@@ -7,6 +7,7 @@
         "build": "tsc",
         "dev": "npm run build && node ./build/src/server.js",
         "debug": "npm run build && node --inspect ./build/src/server.js",
+        "prisma-gen": "npx prisma generate",
         "test": "npm run build && jest"
     },
     "keywords": [],
