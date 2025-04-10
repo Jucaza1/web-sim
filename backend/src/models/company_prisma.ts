@@ -1,8 +1,9 @@
 import { PrismaClient } from '@prisma/client'
-import { CompanyStore } from "./company"
+// import { CompanyStore } from "./company"
 import { Company, CompanyCreate } from '../types/db'
 
-export class CompanyPrismaStore implements CompanyStore {
+// export class CompanyPrismaStore implements CompanyStore {
+export class CompanyPrismaStore {
     private client: PrismaClient
     constructor(client: PrismaClient) {
         this.client = client

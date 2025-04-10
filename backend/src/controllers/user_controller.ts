@@ -16,18 +16,22 @@ export class UserController {
 
     getUser(req: Request, res: Response, next: NextFunction) {
         const id = req.params.id
-        const user = this.userService.getUser(id)
-        if (!user) {
-            next(new Error('User not found'))
+        const result = this.userService.getUser(id)
+        if (!result.ok) {
+            next(result.err!)
             return
         }
-        res.status(200).json(user)
+        res.status(200).json(result.data)
         return
     }
 
-    getUsers(_req: Request, res: Response, _next: NextFunction) {
-        const users = this.userService.getUsers()
-        res.status(200).json(users)
+    getUsers(_req: Request, res: Response, next: NextFunction) {
+        const result = this.userService.getUsers()
+        if (!result.ok) {
+            next(result.err!)
+            return
+        }
+        res.status(200).json(result.data)
         return
     }
 
@@ -40,12 +44,12 @@ export class UserController {
             companyId: userParams.companyId,
             profession: userParams.profession,
         }
-        const user = this.userService.createUser(userCreate)
-        if (!user) {
-            next(new Error('User already exists'))
+        const result = this.userService.createUser(userCreate)
+        if (!result.ok) {
+            next(result.err!)
             return
         }
-        res.status(201).json(user)
+        res.status(201).json(result.data)
         return
     }
 
@@ -59,23 +63,23 @@ export class UserController {
             companyId: userParams.companyId,
             profession: userParams.profession,
         }
-        const user = this.userService.updateUser(id, userUpdate)
-        if (!user) {
-            next(new Error('User not found'))
+        const result = this.userService.updateUser(id, userUpdate)
+        if (!result.ok) {
+            next(result.err!)
             return
         }
-        res.status(200).json(user)
+        res.status(200).json(result.data)
         return
     }
 
     deleteUser(req: Request, res: Response, next: NextFunction) {
         const id = req.params.id
-        const user = this.userService.deleteUser(id)
-        if (!user) {
-            next(new Error('User not found'))
+        const result = this.userService.deleteUser(id)
+        if (!result.ok) {
+            next(result.err!)
             return
         }
-        res.status(200).json(user)
+        res.status(200).json(result.data)
         return
     }
 }

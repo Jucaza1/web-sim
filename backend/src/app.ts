@@ -7,6 +7,7 @@ import { CompanyMemoryStore } from './models/company_memory';
 import { CompanyService } from './services/company_service';
 import { CompanyController } from './controllers/company_controller';
 import { createRouter } from './routes/routes_dev';
+import { HttpError } from './types/result';
 
 const app = express();
 const corsOptions = {
@@ -27,9 +28,9 @@ const router = createRouter(userController, companyController)
 app.use('/api/v1', router)
 
 // error handler
-const globalErrorHandler: ErrorRequestHandler = (err: Error, _req: Request, res: Response, _next: NextFunction) => {
+const globalErrorHandler: ErrorRequestHandler = (err: HttpError, _req: Request, res: Response, _next: NextFunction) => {
     console.error(err)
-    res.status(500).json({ error: err.message })
+    res.status(err.status).json({ error: err.msg })
 }
 app.use(globalErrorHandler)
 

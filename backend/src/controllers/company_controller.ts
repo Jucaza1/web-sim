@@ -16,17 +16,22 @@ export class CompanyController {
 
     getCompany(req: Request, res: Response, next: NextFunction) {
         const id = req.params.id
-        const company = this.companyService.getCompany(id)
-        if (!company) {
-            next(new Error('Company not found'))
+        const result = this.companyService.getCompany(id)
+        if (!result.ok) {
+            next(result.err!)
             return
         }
-        res.status(200).json(company)
+        res.status(200).json(result.data)
         return
     }
 
     getCompanies(_req: Request, res: Response, _next: NextFunction) {
-        res.status(200).json(this.companyService.getCompanies())
+        const result = this.companyService.getCompanies()
+        if (!result.ok) {
+            _next(result.err!)
+            return
+        }
+        res.status(200).json(result.data)
         return
     }
 
@@ -37,12 +42,12 @@ export class CompanyController {
             image: companyParams.image,
             styleId: companyParams.styleId,
         }
-        const company = this.companyService.createCompany(companyCreate)
-        if (!company) {
-            next(new Error('Company already exists'))
+        const result = this.companyService.createCompany(companyCreate)
+        if (!result.ok) {
+            next(result.err!)
             return
         }
-        res.status(201).json(company)
+        res.status(201).json(result.data)
         return
     }
 
@@ -54,23 +59,23 @@ export class CompanyController {
             image: companyParams.image,
             styleId: companyParams.styleId,
         }
-        const company = this.companyService.updateCompany(id, companyUpdate)
-        if (!company) {
-            next(new Error('Company not found'))
+        const result = this.companyService.updateCompany(id, companyUpdate)
+        if (!result.ok) {
+            next(result.err!)
             return
         }
-        res.status(200).json(company)
+        res.status(200).json(result.data)
         return
     }
 
     deleteCompany(req: Request, res: Response, next: NextFunction) {
         const id = req.params.id
-        const company = this.companyService.deleteCompany(id)
-        if (!company) {
-            next(new Error('Company not found'))
+        const result = this.companyService.deleteCompany(id)
+        if (!result.ok) {
+            next(result.err!)
             return
         }
-        res.status(200).json(company)
+        res.status(200).json(result.data)
         return
     }
 }

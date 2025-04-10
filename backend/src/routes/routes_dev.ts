@@ -4,20 +4,20 @@ import { CompanyController } from "../controllers/company_controller";
 
 export function createRouter(userController: UserController, companyController: CompanyController) {
     const router = Router();
-
+    //-> /api/v1
     // User routes
-    router.get("/users/:id", userController.getUser);
-    router.get("/users", userController.getUsers);
-    router.post("/users", userController.createUser.bind(userController));
-    router.put("/users/:id", userController.updateUser.bind(userController));
-    router.delete("/users/:id", userController.deleteUser.bind(userController));
+    router.get("/users/:id", userController.getUser)
+    router.get("/users", userController.getUsers)
+    router.post("/users", userController.createUser)
+    router.put("/users/:id", userController.updateUser)
+    router.delete("/users/:id", userController.deleteUser)
 
     // Company routes
-    router.get("/companies/:id", companyController.getCompany.bind(companyController));
-    router.get("/companies", companyController.getCompanies.bind(companyController));
-    router.post("/companies", companyController.createCompany.bind(companyController));
-    router.put("/companies/:id", companyController.updateCompany.bind(companyController));
-    router.delete("/companies/:id", companyController.deleteCompany.bind(companyController));
+    router.get("/companies/:id", companyController.getCompany)
+    router.get("/companies", companyController.getCompanies)
+    router.post("/companies", companyController.createCompany)
+    router.put("/companies/:id", companyController.updateCompany)
+    router.delete("/companies/:id", companyController.deleteCompany)
 
     return router;
 }

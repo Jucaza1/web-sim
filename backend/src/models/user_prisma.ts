@@ -1,8 +1,9 @@
 import { PrismaClient } from '@prisma/client'
-import { UserStore } from "./user"
+// import { UserStore } from "./user"
 import { User, UserCreate, UserCreatePrismaConverter } from '../types/db'
 
-export class UserPrismaStore implements UserStore {
+// export class UserPrismaStore implements UserStore {
+export class UserPrismaStore {
     private client: PrismaClient
     constructor(client: PrismaClient) {
         this.client = client
