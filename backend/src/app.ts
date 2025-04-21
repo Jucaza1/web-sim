@@ -8,6 +8,9 @@ import { CompanyService } from './services/company-service';
 import { CompanyController } from './controllers/company-controller';
 import { createRouter } from './routes/routes-dev';
 import { HttpError } from './types/result';
+import { AuthController } from './controllers/auth-controller';
+import { AuthServiceJWT } from './services/auth-service';
+import cookieParser from "cookie-parser"
 
 const app = express();
 const corsOptions = {
@@ -16,21 +19,28 @@ const corsOptions = {
     optionsSuccessStatus: 200,
 }
 
+app.disable('x-powered-by')
+app.use(cookieParser())
 app.use(express.json())
 app.use(cors(corsOptions))
 app.get('/health', (_, res) => {
     res.status(200).json({ message: 'Server is OK' })
 })
-const userController = new UserController(new UserService(new UserMemoryStore()))
+//TODO: hashpassword
+const pwdHasher = (pwd: string) => pwd
+const userService = new UserService(new UserMemoryStore())
+const userController = new UserController(userService)
 const companyController = new CompanyController(new CompanyService(new CompanyMemoryStore()))
-const router = createRouter(userController, companyController)
+const authService = new AuthServiceJWT("supersecret", userService, pwdHasher)
+const authController = new AuthController(authService)
+const router = createRouter(userController, companyController, authController)
 
 app.use('/api/v1', router)
 
 // error handler
 const globalErrorHandler: ErrorRequestHandler = (err: HttpError, _req: Request, res: Response, _next: NextFunction) => {
     console.error(err)
-    res.status(err.status).json({ error: err.msg })
+    res.status(err.status ?? 500).json({ error: err.msg })
 }
 app.use(globalErrorHandler)
 
