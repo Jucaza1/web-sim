@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express'
-import { CompanyService } from '../services/company_service'
+import { CompanyService } from '../services/company-service'
 import { CompanyCreateDTO, CompanyUpdateDTO } from '../types/validations'
 
 export class CompanyController {

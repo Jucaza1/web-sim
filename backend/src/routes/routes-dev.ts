@@ -1,6 +1,6 @@
 import { Router } from "express";
-import { UserController } from "../controllers/user_controller";
-import { CompanyController } from "../controllers/company_controller";
+import { UserController } from "../controllers/user-controller";
+import { CompanyController } from "../controllers/company-controller";
 
 export function createRouter(userController: UserController, companyController: CompanyController) {
     const router = Router();

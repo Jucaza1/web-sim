@@ -1,6 +1,6 @@
 import { SimulatorModel, SimulatorModelCreate, SimulatorModelCreatePrismaConverter } from '../types/db'
 import { PrismaClient } from '@prisma/client'
-import { SimulatorModelStore } from "./simulator_model"
+import { SimulatorModelStore } from "./simulator-model"
 
 export class SimulatorModelPrismaStore implements SimulatorModelStore {
     private client: PrismaClient

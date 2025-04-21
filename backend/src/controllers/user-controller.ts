@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express'
-import { UserService } from '../services/user_service'
+import { UserService } from '../services/user-service'
 import { UserCreateDTO, UserUpdateDTO } from '../types/validations'
 
 export class UserController {

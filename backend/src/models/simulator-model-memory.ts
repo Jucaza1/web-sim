@@ -1,5 +1,5 @@
 import { SimulatorModel, SimulatorModelCreate } from '../types/db'
-import { SimulatorModelStore } from "./simulator_model"
+import { SimulatorModelStore } from "./simulator-model"
 
 export class SimulatorModelMemoryStore implements SimulatorModelStore {
     private simulatorModels: Map<string, SimulatorModel>

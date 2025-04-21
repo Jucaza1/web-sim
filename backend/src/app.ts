@@ -1,12 +1,12 @@
 import express, { ErrorRequestHandler, NextFunction, Request, Response } from 'express';
 import cors from 'cors';
-import { UserMemoryStore } from './models/user_memory';
-import { UserService } from './services/user_service';
-import { UserController } from './controllers/user_controller';
-import { CompanyMemoryStore } from './models/company_memory';
-import { CompanyService } from './services/company_service';
-import { CompanyController } from './controllers/company_controller';
-import { createRouter } from './routes/routes_dev';
+import { UserMemoryStore } from './models/user-memory';
+import { UserService } from './services/user-service';
+import { UserController } from './controllers/user-controller';
+import { CompanyMemoryStore } from './models/company-memory';
+import { CompanyService } from './services/company-service';
+import { CompanyController } from './controllers/company-controller';
+import { createRouter } from './routes/routes-dev';
 import { HttpError } from './types/result';
 
 const app = express();
