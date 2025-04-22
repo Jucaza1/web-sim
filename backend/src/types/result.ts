@@ -20,10 +20,13 @@ export enum StoreErrorCode {
     engineFault, // 500
     connectionFault, // 500
     invalidCredentials, // 500
+    inconsistentState, // 500
+    versionError, // 500
     unique,  // 409
     notFound, // 404
     invalidInput, // 400
-    unknown, // 500
+    unknown,
+    migrateError, // 500
 }
 
 // function to convert a ResultStore to a ResultHttp
@@ -43,7 +46,15 @@ export function resultStoreToResultHttp<T>(result: ResultStore<T>): ResultHttp<T
         case StoreErrorCode.notFound:
             return { ok: false, err: { status: 404, msg: [result.err!.msg!] } }
         case StoreErrorCode.invalidInput:
-            return { ok: false, err: { status: 400, msg: [result.err!.msg!] } }
+            return { ok: false, err: { status: 500, msg: [result.err!.msg!] } }
+        case StoreErrorCode.inconsistentState:
+            return { ok: false, err: { status: 500, msg: [result.err!.msg!] } }
+        case StoreErrorCode.versionError:
+            return { ok: false, err: { status: 500, msg: [result.err!.msg!] } }
+        case StoreErrorCode.unknown:
+            return { ok: false, err: { status: 500, msg: [result.err!.msg!] } }
+        case StoreErrorCode.migrateError:
+            return { ok: false, err: { status: 500, msg: [result.err!.msg!] } }
         default:
             return { ok: false, err: { status: 500, msg: [result.err!.msg!] } }
     }
