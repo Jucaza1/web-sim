@@ -2,7 +2,7 @@ import { z } from "zod";
 import { UserStore } from "../models/user";
 import { User } from "../types/db"
 import { ResultHttp, resultStoreToResultHttp } from "../types/result";
-import { UserCreateDTO, UserCreateDTOSchema } from "../types/validations";
+import { UserCreateDTO, UserCreateDTOSchema, UserUpdateDTOSchema } from "../types/validations";
 import { Hasher } from "./hashing";
 
 export class UserService {
@@ -62,12 +62,12 @@ export class UserService {
         if (!id || id.length === 0) {
             return { ok: false, err: { status: 400, msg: ["id is required"] } }
         }
-        const validateResult = UserCreateDTOSchema.safeParse(user)
+        const validateResult = UserUpdateDTOSchema.safeParse(user)
         if (!validateResult.success) {
             return { ok: false, err: { status: 400, msg: validateResult.error.errors.map(e => e.message) } }
         }
         if (user.password && user.password.length > 0) {
-            // user.password = HashPassword(user.password)
+            user.password = this.hasher.hash(user.password)
         }
         const result = this.userStore.updateUser(id, user)
         return resultStoreToResultHttp(result)
