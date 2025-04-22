@@ -1,5 +1,6 @@
 import express, { ErrorRequestHandler, NextFunction, Request, Response } from 'express';
 import cors from 'cors';
+import cookieParser from "cookie-parser"
 import { UserMemoryStore } from './models/user-memory';
 import { UserService } from './services/user-service';
 import { UserController } from './controllers/user-controller';
@@ -10,7 +11,6 @@ import { createRouter } from './routes/routes-dev';
 import { HttpError } from './types/result';
 import { AuthController } from './controllers/auth-controller';
 import { AuthServiceJWT } from './services/auth-service';
-import cookieParser from "cookie-parser"
 
 const app = express();
 const corsOptions = {
