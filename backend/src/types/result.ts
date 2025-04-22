@@ -22,10 +22,10 @@ export enum StoreErrorCode {
     invalidCredentials, // 500
     inconsistentState, // 500
     versionError, // 500
-    unique,  // 409
+    unique,  // 422
     notFound, // 404
     invalidInput, // 400
-    unknown,
+    unknown, // 500
     migrateError, // 500
 }
 
@@ -40,7 +40,7 @@ export function resultStoreToResultHttp<T>(result: ResultStore<T>): ResultHttp<T
         case StoreErrorCode.connectionFault:
             return { ok: false, err: { status: 500, msg: [result.err!.msg!] } }
         case StoreErrorCode.invalidCredentials:
-            return { ok: false, err: { status: 401, msg: [result.err!.msg!] } }
+            return { ok: false, err: { status: 500, msg: [result.err!.msg!] } }
         case StoreErrorCode.unique:
             return { ok: false, err: { status: 422, msg: [result.err!.msg!] } }
         case StoreErrorCode.notFound:

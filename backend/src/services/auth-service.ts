@@ -3,15 +3,16 @@ import { UserService } from "./user-service"
 import { UserCredentials, UserCredentialsSchema } from "../types/credentials"
 import { ResultHttp } from "../types/result"
 import { User } from "../types/db"
+import { HasherBcrypt } from "./hashing"
 
 export class AuthServiceJWT {
     private secret: string
     private userService: UserService
-    private pwdHasher: (pwd: string) => string;
-    constructor(secret: string, userService: UserService, pwdHasher: (pwd: string) => string) {
+    private hasher: HasherBcrypt
+    constructor(secret: string, userService: UserService, Hasher: HasherBcrypt) {
         this.secret = secret
         this.userService = userService
-        this.pwdHasher = pwdHasher
+        this.hasher = Hasher
         this.validateJWT = this.validateJWT.bind(this)
         this.forgeJWT = this.forgeJWT.bind(this)
         this.validateCredentials = this.validateCredentials.bind(this)
@@ -29,7 +30,7 @@ export class AuthServiceJWT {
             return { ok: false, err: { status: 401, msg: ["incorrect credentials"] } }
         }
         if (userCred.email !== userResult!.data!.email
-            && this.pwdHasher(userCred.password) !== userResult!.data!.password) {
+            && !this.hasher.compare(userCred.password, userResult!.data!.password)) {
             return { ok: false, err: { status: 401, msg: ["incorrect credentials"] } }
         }
         return { ok: true, data: this.forgeJWT(userResult!.data!) }

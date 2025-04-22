@@ -3,11 +3,14 @@ import { UserStore } from "../models/user";
 import { User } from "../types/db"
 import { ResultHttp, resultStoreToResultHttp } from "../types/result";
 import { UserCreateDTO, UserCreateDTOSchema } from "../types/validations";
+import { HasherBcrypt } from "./hashing";
 
 export class UserService {
     private userStore: UserStore
-    constructor(uStore: UserStore) {
+    private hasher: HasherBcrypt
+    constructor(uStore: UserStore, hasher: HasherBcrypt) {
         this.userStore = uStore
+        this.hasher = hasher
     }
     getUser(id: string): ResultHttp<User> {
         if (!id || id.length === 0) {
@@ -51,7 +54,7 @@ export class UserService {
         if (!validateResult.success) {
             return { ok: false, err: { status: 400, msg: validateResult.error.errors.map(e => e.message) } }
         }
-        // user.password = HashPassword(user.password)
+        user.password = this.hasher.hash(user.password)
         const result = this.userStore.createUser(user)
         return resultStoreToResultHttp(result)
     }

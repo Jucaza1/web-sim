@@ -11,6 +11,7 @@ import { createRouter } from './routes/routes-dev';
 import { HttpError } from './types/result';
 import { AuthController } from './controllers/auth-controller';
 import { AuthServiceJWT } from './services/auth-service';
+import { HasherBcrypt } from './services/hashing';
 
 const app = express();
 const corsOptions = {
@@ -26,9 +27,9 @@ app.use(cors(corsOptions))
 app.get('/health', (_, res) => {
     res.status(200).json({ message: 'Server is OK' })
 })
-//TODO: hashpassword
-const pwdHasher = (pwd: string) => pwd
-const userService = new UserService(new UserMemoryStore())
+
+const pwdHasher = new HasherBcrypt(10)
+const userService = new UserService(new UserMemoryStore(), pwdHasher)
 const userController = new UserController(userService)
 const companyController = new CompanyController(new CompanyService(new CompanyMemoryStore()))
 const authService = new AuthServiceJWT("supersecret", userService, pwdHasher)
