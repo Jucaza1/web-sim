@@ -3,12 +3,12 @@ import { UserStore } from "../models/user";
 import { User } from "../types/db"
 import { ResultHttp, resultStoreToResultHttp } from "../types/result";
 import { UserCreateDTO, UserCreateDTOSchema } from "../types/validations";
-import { HasherBcrypt } from "./hashing";
+import { Hasher } from "./hashing";
 
 export class UserService {
     private userStore: UserStore
-    private hasher: HasherBcrypt
-    constructor(uStore: UserStore, hasher: HasherBcrypt) {
+    private hasher: Hasher
+    constructor(uStore: UserStore, hasher: Hasher) {
         this.userStore = uStore
         this.hasher = hasher
     }

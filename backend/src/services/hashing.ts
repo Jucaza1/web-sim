@@ -1,6 +1,11 @@
 import b from "bcrypt"
 
-export class HasherBcrypt{
+export interface Hasher {
+    hash(input: string): string
+    compare(input: string, hash: string): boolean
+}
+
+export class HasherBcrypt implements Hasher {
     private cost: number
     constructor(cost: number = 10) {
         this.cost = cost

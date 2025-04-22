@@ -3,13 +3,13 @@ import { UserService } from "./user-service"
 import { UserCredentials, UserCredentialsSchema } from "../types/credentials"
 import { ResultHttp } from "../types/result"
 import { User } from "../types/db"
-import { HasherBcrypt } from "./hashing"
+import { Hasher } from "./hashing"
 
 export class AuthServiceJWT {
     private secret: string
     private userService: UserService
-    private hasher: HasherBcrypt
-    constructor(secret: string, userService: UserService, Hasher: HasherBcrypt) {
+    private hasher: Hasher
+    constructor(secret: string, userService: UserService, Hasher: Hasher) {
         this.secret = secret
         this.userService = userService
         this.hasher = Hasher
