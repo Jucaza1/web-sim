@@ -9,7 +9,7 @@ const Home = () => {
             <NavBar />
             <main className="p-6 text-white">
                 <h1 className="text-3xl font-bold">Bienvenido a Davante</h1>
-                <SearchBar />
+                {/*<SearchBar />*/}
                 {/* Aqui va el grid con la lista de simuladores */} 
             </main>
         </div>
