@@ -6,6 +6,7 @@
 
 generator client {
     provider = "prisma-client-js"
+    binaryTargets = ["linux-musl-openssl-3.0.x","debian-openssl-3.0.x"]
 }
 
 datasource db {
@@ -19,11 +20,12 @@ model User {
     email      String   @unique
     password   String
     profession String
-    companyId  String   @map("company_id")
+    companyId  String?   @map("company_id")
     createdAt  DateTime @default(now()) @map("created_at")
     isActive   Boolean  @default(true) @map("is_active")
+    // isAdmin   Boolean  @default(false) @map("is_admin")
 
-    company Company @relation(fields: [companyId], references: [id])
+    company Company? @relation(fields: [companyId], references: [id])
 
     @@map("users")
 }

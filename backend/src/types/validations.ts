@@ -25,7 +25,7 @@ export const UserCreateDTOSchema = z.object({
         .min(5, { message: "Profession must be at least 5 characters" })
         .max(25, { message: "Profession must be at most 25 characters" }),
     companyId: z.string()
-        .uuid({ message: "Invalid company ID" }),
+        .uuid({ message: "Invalid company ID" }).optional(),
 }).strict()
 
 export const UserUpdateDTOSchema = UserCreateDTOSchema.partial()

@@ -12,7 +12,7 @@ export type Company = Company_prisma
 export type Simulator = Simulator_prisma
 export type SimulatorModel = SimulatorModel_prisma
 
-export type UserCreate = Omit<Prisma.UserCreateInput, "company"> & { companyId: string }
+export type UserCreate = Omit<Prisma.UserCreateInput, "company"> & { companyId?: string }
 export type CompanyCreate = Prisma.CompanyCreateInput
 export type SimulatorCreate = Omit<Prisma.SimulatorCreateInput, "company"> & { companyId: string }
 export type SimulatorModelCreate = Omit<Prisma.SimulatorModelCreateInput, "company" | "simulator"> & { companyId: string, simulatorId: string }
@@ -21,6 +21,15 @@ export type SimulatorModelCreate = Omit<Prisma.SimulatorModelCreateInput, "compa
 // Prisma creation type converter functions
 
 export function UserCreatePrismaConverter(user: UserCreate): Prisma.UserCreateInput{
+    if (user.companyId === null || user.companyId === undefined) {
+        return {
+            name: user.name,
+            email: user.email,
+            password: user.password,
+            isActive: true,
+            profession: user.profession,
+        }
+    }
     return {
         name: user.name,
         email: user.email,
