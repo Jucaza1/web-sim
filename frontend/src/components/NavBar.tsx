@@ -1,4 +1,3 @@
-import logo from '../assets/logo/Davante_logotipo_white.png';
 import logoNavy from "../assets/logo/Davante_simbolo_navy.svg";
 import logoWhite from "../assets/logo/Davante_simbolo_white.svg";
 import ThemeToggle from './ThemeToggle';
@@ -8,18 +7,20 @@ const NavBar = () => {
     const [menuOpen, setMenuOpen] = useState(false);
 
     return (
-        <nav className='bg-navy text-white px-6 py-4 flex items-center justify-between'>
+        <nav className='px-6 py-4 flex items-center justify-between'>
             <div className='flex items-center gap-2'>
+                
                 {/* Logo oscuro por defecto */}
-                <img src={logoNavy} alt="Logo Davante" className='h-10 dark:hidden' />
+                <img src={logoNavy} alt="Logo Davante" className='h-10 logo-dark' />
                 {/* Logo claro para el modo oscuro */}
-                <img src={logoWhite} alt="Logo Davante" className='h-10 hidden dark:block' />
+                <img src={logoWhite} alt="Logo Davante" className='h-10 logo-light' />
+                
             
                 <div className='text-2xl font-bold'>Davante</div>
             </div>
 
             {/* Menú PC */}
-            <div className='hidden md:block'>
+            <div className='hidden md:flex gap-6 items-center'>
                 <a href='#' className='hover:underline'>Inicio</a>
                 <a href='#' className='hover:underline'>Simuladores</a>
                 <a href='#' className='hover:underline'>Perfil</a>
@@ -37,7 +38,7 @@ const NavBar = () => {
             </div>
 
             {menuOpen && (
-                <div className='absolute top-16 left-0 w-full bg-navy flex flex-col items-start px-6 py-4 md:hidden'>
+                <div className='absolute top-24 right-0 w-full flex flex-col items-end px-6 py-4 md:hidden'>
                     <a href='#' className='block hover:underline'>Inicio</a>
                     <a href='#' className='block hover:underline'>Simuladores</a>
                     <a href='#' className='block hover:underline'>Perfil</a>
