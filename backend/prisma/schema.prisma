@@ -5,8 +5,8 @@
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
-    provider = "prisma-client-js"
-    binaryTargets = ["linux-musl-openssl-3.0.x","debian-openssl-3.0.x"]
+    provider      = "prisma-client-js"
+    binaryTargets = ["linux-musl-openssl-3.0.x", "debian-openssl-3.0.x"]
 }
 
 datasource db {
@@ -20,7 +20,7 @@ model User {
     email      String   @unique
     password   String
     profession String
-    companyId  String?   @map("company_id")
+    companyId  String?  @map("company_id")
     createdAt  DateTime @default(now()) @map("created_at")
     isActive   Boolean  @default(true) @map("is_active")
     // isAdmin   Boolean  @default(false) @map("is_admin")
@@ -31,43 +31,39 @@ model User {
 }
 
 model Company {
-    id              String           @id @default(cuid())
-    name            String           @unique
-    image           String
-    styleId         String           @map("style_id")
+    id      String @id @default(cuid())
+    name    String @unique
+    image   String
+    styleId String @map("style_id")
 
-    users           User[]
-    simulatorModels SimulatorModel[]
-    simulators      Simulator[]
+    users      User[]
+    simulators Simulator[]
 
     @@map("companies")
 }
 
 model Simulator {
-    id        String           @id @default(cuid())
-    name      String
-    companyId String           @map("company_id")
+    id          String @id @default(cuid())
+    name        String
+    companyId   String @map("company_id")
     description String
 
-    models    SimulatorModel[]
-
-    company Company @relation(fields: [companyId], references: [id])
+    company        Company         @relation(fields: [companyId], references: [id])
+    simulatorWebgl SimulatorWebgl? @relation
 
     @@map("simulators")
 }
 
-model SimulatorModel {
-    id          String   @id @default(cuid())
-    simulatorId String   @map("simulator_id")
-    name        String
-    description String
-    image       String
-    webglUrl    String   @map("webgl_url")
-    createdAt   DateTime @default(now()) @map("created_at")
-    companyId   String
+model SimulatorWebgl {
+    id          String @id @default(cuid())
+    kind        String
+    simulatorId String @unique @map("simulator_id")
+    data        String
+    framework   String
+    loader      String
+    wasm        String
 
     simulator Simulator @relation(fields: [simulatorId], references: [id])
-    company   Company?  @relation(fields: [companyId], references: [id])
 
-    @@map("simulator_models")
+    @@map("simulator_webgls")
 }

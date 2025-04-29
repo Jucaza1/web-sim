@@ -3,24 +3,24 @@ import {
     User as User_prisma,
     Company as Company_prisma,
     Simulator as Simulator_prisma,
-    SimulatorModel as SimulatorModel_prisma,
+    SimulatorWebgl as SimulatorWebgl_prisma
 
 } from "@prisma/client"
 
 export type User = User_prisma
 export type Company = Company_prisma
 export type Simulator = Simulator_prisma
-export type SimulatorModel = SimulatorModel_prisma
+export type SimulatorWebgl = SimulatorWebgl_prisma
 
 export type UserCreate = Omit<Prisma.UserCreateInput, "company"> & { companyId?: string }
 export type CompanyCreate = Prisma.CompanyCreateInput
 export type SimulatorCreate = Omit<Prisma.SimulatorCreateInput, "company"> & { companyId: string }
-export type SimulatorModelCreate = Omit<Prisma.SimulatorModelCreateInput, "company" | "simulator"> & { companyId: string, simulatorId: string }
+export type SimulatorWebglCreate = Omit<Prisma.SimulatorWebglCreateInput, "simulator"> & { simulatorId: string }
 
 
 // Prisma creation type converter functions
 
-export function UserCreatePrismaConverter(user: UserCreate): Prisma.UserCreateInput{
+export function UserCreatePrismaConverter(user: UserCreate): Prisma.UserCreateInput {
     if (user.companyId === null || user.companyId === undefined) {
         return {
             name: user.name,
@@ -36,7 +36,7 @@ export function UserCreatePrismaConverter(user: UserCreate): Prisma.UserCreateIn
         password: user.password,
         isActive: true,
         profession: user.profession,
-        company:{
+        company: {
             connect: {
                 id: user.companyId
             }
@@ -44,11 +44,11 @@ export function UserCreatePrismaConverter(user: UserCreate): Prisma.UserCreateIn
     }
 }
 
-export function SimulatorCreatePrismaConverter(simulator: SimulatorCreate): Prisma.SimulatorCreateInput{
+export function SimulatorCreatePrismaConverter(simulator: SimulatorCreate): Prisma.SimulatorCreateInput {
     return {
         name: simulator.name,
         description: simulator.description,
-        company:{
+        company: {
             connect: {
                 id: simulator.companyId
             }
@@ -56,20 +56,16 @@ export function SimulatorCreatePrismaConverter(simulator: SimulatorCreate): Pris
     }
 }
 
-export function SimulatorModelCreatePrismaConverter(simulatorModel: SimulatorModelCreate): Prisma.SimulatorModelCreateInput{
+export function SimulatorWebglCreatePrismaConverter(simulatorWebglCreate: SimulatorWebglCreate): Prisma.SimulatorWebglCreateInput {
     return {
-        name: simulatorModel.name,
-        description: simulatorModel.description,
-        image: simulatorModel.image,
-        webglUrl: simulatorModel.webglUrl,
-        company:{
+        kind: simulatorWebglCreate.kind ?? "webgl",
+        data: simulatorWebglCreate.data,
+        wasm: simulatorWebglCreate.wasm,
+        framework: simulatorWebglCreate.framework,
+        loader: simulatorWebglCreate.loader,
+        simulator: {
             connect: {
-                id: simulatorModel.companyId
-            }
-        },
-        simulator:{
-            connect: {
-                id: simulatorModel.simulatorId
+                id: simulatorWebglCreate.simulatorId
             }
         },
     }
