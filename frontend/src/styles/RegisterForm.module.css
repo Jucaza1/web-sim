@@ -1,6 +1,10 @@
-.body {
-    background-color: black;
+.formPage {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
+
 
 .formContainer {
     background-color: white;
