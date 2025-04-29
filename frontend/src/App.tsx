@@ -1,17 +1,16 @@
-import './App.css'
-import Home from './pages/Home'
+// frontend/src/App.tsx
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import RegisterPage from "./pages/RegisterPage";
 
 function App() {
-  
-
   return (
-    <>
-      <div>
-        <Home></Home>
-      </div>
-      
-    </>
-  )
+    <Router>
+      <Routes>
+        <Route path="/register" element={<RegisterPage />} />
+        {/*Agregar rutas*/}
+      </Routes>
+    </Router>
+  );
 }
 
-export default App
+export default App;

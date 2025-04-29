@@ -1,21 +1,21 @@
-@import './styles/variables.css';
-@import './styles/fonts.css';
+@import "./styles/variables.css";
+@import "./styles/fonts.css";
 
 :root {
-    --bg-color: var(--color-navy);
-    --text-color: var(--text-primary);
-    --text-color-secondary: var(--text-secondary);
-    --text-color-tertiary: var(--text-tertiary);
+  --bg-color: var(--color-navy);
+  --text-color: var(--text-primary);
+  --text-color-secondary: var(--text-secondary);
+  --text-color-tertiary: var(--text-tertiary);
 }
 
 body.dark-theme {
-    --bg-color: #000000;
-    --text-color: var(--text-primary);
+  --bg-color: #000000;
+  --text-color: var(--text-primary);
 }
 
 body {
-    background-color: var(--bg-color);
-    color: var(--text-color);
-    font-family: 'Manrope', sans-serif;
-    transition: background-color 0.3s ease, color 0.3s ease;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  font-family: "Manrope", sans-serif;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
