@@ -1,13 +1,19 @@
-
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import RegisterPage from "./pages/RegisterPage";
+import Home from './pages/Home';
+import LoginPage from './pages/LoginPage'
 
 function App() {
   return (
     <Router>
-      <Routes>
+      <Routes> {/*Agregar rutas*/}
+
+        <Route path="/" element={<LoginPage />} />
+
         <Route path="/register" element={<RegisterPage />} />
-        {/*Agregar rutas*/}
+
+        <Route path="/home" element={<Home />} />
+
       </Routes>
     </Router>
   );

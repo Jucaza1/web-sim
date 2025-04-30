@@ -5,13 +5,13 @@ export default {
   theme: {
     extend: {
       colors: {
-        navy: "#003594",
-        gray: "#ededed",
-        orange: "#FF5B41",
-        white: "#ffffff",
+        navy: "var(--color-navy)",
+        gray: "var(--color-gray)",
+        orange: "var(--color-orange)",
+        white: "var(--color-white)",
       },
       fontFamily: {
-        sans: ["Manrope", "sans-serif"],
+        manrope: ["Manrope", "sans-serif"],
       },
     },
   },

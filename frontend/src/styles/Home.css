@@ -1,0 +1,16 @@
+.main-container {
+    padding: 1.5rem;
+}
+
+.main-title {
+    font-size: 1.875rem;
+    font-weight: 700;
+}
+
+.video-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 2rem;
+}
+

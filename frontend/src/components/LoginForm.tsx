@@ -1,10 +1,17 @@
 
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import styles from "../styles/LoginForm.module.css";
 
 const LoginForm = () => {
+  const navigate = useNavigate();
+
+  const handleSubmit = (event: React.FormEvent) => {
+    event.preventDefault();                           //Evita comportamiento por defecto del formulario
+    navigate("/home");
+  }
+
   return (
-    <form className={styles.formContainer}>
+    <form onSubmit={handleSubmit} className={styles.formContainer}>
       <h2 className={styles.formTitle}>Iniciar sesión</h2>
       <input
         type="email"
@@ -22,15 +29,15 @@ const LoginForm = () => {
         className={styles.inputField}
       />
       <button type="submit" className={styles.submitButton}>
-        Iniciar sesion
+        Iniciar sesión
       </button>
 
-<p className={styles.redirectText}>
-  ¿No tienes cuenta?{" "}
-  <Link to="/register" className={styles.linkButton}>
-    Regístrate aquí
-  </Link>
-</p>
+      <p className={styles.redirectText}>
+        ¿No tienes cuenta?{" "}
+        <Link to="/register" className={styles.linkButton}>
+          Regístrate aquí
+        </Link>
+      </p>
     </form>
   );
 };
