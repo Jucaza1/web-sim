@@ -1,10 +1,8 @@
 import express, { ErrorRequestHandler, NextFunction, Request, Response } from 'express';
 import cors from 'cors';
 import cookieParser from "cookie-parser"
-import { UserMemoryStore } from './models/user-memory';
 import { UserService } from './services/user-service';
 import { UserController } from './controllers/user-controller';
-import { CompanyMemoryStore } from './models/company-memory';
 import { CompanyService } from './services/company-service';
 import { CompanyController } from './controllers/company-controller';
 import { createRouter } from './routes/routes-dev';
@@ -13,6 +11,8 @@ import { AuthController } from './controllers/auth-controller';
 import { AuthServiceJWT } from './services/auth-service';
 import { HasherBcrypt } from './services/hashing';
 import { UserCreate } from './types/db';
+import { UserStoreFactory } from './models/user';
+import { CompanyStoreFactory } from './models/company';
 
 const app = express();
 const corsOptions = {
@@ -29,15 +29,25 @@ app.get('/health', (_, res: Response) => {
     res.status(200).json({ message: 'Server is OK' })
 })
 
+const JWT_SECRET = process.env.JWT_SECRET ?? "supersecret"
+const DB_KIND = process.env.DB_KIND ?? "memory" // or "postgreslq"
+const DB_SEED = process.env.DB_SEED === "true"
+
+const userStore = UserStoreFactory(DB_KIND, DB_SEED)
+const companyStore = CompanyStoreFactory(DB_KIND, DB_SEED)
 const pwdHasher = new HasherBcrypt(10)
-const userService = new UserService(new UserMemoryStore(), pwdHasher)
+
+const userService = new UserService(userStore, pwdHasher)
 const userController = new UserController(userService)
-const companyController = new CompanyController(new CompanyService(new CompanyMemoryStore()))
-const authService = new AuthServiceJWT("supersecret", userService, pwdHasher)
+
+const companyService = new CompanyService(companyStore)
+const companyController = new CompanyController(companyService)
+
+const authService = new AuthServiceJWT(JWT_SECRET, userService, pwdHasher)
 const authController = new AuthController(authService)
 const router = createRouter(userController, companyController, authController)
 
-app.use('/api/v1', router)
+app.use("/api/v1", router)
 
 // error handler
 const globalErrorHandler: ErrorRequestHandler = (
