@@ -17,12 +17,12 @@ export class AuthServiceJWT {
         this.forgeJWT = this.forgeJWT.bind(this)
         this.validateCredentials = this.validateCredentials.bind(this)
     }
-    validateCredentials(userCred: UserCredentials): ResultHttp<string> {
+    async validateCredentials(userCred: UserCredentials): Promise<ResultHttp<string>> {
         const validateResult = UserCredentialsSchema.safeParse(userCred)
         if (!validateResult.success) {
             return { ok: false, err: { status: 400, msg: validateResult.error.errors.map(e => e.message) } }
         }
-        const userResult = this.userService.getUserByEmail(userCred.email)
+        const userResult = await this.userService.getUserByEmail(userCred.email)
         if (!userResult.ok) {
             if (userResult.err!.status >= 500) {
                 return { ok: false, err: userResult.err }
@@ -39,7 +39,7 @@ export class AuthServiceJWT {
         const payload = { id: user.id }
         return jwt.sign(payload, this.secret, { expiresIn: 3600 })
     }
-    validateJWT(token: string): ResultHttp<jwt.JwtPayload> {
+    async validateJWT(token: string): Promise<ResultHttp<jwt.JwtPayload>> {
         if (token === "") {
             return { ok: false, err: { status: 401, msg: ["invalid token"] } }
         }
@@ -49,7 +49,7 @@ export class AuthServiceJWT {
         } catch (_) {
             return { ok: false, err: { status: 401, msg: ["invalid token"] } }
         }
-        const result = this.userService.getUser(decoded.id as string)
+        const result = await this.userService.getUser(decoded.id as string)
         if (!result.ok){
             return { ok: false, err: { status: 401, msg: ["invalid token"] } }
         }

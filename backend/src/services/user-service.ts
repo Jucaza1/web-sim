@@ -12,7 +12,7 @@ export class UserService {
         this.userStore = uStore
         this.hasher = hasher
     }
-    getUser(id: string): ResultHttp<User> {
+    async getUser(id: string): Promise<ResultHttp<User>> {
         if (!id || id.length === 0) {
             return { ok: false, err: { status: 400, msg: ["id is required"] } }
         }
@@ -20,10 +20,10 @@ export class UserService {
         if (!validateResult.success) {
             return { ok: false, err: { status: 400, msg: ["id is not valid"] } }
         }
-        const result = this.userStore.getUser(id)
+        const result = await this.userStore.getUser(id)
         return resultStoreToResultHttp(result)
     }
-    getUserByEmail(email: string): ResultHttp<User> {
+    async getUserByEmail(email: string): Promise<ResultHttp<User>> {
         if (!email || email.length === 0) {
             return { ok: false, err: { status: 400, msg: ["email is required"] } }
         }
@@ -31,10 +31,10 @@ export class UserService {
         if (!validateResult.success) {
             return { ok: false, err: { status: 400, msg: ["email is not valid"] } }
         }
-        const result = this.userStore.getUserByEmail(email)
+        const result = await this.userStore.getUserByEmail(email)
         return resultStoreToResultHttp(result)
     }
-    getUsersByCompanyId(companyId: string): ResultHttp<User[]> {
+    async getUsersByCompanyId(companyId: string): Promise<ResultHttp<User[]>> {
         if (!companyId || companyId.length === 0) {
             return {ok:false, err: { status: 400, msg: ["id is required"] } }
         }
@@ -42,23 +42,23 @@ export class UserService {
         if (!validateResult.success) {
             return { ok: false, err: { status: 400, msg: ["id is not valid"] } }
         }
-        const result = this.userStore.getUsersByCompanyId(companyId)
+        const result = await this.userStore.getUsersByCompanyId(companyId)
         return resultStoreToResultHttp(result)
     }
-    getUsers(): ResultHttp<User[]> {
-        const result = this.userStore.getUsers()
+    async getUsers(): Promise<ResultHttp<User[]>> {
+        const result = await this.userStore.getUsers()
         return resultStoreToResultHttp(result)
     }
-    createUser(user: UserCreateDTO): ResultHttp<User> {
+    async createUser(user: UserCreateDTO): Promise<ResultHttp<User>> {
         const validateResult = UserCreateDTOSchema.safeParse(user)
         if (!validateResult.success) {
             return { ok: false, err: { status: 400, msg: validateResult.error.errors.map(e => e.message) } }
         }
         user.password = this.hasher.hash(user.password)
-        const result = this.userStore.createUser(user)
+        const result = await this.userStore.createUser(user)
         return resultStoreToResultHttp(result)
     }
-    updateUser(id: string, user: Partial<UserCreateDTO>): ResultHttp<User> {
+    async updateUser(id: string, user: Partial<UserCreateDTO>): Promise<ResultHttp<User>> {
         if (!id || id.length === 0) {
             return { ok: false, err: { status: 400, msg: ["id is required"] } }
         }
@@ -69,10 +69,10 @@ export class UserService {
         if (user.password && user.password.length > 0) {
             user.password = this.hasher.hash(user.password)
         }
-        const result = this.userStore.updateUser(id, user)
+        const result = await this.userStore.updateUser(id, user)
         return resultStoreToResultHttp(result)
     }
-    deleteUser(id: string): ResultHttp<User>{
+    async deleteUser(id: string): Promise<ResultHttp<User>>{
         if (!id || id.length === 0) {
             return { ok: false, err: { status: 400, msg: ["id is required"] } }
         }
@@ -80,7 +80,7 @@ export class UserService {
         if (!validateResult.success) {
             return { ok: false, err: { status: 400, msg: ["id is not valid"] } }
         }
-        const result = this.userStore.deleteUser(id)
+        const result = await this.userStore.deleteUser(id)
         return resultStoreToResultHttp(result)
     }
 

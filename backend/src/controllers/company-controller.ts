@@ -14,44 +14,44 @@ export class CompanyController {
         this.deleteCompany = this.deleteCompany.bind(this)
     }
 
-    getCompany(req: Request, res: Response, next: NextFunction) {
+    async getCompany(req: Request, res: Response, next: NextFunction) {
         const id = req.params.id
-        const result = this.companyService.getCompany(id)
+        const result = await this.companyService.getCompany(id)
         if (!result.ok) {
-            next(result.err!)
+            next({ httpError: result.err!, exception: result.exception })
             return
         }
         res.status(200).json(result.data)
         return
     }
 
-    getCompanies(_req: Request, res: Response, _next: NextFunction) {
-        const result = this.companyService.getCompanies()
+    async getCompanies(_req: Request, res: Response, next: NextFunction) {
+        const result = await this.companyService.getCompanies()
         if (!result.ok) {
-            _next(result.err!)
+            next({ httpError: result.err!, exception: result.exception })
             return
         }
         res.status(200).json(result.data)
         return
     }
 
-    createCompany(req: Request, res: Response, next: NextFunction) {
+    async createCompany(req: Request, res: Response, next: NextFunction) {
         const companyParams = req.body as CompanyCreateDTO
         const companyCreate : CompanyCreateDTO = {
             name: companyParams.name,
             image: companyParams.image,
             styleId: companyParams.styleId,
         }
-        const result = this.companyService.createCompany(companyCreate)
+        const result = await this.companyService.createCompany(companyCreate)
         if (!result.ok) {
-            next(result.err!)
+            next({ httpError: result.err!, exception: result.exception })
             return
         }
         res.status(201).json(result.data)
         return
     }
 
-    updateCompany(req: Request, res: Response, next: NextFunction) {
+    async updateCompany(req: Request, res: Response, next: NextFunction) {
         const id = req.params.id
         const companyParams = req.body as Partial<CompanyUpdateDTO>
         const companyUpdate : CompanyUpdateDTO = {
@@ -59,20 +59,20 @@ export class CompanyController {
             image: companyParams.image,
             styleId: companyParams.styleId,
         }
-        const result = this.companyService.updateCompany(id, companyUpdate)
+        const result = await this.companyService.updateCompany(id, companyUpdate)
         if (!result.ok) {
-            next(result.err!)
+            next({ httpError: result.err!, exception: result.exception })
             return
         }
         res.status(200).json(result.data)
         return
     }
 
-    deleteCompany(req: Request, res: Response, next: NextFunction) {
+    async deleteCompany(req: Request, res: Response, next: NextFunction) {
         const id = req.params.id
-        const result = this.companyService.deleteCompany(id)
+        const result = await this.companyService.deleteCompany(id)
         if (!result.ok) {
-            next(result.err!)
+            next({ httpError: result.err!, exception: result.exception })
             return
         }
         res.status(200).json(result.data)

@@ -2,6 +2,7 @@ export type Result<T, E> = {
     ok: boolean
     data?: T
     err?: E
+    exception?: Error
 }
 
 export type ResultHttp<T> = Result<T, HttpError>
@@ -34,28 +35,42 @@ export function resultStoreToResultHttp<T>(result: ResultStore<T>): ResultHttp<T
     if (result.ok) {
         return { ok: true, data: result.data }
     }
+    let e: ResultHttp<T>
     switch (result.err!.code) {
         case StoreErrorCode.engineFault:
-            return { ok: false, err: { status: 500, msg: [result.err!.msg!] } }
+            e = { ok: false, err: { status: 500, msg: [result.err!.msg!] } }
+            break
         case StoreErrorCode.connectionFault:
-            return { ok: false, err: { status: 500, msg: [result.err!.msg!] } }
+            e = { ok: false, err: { status: 500, msg: [result.err!.msg!] } }
+            break
         case StoreErrorCode.invalidCredentials:
-            return { ok: false, err: { status: 500, msg: [result.err!.msg!] } }
+            e = { ok: false, err: { status: 500, msg: [result.err!.msg!] } }
+            break
         case StoreErrorCode.unique:
-            return { ok: false, err: { status: 422, msg: [result.err!.msg!] } }
+            e = { ok: false, err: { status: 422, msg: ["entity already exists"] } }
+            break
         case StoreErrorCode.notFound:
-            return { ok: false, err: { status: 404, msg: [result.err!.msg!] } }
+            e = { ok: false, err: { status: 404, msg: [result.err!.msg!] } }
+            break
         case StoreErrorCode.invalidInput:
-            return { ok: false, err: { status: 500, msg: [result.err!.msg!] } }
+            e = { ok: false, err: { status: 400, msg: ["invalid input"] } }
+            break
         case StoreErrorCode.inconsistentState:
-            return { ok: false, err: { status: 500, msg: [result.err!.msg!] } }
+            e = { ok: false, err: { status: 500, msg: [result.err!.msg!] } }
+            break
         case StoreErrorCode.versionError:
-            return { ok: false, err: { status: 500, msg: [result.err!.msg!] } }
+            e = { ok: false, err: { status: 500, msg: [result.err!.msg!] } }
+            break
         case StoreErrorCode.unknown:
-            return { ok: false, err: { status: 500, msg: [result.err!.msg!] } }
+            e = { ok: false, err: { status: 500, msg: [result.err!.msg!] } }
+            break
         case StoreErrorCode.migrateError:
-            return { ok: false, err: { status: 500, msg: [result.err!.msg!] } }
+            e = { ok: false, err: { status: 500, msg: [result.err!.msg!] } }
+            break
         default:
-            return { ok: false, err: { status: 500, msg: [result.err!.msg!] } }
+            e = { ok: false, err: { status: 500, msg: [result.err!.msg!] } }
+            break
     }
+    e.exception = result.exception
+    return e
 }

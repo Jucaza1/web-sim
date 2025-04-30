@@ -15,48 +15,34 @@ export class CompanyPrismaStore implements CompanyStore {
         this.deleteCompany = this.deleteCompany.bind(this)
         this.getCompaniesByUserId = this.getCompaniesByUserId.bind(this)
     }
-    getCompany(id: string): ResultStore<Company> {
-        let company: Company | undefined
+    async getCompany(id: string): Promise<ResultStore<Company>> {
+        let company: Company | null
         try {
-            this.client.company.findUnique({ where: { id } }).then((result) => {
-                if (!result) {
-                    return
-                }
-                company = result
-            })
+            company = await this.client.company.findUnique({ where: { id } })
         } catch (e) {
-            return { ok: false, err: { code: prismaCatchToStoreError(e), msg: "internal server error" } }
+            return { ok: false, err: { code: prismaCatchToStoreError(e), msg: "internal server error" }, exception: e as Error }
         }
         if (!company) {
             return { ok: false, err: { code: StoreErrorCode.notFound, msg: "company not found" } }
         }
         return { ok: true, data: company }
     }
-    getCompanies(): ResultStore<Company[]> {
+    async getCompanies(): Promise<ResultStore<Company[]>> {
         let companies: Company[] = []
         try {
-            this.client.company.findMany().then((result) => {
-                if (!result) {
-                    return
-                }
-                companies = result
-            })
+            companies = await this.client.company.findMany()
         } catch (e) {
-            return { ok: false, err: { code: prismaCatchToStoreError(e), msg: "internal server error" } }
+            return { ok: false, err: { code: prismaCatchToStoreError(e), msg: "internal server error" }, exception: e as Error }
         }
         return { ok: true, data: companies }
     }
-    createCompany(company: CompanyCreate): ResultStore<Company> {
+    async createCompany(company: CompanyCreate): Promise<ResultStore<Company>> {
         // Check if the company already exists
-        let existingCompany: Company | undefined
+        let existingCompany: Company | null
         try {
-            this.client.company.findUnique({ where: { name: company.name } }).then((result) => {
-                if (result) {
-                    existingCompany = result
-                }
-            })
+            existingCompany = await this.client.company.findUnique({ where: { name: company.name } })
         } catch (e) {
-            return { ok: false, err: { code: prismaCatchToStoreError(e), msg: "internal server error" } }
+            return { ok: false, err: { code: prismaCatchToStoreError(e), msg: "internal server error" }, exception: e as Error }
         }
         if (existingCompany) {
             return { ok: false, err: { code: StoreErrorCode.unique, msg: "company already exists" } }
@@ -64,67 +50,46 @@ export class CompanyPrismaStore implements CompanyStore {
         // Create the company
         let companyResult: Company | undefined
         try {
-            this.client.company.create({ data: company }).then((result) => {
-                if (!result) {
-                    return
-                }
-                companyResult = result
-            })
+            companyResult = await this.client.company.create({ data: company })
         } catch (e) {
-            return { ok: false, err: { code: prismaCatchToStoreError(e), msg: "internal server error" } }
+            return { ok: false, err: { code: prismaCatchToStoreError(e), msg: "internal server error" }, exception: e as Error }
         }
         if (!companyResult) {
             return { ok: false, err: { code: StoreErrorCode.unknown, msg: "internal server error" } }
         }
         return { ok: true, data: companyResult }
     }
-    updateCompany(id: string, company: Partial<Company>): ResultStore<Company> {
+    async updateCompany(id: string, company: Partial<Company>): Promise<ResultStore<Company>> {
         let companyResult: Company | undefined
         try {
-            this.client.company.update({ where: { id }, data: company }).then((result) => {
-                if (!result) {
-                    return
-                }
-                companyResult = result
-            })
+            // TODO: check if id field collides in data
+            companyResult = await this.client.company.update({ where: { id }, data: company })
         } catch (e) {
-            return { ok: false, err: { code: prismaCatchToStoreError(e), msg: "internal server error" } }
+            return { ok: false, err: { code: prismaCatchToStoreError(e), msg: "internal server error" }, exception: e as Error }
         }
         if (!companyResult) {
             return { ok: false, err: { code: StoreErrorCode.notFound, msg: "company not found" } }
         }
         return { ok: true, data: companyResult }
     }
-    deleteCompany(id: string): ResultStore<Company> {
+    async deleteCompany(id: string): Promise<ResultStore<Company>> {
         let companyResult: Company | undefined
         try {
-            this.client.company.delete({ where: { id } }).then((result) => {
-                // Company deleted
-                if (!result) {
-                    return
-                }
-                companyResult = result
-            })
+            companyResult = await this.client.company.delete({ where: { id } })
         } catch (e) {
-            return { ok: false, err: { code: prismaCatchToStoreError(e), msg: "internal server error" } }
+            return { ok: false, err: { code: prismaCatchToStoreError(e), msg: "internal server error" }, exception: e as Error }
         }
         if (!companyResult) {
             return { ok: false, err: { code: StoreErrorCode.notFound, msg: "company not found" } }
         }
         return { ok: true, data: companyResult }
     }
-    getCompaniesByUserId(userId: string): ResultStore<Company[]> {
+    async getCompaniesByUserId(userId: string): Promise<ResultStore<Company[]>> {
         let companies: Company[] = []
         try {
-            this.client.company.findMany({ where: { users: { some: { id: userId } } } })
-                .then((result) => {
-                    if (!result) {
-                        return
-                    }
-                    companies = result
-                })
+            companies = await this.client.company.findMany({ where: { users: { some: { id: userId } } } })
         } catch (e) {
-            return { ok: false, err: { code: prismaCatchToStoreError(e), msg: "internal server error" } }
+            return { ok: false, err: { code: prismaCatchToStoreError(e), msg: "internal server error" }, exception: e as Error }
         }
         return { ok: true, data: companies }
     }

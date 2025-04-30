@@ -1,46 +1,48 @@
 import { randomUUID } from "crypto"
 import { Simulator, SimulatorCreate } from "../types/db"
 import { SimulatorStore } from "./simulator"
+import { ResultStore, StoreErrorCode } from "../types/result"
 
 export class SimulatorMemoryStore implements SimulatorStore {
     private simulators: Map<string, Simulator>
     constructor() {
         this.simulators = new Map<string, Simulator>()
     }
-
-    getSimulator(id: string): Simulator | null {
+    async getSimulator(id: string): Promise<ResultStore<Simulator>> {
         const simulator = this.simulators.get(id)
-        return simulator || null
+        if (!simulator) {
+            return { ok: false, err: { code: StoreErrorCode.notFound, msg: "simulator not found" } }
+        }
+        return { ok: true, data: simulator }
     }
-
-    getSimulatorsByCompanyId(companyId: string): Simulator[] {
-        return Array.from(this.simulators.values()).filter(simulator => simulator.companyId === companyId)
+    async getSimulatorsByCompanyId(companyId: string): Promise<ResultStore<Simulator[]>> {
+        return { ok: true, data: Array.from(this.simulators.values()).filter(simulator => simulator.companyId === companyId) }
     }
-    getSimulators(): Simulator[] {
-        return Array.from(this.simulators.values())
+    async getSimulators(): Promise<ResultStore<Simulator[]>> {
+        return { ok: true, data: Array.from(this.simulators.values()) }
     }
-    createSimulator(simulator: SimulatorCreate): Simulator | null {
-        let simulatorMemory = { ...simulator, id: randomUUID() }
+    async createSimulator(simulator: SimulatorCreate): Promise<ResultStore<Simulator>> {
+        let simulatorMemory = { ...simulator, id: randomUUID(), createdAt: new Date(), updatedAt: new Date() }
         if (this.simulators.has(simulatorMemory.id)) {
             // Simulator already exists
-            return null
+            return { ok: false, err: { code: StoreErrorCode.unique, msg: "simulator already exists" } }
         }
         this.simulators.set(simulatorMemory.id, simulatorMemory)
-        return simulatorMemory
+        return { ok: true, data: simulatorMemory }
     }
-    updateSimulator(id: string, simulator: Partial<Simulator>): Simulator | null {
-        const existingSimulator = this.getSimulator(id)
-        if (!existingSimulator) {
-            return null
+    async updateSimulator(id: string, simulator: Partial<Simulator>): Promise<ResultStore<Simulator>> {
+        const existingSimulator = await this.getSimulator(id)
+        if (!existingSimulator.ok) {
+            return { ok: false, err: { code: StoreErrorCode.notFound, msg: "simulator not found" } }
         }
-        const updatedSimulator = { ...existingSimulator, ...simulator }
+        const updatedSimulator = { ...existingSimulator.data!, ...simulator }
         this.simulators.set(id, updatedSimulator)
-        return updatedSimulator
+        return { ok: true, data: updatedSimulator }
     }
-    deleteSimulator(id: string): Simulator | null {
-        const resultSimulator = this.getSimulator(id)
-        if (!resultSimulator) {
-            return null
+    async deleteSimulator(id: string): Promise<ResultStore<Simulator>> {
+        const resultSimulator = await this.getSimulator(id)
+        if (!resultSimulator.ok) {
+            return { ok: false, err: { code: StoreErrorCode.notFound, msg: "simulator not found" } }
         }
         this.simulators.delete(id)
         return resultSimulator

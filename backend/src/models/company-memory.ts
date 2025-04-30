@@ -9,7 +9,7 @@ export class CompanyMemoryStore implements CompanyStore {
         this.companies = new Map<string, Company>()
     }
 
-    getCompany(id: string): ResultStore<Company> {
+    async getCompany(id: string): Promise<ResultStore<Company>> {
         const company = this.companies.get(id)
         if (!company) {
             return { ok: false, err: { code: StoreErrorCode.notFound, msg: "company not found" } }
@@ -17,11 +17,11 @@ export class CompanyMemoryStore implements CompanyStore {
         return { ok: true, data: company }
     }
 
-    getCompanies(): ResultStore<Company[]> {
+    async getCompanies(): Promise<ResultStore<Company[]>> {
         const data = Array.from(this.companies.values())
         return { ok: true, data }
     }
-    createCompany(company: CompanyCreate): ResultStore<Company> {
+    async createCompany(company: CompanyCreate): Promise<ResultStore<Company>> {
         company.id = randomUUID()
         if (this.companies.has(company.id)) {
             // User already exists
@@ -30,23 +30,23 @@ export class CompanyMemoryStore implements CompanyStore {
         this.companies.set(company.id, company as Company)
         return { ok: true, data: company as Company }
     }
-    updateCompany(id: string, company: Partial<Company>): ResultStore<Company> {
+    async updateCompany(id: string, company: Partial<Company>): Promise<ResultStore<Company>> {
         const existingCompany = this.companies.get(id)
         if (!existingCompany) {
             return { ok: false, err: { code: StoreErrorCode.notFound, msg: "company not found" } }
         }
-        const updatedCompany = { ...existingCompany, ...company }
+        const updatedCompany: Company = { ...existingCompany, updatedAt: new Date(), ...company }
         this.companies.set(id, updatedCompany)
         return { ok: true, data: updatedCompany }
     }
-    deleteCompany(id: string): ResultStore<Company> {
-        const resultCompany = this.getCompany(id)
+    async deleteCompany(id: string): Promise<ResultStore<Company>> {
+        const resultCompany = await this.getCompany(id)
         if (resultCompany.ok) {
             this.companies.delete(id)
         }
         return resultCompany
     }
-    getCompaniesByUserId(_: string): ResultStore<Company[]> {
+    async getCompaniesByUserId(_: string): Promise<ResultStore<Company[]>> {
         // not implemented
         return { ok: true, data: Array.from(this.companies.values()) }
     }

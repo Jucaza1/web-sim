@@ -16,17 +16,12 @@ export class UserPrismaStore implements UserStore {
         this.getUserByEmail = this.getUserByEmail.bind(this)
         this.getUsersByCompanyId = this.getUsersByCompanyId.bind(this)
     }
-    getUser(id: string): ResultStore<User> {
-        let user
+    async getUser(id: string): Promise<ResultStore<User>> {
+        let user: User | null
         try {
-            this.client.user.findUnique({ where: { id } }).then((restult) => {
-                if (!restult) {
-                    return
-                }
-                user = restult
-            })
+            user = await this.client.user.findUnique({ where: { id } })
         } catch (e) {
-            return { ok: false, err: { code: prismaCatchToStoreError(e), msg: "internal server error" } }
+            return { ok: false, err: { code: prismaCatchToStoreError(e), msg: "internal server error" }, exception: e as Error }
         }
         if (!user) {
             return { ok: false, err: { code: StoreErrorCode.notFound, msg: "user not found" } }
@@ -34,49 +29,34 @@ export class UserPrismaStore implements UserStore {
         return { ok: true, data: user }
     }
 
-    getUsers(): ResultStore<User[]> {
+    async getUsers(): Promise<ResultStore<User[]>> {
         let users: User[] = []
         try {
-            this.client.user.findMany().then((result) => {
-                if (!result) {
-                    return
-                }
-                users = result
-            })
+            users = await this.client.user.findMany()
         } catch (e) {
-            return { ok: false, err: { code: prismaCatchToStoreError(e), msg: "internal server error" } }
+            return { ok: false, err: { code: prismaCatchToStoreError(e), msg: "internal server error" }, exception: e as Error }
         }
         return { ok: true, data: users }
     }
 
-    createUser(user: UserCreate): ResultStore<User> {
+    async createUser(user: UserCreate): Promise<ResultStore<User>> {
         // Check if the user already exists
-        let existingUser = null
+        let existingUser: User | null
         try {
-            this.client.user.findUnique({ where: { email: user.email } }).then((result) => {
-                if (result) {
-                    existingUser = result
-                }
-            })
+            existingUser = await this.client.user.findUnique({ where: { email: user.email } })
         } catch (e) {
-            return { ok: false, err: { code: prismaCatchToStoreError(e), msg: "internal server error" } }
+            return { ok: false, err: { code: prismaCatchToStoreError(e), msg: "internal server error" }, exception: e as Error }
         }
         if (existingUser) {
-            // throw new Error('User already exists')
             return { ok: false, err: { code: StoreErrorCode.unique, msg: "user already exists" } }
         }
         // Create the user
         let userResult: User | undefined
         let userPrisma = UserCreatePrismaConverter(user)
         try {
-            this.client.user.create({ data: userPrisma }).then((result) => {
-                if (!result) {
-                    return
-                }
-                userResult = result
-            })
+            userResult = await this.client.user.create({ data: userPrisma })
         } catch (e) {
-            return { ok: false, err: { code: prismaCatchToStoreError(e), msg: "internal server error" } }
+            return { ok: false, err: { code: prismaCatchToStoreError(e), msg: "internal server error" }, exception: e as Error }
         }
         if (!userResult) {
             return { ok: false, err: { code: StoreErrorCode.unknown, msg: "internal server error" } }
@@ -84,17 +64,13 @@ export class UserPrismaStore implements UserStore {
         return { ok: true, data: userResult as User }
     }
 
-    updateUser(id: string, user: Partial<User>): ResultStore<User> {
-        let userResult: User | undefined
+    async updateUser(id: string, user: Partial<User>): Promise<ResultStore<User>> {
+        let userResult: User | null
         try {
-            this.client.user.update({ where: { id }, data: user }).then((result) => {
-                if (!result) {
-                    return
-                }
-                userResult = result
-            })
+            // TODO: check if id field collides in data
+            userResult = await this.client.user.update({ where: { id }, data: user })
         } catch (e) {
-            return { ok: false, err: { code: prismaCatchToStoreError(e), msg: "internal server error" } }
+            return { ok: false, err: { code: prismaCatchToStoreError(e), msg: "internal server error" }, exception: e as Error }
         }
         if (!userResult) {
             return { ok: false, err: { code: StoreErrorCode.unique, msg: "user already exists" } }
@@ -102,51 +78,36 @@ export class UserPrismaStore implements UserStore {
         return { ok: true, data: userResult }
     }
 
-    deleteUser(id: string): ResultStore<User> {
-        let userResult: User | undefined
+    async deleteUser(id: string): Promise<ResultStore<User>> {
+        let userResult: User | null
         try {
-            this.client.user.delete({ where: { id } }).then((result) => {
-                if (!result) {
-                    return
-                }
-                userResult = result
-            })
+            userResult = await this.client.user.delete({ where: { id } })
         } catch (e) {
-            return { ok: false, err: { code: prismaCatchToStoreError(e), msg: "internal server error" } }
+            return { ok: false, err: { code: prismaCatchToStoreError(e), msg: "internal server error" }, exception: e as Error }
         }
         if (!userResult) {
             return { ok: false, err: { code: StoreErrorCode.notFound, msg: "user not found" } }
         }
         return { ok: true, data: userResult }
     }
-    getUserByEmail(email: string): ResultStore<User> {
-        let user: User | undefined
+    async getUserByEmail(email: string): Promise<ResultStore<User>> {
+        let user: User | null
         try {
-            this.client.user.findUnique({ where: { email } }).then((result) => {
-                if (!result) {
-                    return
-                }
-                user = result
-            })
+            user = await this.client.user.findUnique({ where: { email } })
         } catch (e) {
-            return { ok: false, err: { code: prismaCatchToStoreError(e), msg: "internal server error" } }
+            return { ok: false, err: { code: prismaCatchToStoreError(e), msg: "internal server error" }, exception: e as Error }
         }
         if (!user) {
             return { ok: false, err: { code: StoreErrorCode.notFound, msg: "user not found" } }
         }
         return { ok: true, data: user }
     }
-    getUsersByCompanyId(companyId: string): ResultStore<User[]> {
+    async getUsersByCompanyId(companyId: string): Promise<ResultStore<User[]>> {
         let users: User[] = []
         try {
-            this.client.user.findMany({ where: { companyId } }).then((result) => {
-                if (!result) {
-                    return
-                }
-                users = result
-            })
+            users = await this.client.user.findMany({ where: { companyId } })
         } catch (e) {
-            return { ok: false, err: { code: prismaCatchToStoreError(e), msg: "internal server error" } }
+            return { ok: false, err: { code: prismaCatchToStoreError(e), msg: "internal server error" }, exception: e as Error }
         }
         return { ok: true, data: users }
     }

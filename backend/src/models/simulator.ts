@@ -1,10 +1,11 @@
 import { Simulator, SimulatorCreate } from '../types/db'
+import { ResultStore } from '../types/result'
 
 export interface SimulatorStore {
-    getSimulator(id: string): Simulator | null
-    getSimulatorsByCompanyId(companyId: string): Simulator[]
-    getSimulators(): Simulator[]
-    createSimulator(simulator: SimulatorCreate): Simulator | null
-    updateSimulator(id: string, simulator: Partial<Simulator>): Simulator | null
-    deleteSimulator(id: string): Simulator | null
+    getSimulator(id: string): Promise<ResultStore<Simulator>>
+    getSimulatorsByCompanyId(companyId: string): Promise<ResultStore<Simulator[]>>
+    getSimulators(): Promise<ResultStore<Simulator[]>>
+    createSimulator(simulator: SimulatorCreate): Promise<ResultStore<Simulator>>
+    updateSimulator(id: string, simulator: Partial<Simulator>): Promise<ResultStore<Simulator>>
+    deleteSimulator(id: string): Promise<ResultStore<Simulator>>
 }
