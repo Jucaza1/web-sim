@@ -1,0 +1,60 @@
+.formPage {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.formContainer {
+  background-color: white;
+  padding: 2rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.formTitle {
+  font-size: 1.5rem;
+  font-weight: 600;
+  text-align: center;
+  margin-bottom: 1rem;
+  color: #0c5ca8;
+}
+
+.inputField {
+  width: 100%;
+  padding: 0.5rem 1rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.375rem;
+  box-sizing: border-box;
+  margin: 5px;
+}
+
+.submitButton {
+  width: 100%;
+  background-color: #0c5ca8;
+  color: white;
+  padding: 0.5rem;
+  border-radius: 0.375rem;
+  transition: background-color 0.3s;
+  margin-top: 1rem;
+  cursor: pointer;
+}
+
+.submitButton:hover {
+  background-color: #074a8d;
+}
+.redirectText {
+  color: black;
+  text-align: center;
+  margin-top: 1rem;
+  font-size: 0.9rem;
+}
+
+.linkButton {
+  color: #0c5ca8;
+  text-decoration: underline;
+  cursor: pointer;
+}
