@@ -22,11 +22,11 @@ function compareUserWithUserCreateDTO(user: User, userDTO: UserCreateDTO): boole
         user.companyId === userDTO.companyId &&
         user.profession === userDTO.profession
 }
-function compareUserWithUser(user: User, userDTO: User): boolean {
-    return user.email === userDTO.email &&
-        user.name === userDTO.name &&
-        user.companyId === userDTO.companyId &&
-        user.profession === userDTO.profession
+function compareUserWithUser(user: User, user2: User): boolean {
+    return user.email === user2.email &&
+        user.name === user2.name &&
+        user.companyId === user2.companyId &&
+        user.profession === user2.profession
 }
 describe('UserService', () => {
     beforeEach(() => {
