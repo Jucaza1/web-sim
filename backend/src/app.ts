@@ -11,6 +11,7 @@ import { AuthController } from './controllers/auth-controller';
 import { AuthServiceJWT } from './services/auth-service';
 import { HasherBcrypt } from './services/hashing';
 import { UserCreate } from './types/db';
+import { fileServer } from './routes/file-server';
 import { UserStoreFactory } from './models/user';
 import { CompanyStoreFactory } from './models/company';
 
@@ -47,6 +48,7 @@ const authService = new AuthServiceJWT(JWT_SECRET, userService, pwdHasher)
 const authController = new AuthController(authService)
 const router = createRouter(userController, companyController, authController)
 
+app.use(fileServer(authController))
 app.use("/api/v1", router)
 
 // error handler
