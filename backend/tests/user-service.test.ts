@@ -46,19 +46,19 @@ describe('UserService', () => {
             profession: "Engineer",
         }
     })
-    it('should create a user', () => {
-        const result = userService.createUser(userCreateDTO)
+    it('should create a user', async () => {
+        const result = await userService.createUser(userCreateDTO)
         expect(result.ok).toBe(true)
         const createdUser = result.data
         expect(createdUser).toBeDefined()
     })
-    it('should create and get a user by id', () => {
-        const createResult = userService.createUser(userCreateDTO)
+    it('should create and get a user by id', async () => {
+        const createResult = await userService.createUser(userCreateDTO)
         expect(createResult.ok).toBe(true)
         const createdUser = createResult.data!
         expect(createdUser).toBeDefined()
 
-        const getResult = userService.getUser(createdUser.id)
+        const getResult = await userService.getUser(createdUser.id)
         expect(getResult.ok).toBe(true)
         expect(getResult.data).toBeDefined()
         const user = getResult.data!
@@ -66,13 +66,13 @@ describe('UserService', () => {
         expect(compareUserWithUserCreateDTO(user, userCreateDTO)).toBe(true)
         expect(compareUserWithUser(user, createdUser)).toBe(true)
     })
-    it('should create and get a user by email', () => {
-        const createResult = userService.createUser(userCreateDTO)
+    it('should create and get a user by email', async () => {
+        const createResult = await userService.createUser(userCreateDTO)
         expect(createResult.ok).toBe(true)
         const createdUser = createResult.data!
         expect(createdUser).toBeDefined()
 
-        const getResult = userService.getUserByEmail(createdUser.email)
+        const getResult = await userService.getUserByEmail(createdUser.email)
         expect(getResult.ok).toBe(true)
         expect(getResult.data).toBeDefined()
         const user = getResult.data!
@@ -80,13 +80,13 @@ describe('UserService', () => {
         expect(compareUserWithUserCreateDTO(user, userCreateDTO)).toBe(true)
         expect(compareUserWithUser(user, createdUser)).toBe(true)
     })
-    it('should create and get a user by companyId', () => {
-        const createResult = userService.createUser(userCreateDTO)
+    it('should create and get a user by companyId', async () => {
+        const createResult = await userService.createUser(userCreateDTO)
         expect(createResult.ok).toBe(true)
         const createdUser = createResult.data!
         expect(createdUser).toBeDefined()
 
-        const getResult = userService.getUsersByCompanyId(createdUser.companyId!)
+        const getResult = await userService.getUsersByCompanyId(createdUser.companyId!)
         expect(getResult.ok).toBe(true)
         expect(getResult.data).toBeDefined()
         const users = getResult.data!
@@ -95,13 +95,13 @@ describe('UserService', () => {
         expect(compareUserWithUserCreateDTO(users[0], userCreateDTO)).toBe(true)
         expect(compareUserWithUser(users[0], createdUser)).toBe(true)
     })
-    it('should create and get all users', () => {
-        const createResult = userService.createUser(userCreateDTO)
+    it('should create and get all users', async () => {
+        const createResult = await userService.createUser(userCreateDTO)
         expect(createResult.ok).toBe(true)
         const createdUser = createResult.data!
         expect(createdUser).toBeDefined()
 
-        const getResult = userService.getUsers()
+        const getResult = await userService.getUsers()
         expect(getResult.ok).toBe(true)
         expect(getResult.data).toBeDefined()
         const users = getResult.data!
@@ -110,67 +110,67 @@ describe('UserService', () => {
         expect(compareUserWithUserCreateDTO(users[0], userCreateDTO)).toBe(true)
         expect(compareUserWithUser(users[0], createdUser)).toBe(true)
     })
-    it('should update a user', () => {
-        const createResult = userService.createUser(userCreateDTO)
+    it('should update a user', async () => {
+        const createResult = await userService.createUser(userCreateDTO)
         expect(createResult.ok).toBe(true)
         const createdUser = createResult.data!
         expect(createdUser).toBeDefined()
 
-        const updateResult = userService.updateUser(createdUser.id, { name: "Updated User" })
+        const updateResult = await userService.updateUser(createdUser.id, { name: "Updated User" })
         expect(updateResult.ok).toBe(true)
         const updatedUser = updateResult.data!
         expect(updatedUser).toBeDefined()
         expect(updatedUser.name).toBe("Updated User")
     })
-    it('should delete a user', () => {
-        const createResult = userService.createUser(userCreateDTO)
+    it('should delete a user', async () => {
+        const createResult = await userService.createUser(userCreateDTO)
         expect(createResult.ok).toBe(true)
         const createdUser = createResult.data!
         expect(createdUser).toBeDefined()
 
-        const deleteResult = userService.deleteUser(createdUser.id)
+        const deleteResult = await userService.deleteUser(createdUser.id)
         expect(deleteResult.ok).toBe(true)
         const deletedUser = deleteResult.data!
         expect(deletedUser).toBeDefined()
         expect(deletedUser.id).toBe(createdUser.id)
 
-        const getResult = userService.getUser(createdUser.id)
+        const getResult = await userService.getUser(createdUser.id)
         expect(getResult.ok).toBe(false)
     })
-    it('should not create a user with existing email', () => {
-        const createResult1 = userService.createUser(userCreateDTO)
+    it('should not create a user with existing email', async () => {
+        const createResult1 = await userService.createUser(userCreateDTO)
         expect(createResult1.ok).toBe(true)
         const createdUser1 = createResult1.data!
         expect(createdUser1).toBeDefined()
 
-        const createResult2 = userService.createUser({ ...userCreateDTO, email: userCreateDTO.email })
+        const createResult2 = await userService.createUser({ ...userCreateDTO, email: userCreateDTO.email })
         expect(createResult2.ok).toBe(false)
     })
-    it('should not create a user with invalid email', () => {
-        const createResult = userService.createUser({ ...userCreateDTO, email: "invalid-email" })
+    it('should not create a user with invalid email', async () => {
+        const createResult = await userService.createUser({ ...userCreateDTO, email: "invalid-email" })
         expect(createResult.ok).toBe(false)
     })
-    it('should not update a user with invalid id', () => {
-        const createResult = userService.createUser(userCreateDTO)
+    it('should not update a user with invalid id', async () => {
+        const createResult = await userService.createUser(userCreateDTO)
         expect(createResult.ok).toBe(true)
         const createdUser = createResult.data!
         expect(createdUser).toBeDefined()
 
-        const updateResult = userService.updateUser("invalid-id", { name: "Updated User" })
+        const updateResult = await userService.updateUser("invalid-id", { name: "Updated User" })
         expect(updateResult.ok).toBe(false)
     })
-    it('should not update a user with an existing email', () => {
-        const createResult1 = userService.createUser(userCreateDTO)
+    it('should not update a user with an existing email', async () => {
+        const createResult1 = await userService.createUser(userCreateDTO)
         expect(createResult1.ok).toBe(true)
         const createdUser1 = createResult1.data!
         expect(createdUser1).toBeDefined()
 
-        const createResult2 = userService.createUser(userCreateDTO2)
+        const createResult2 = await userService.createUser(userCreateDTO2)
         expect(createResult2.ok).toBe(true)
         const createdUser2 = createResult2.data!
         expect(createdUser2).toBeDefined()
 
-        const updateResult = userService.updateUser(createdUser1.id, { email: createdUser2.email })
+        const updateResult = await userService.updateUser(createdUser1.id, { email: createdUser2.email })
         expect(updateResult.ok).toBe(false)
     })
 })
