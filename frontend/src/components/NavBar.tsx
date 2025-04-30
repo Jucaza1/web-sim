@@ -16,12 +16,12 @@ const NavBar = () => {
                 <img src={logoWhite} alt="Logo Davante" className='h-10 logo-light' />
                 
             
-                <div className='text-2xl font-bold'>Davante</div>
+                <div className='text-2xl font-bold '>Davante</div>
             </div>
 
             {/* Menú PC */}
             <div className='hidden md:flex gap-6 items-center'>
-                <a href='#' className='hover:underline'>Inicio</a>
+                <a href='/home' className='hover:underline'>Inicio</a>
                 <a href='#' className='hover:underline'>Simuladores</a>
                 <a href='#' className='hover:underline'>Perfil</a>
                 <a href='#' className='hover:underline'>Contacto</a>

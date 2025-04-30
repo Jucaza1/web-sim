@@ -8,11 +8,11 @@ function App() {
     <Router>
       <Routes> {/*Agregar rutas*/}
 
-        <Route path="/" element={<LoginPage />} />
+        <Route path="/" Component={LoginPage} />
 
-        <Route path="/register" element={<RegisterPage />} />
+        <Route path="/register" Component={RegisterPage} />
 
-        <Route path="/home" element={<Home />} />
+        <Route path="/home" Component={Home} />
 
       </Routes>
     </Router>
