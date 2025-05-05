@@ -1,11 +1,28 @@
-import { SimulatorWebgl } from '../types/db'
+import { SimulatorWebgl, SimulatorWebglCreate } from '../types/db'
 import { ResultStore } from '../types/result'
+import { PrismaClientSingleton } from './prisma-singleton'
+import { SimulatorWebglMemoryStore } from './simulator-webgl-memory'
+import { SimulatorWebglPrismaStore } from './simulator-webgl-prisma'
 
 export interface SimulatorWebglStore {
     getSimulatorWebgl(id: string): Promise<ResultStore<SimulatorWebgl>>
     getSimulatorWebglBySimulatorId(simulatorModelId: string): Promise<ResultStore<SimulatorWebgl[]>>
     getSimulatorWebgls(): Promise<ResultStore<SimulatorWebgl[]>>
-    createSimulatorWebgl(simulatorModelCreate: SimulatorWebgl): Promise<ResultStore<SimulatorWebgl>>
+    createSimulatorWebgl(simulatorModelCreate: SimulatorWebglCreate): Promise<ResultStore<SimulatorWebgl>>
     updateSimulatorWebgl(id: string, simulator: Partial<SimulatorWebgl>): Promise<ResultStore<SimulatorWebgl>>
     deleteSimulatorWebgl(id: string): Promise<ResultStore<SimulatorWebgl>>
+}
+
+export function SimulatorWebglStoreFactory(kind: string, _seed: boolean = false): SimulatorWebglStore {
+    switch (kind) {
+        case "memory":
+            console.log("runing in-memory DB for simulatorWebgl")
+            return new SimulatorWebglMemoryStore()
+        case "postgresql":
+            console.log("runing postgresql DB for simulatorWebgl")
+            return new SimulatorWebglPrismaStore(PrismaClientSingleton.getInstance())
+        default:
+            console.log("runing in-memory DB for simulatorWebgl")
+            return new SimulatorWebglMemoryStore()
+    }
 }

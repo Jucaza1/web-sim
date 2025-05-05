@@ -14,7 +14,7 @@ export type SimulatorWebgl = SimulatorWebgl_prisma
 
 export type UserCreate = Omit<Prisma.UserCreateInput, "company"> & { companyId?: string }
 export type CompanyCreate = Prisma.CompanyCreateInput
-export type SimulatorCreate = Omit<Prisma.SimulatorCreateInput, "company"> & { companyId: string }
+export type SimulatorCreate = Omit<Prisma.SimulatorCreateInput, "company" | "simulatorWebgl"> & { companyId: string }
 export type SimulatorWebglCreate = Omit<Prisma.SimulatorWebglCreateInput, "simulator"> & { simulatorId: string }
 
 

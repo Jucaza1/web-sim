@@ -1,16 +1,5 @@
 import { z } from "zod"
 
-// model User {
-// id         String   @id @default(cuid())
-// name       String
-// email      String   @unique
-// password   String
-// profession String
-// companyId  String   @map("company_id")
-// createdAt  DateTime @default(now()) @map("created_at")
-// isActive   Boolean  @default(true) @map("is_active")
-// }
-
 export const UserCreateDTOSchema = z.object({
     name: z.string()
         .min(1)
@@ -33,17 +22,6 @@ export const UserUpdateDTOSchema = UserCreateDTOSchema.partial()
 export type UserCreateDTO = z.infer<typeof UserCreateDTOSchema>
 export type UserUpdateDTO = z.infer<typeof UserUpdateDTOSchema>
 
-// model Company {
-    // id              String           @id @default(cuid())
-    // name            String           @unique
-    // image           String
-    // styleId         String           @map("style_id")
-    //
-    // users           User[]
-    // simulatorModels SimulatorModel[]
-    // simulators      Simulator[]
-    //
-//}
 
 export const CompanyCreateDTOSchema = z.object({
     name: z.string()
@@ -58,3 +36,29 @@ export const CompanyUpdateDTOSchema = CompanyCreateDTOSchema.partial()
 
 export type CompanyCreateDTO = z.infer<typeof CompanyCreateDTOSchema>
 export type CompanyUpdateDTO = z.infer<typeof CompanyUpdateDTOSchema>
+
+export const SimulatorCreateDTOSchema = z.object({
+    name: z.string()
+        .min(1)
+        .max(50, { message: "Name must be at most 50 characters" }),
+    description: z.string()
+        .min(1)
+        .max(250, { message: "Description must be at most 250 characters" }),
+    companyId: z.string()
+        .uuid({ message: "Invalid company ID" }),
+}).strict()
+export const SimulatorUpdateDTOSchema = SimulatorCreateDTOSchema.partial()
+export type SimulatorCreateDTO = z.infer<typeof SimulatorCreateDTOSchema>
+export type SimulatorUpdateDTO = z.infer<typeof SimulatorUpdateDTOSchema>
+export const SimulatorWebglCreateDTOSchema = z.object({
+    simulatorId: z.string().uuid(),
+    kind: z.string(),
+    data: z.string(),
+    wasm: z.string(),
+    framework: z.string(),
+    loader: z.string(),
+}).strict()
+
+export const SimulatorWebglUpdateDTOSchema = SimulatorWebglCreateDTOSchema.partial()
+export type SimulatorWebglCreateDTO = z.infer<typeof SimulatorWebglCreateDTOSchema>
+export type SimulatorWebglUpdateDTO = z.infer<typeof SimulatorWebglUpdateDTOSchema>

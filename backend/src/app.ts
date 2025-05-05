@@ -14,6 +14,12 @@ import { UserCreate } from './types/db';
 import { fileServer } from './routes/file-server';
 import { UserStoreFactory } from './models/user';
 import { CompanyStoreFactory } from './models/company';
+import { SimulatorService } from './services/simulator-service';
+import { SimulatorController } from './controllers/simulator-controller';
+import { SimulatorStoreFactory } from './models/simulator';
+import { SimulatorWebglStoreFactory } from './models/simulator-webgl';
+import { SimulatorWebglService } from './services/simulator-webgl-service';
+import { SimulatorWebglController } from './controllers/simulator-webgl-controller';
 
 const app = express();
 const corsOptions = {
@@ -36,6 +42,8 @@ const DB_SEED = process.env.DB_SEED === "true"
 
 const userStore = UserStoreFactory(DB_KIND, DB_SEED)
 const companyStore = CompanyStoreFactory(DB_KIND, DB_SEED)
+const simulatorStore = SimulatorStoreFactory(DB_KIND, DB_SEED)
+const simulatorWebglStore = SimulatorWebglStoreFactory(DB_KIND, DB_SEED)
 const pwdHasher = new HasherBcrypt(10)
 
 const userService = new UserService(userStore, pwdHasher)
@@ -44,9 +52,21 @@ const userController = new UserController(userService)
 const companyService = new CompanyService(companyStore)
 const companyController = new CompanyController(companyService)
 
+const simulatorService = new SimulatorService(simulatorStore)
+const simulatorController = new SimulatorController(simulatorService)
+
+const simulatorWebglService = new SimulatorWebglService(simulatorWebglStore)
+const simulatorWebglController = new SimulatorWebglController(simulatorWebglService)
+
 const authService = new AuthServiceJWT(JWT_SECRET, userService, pwdHasher)
 const authController = new AuthController(authService)
-const router = createRouter(userController, companyController, authController)
+const router = createRouter(
+    userController,
+    companyController,
+    simulatorController,
+    simulatorWebglController,
+    authController
+)
 
 app.use(fileServer(authController))
 app.use("/api/v1", router)

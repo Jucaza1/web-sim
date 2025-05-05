@@ -71,7 +71,7 @@ model SimulatorWebgl {
     createdAt   DateTime @default(now()) @map("created_at")
     updatedAt   DateTime @updatedAt @map("updated_at")
 
-    simulator Simulator @relation(fields: [simulatorId], references: [id])
+    simulator Simulator @relation(onDelete: Cascade ,fields: [simulatorId], references: [id])
 
     @@map("simulator_webgls")
 }

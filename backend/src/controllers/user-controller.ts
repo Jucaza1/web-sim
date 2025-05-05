@@ -82,4 +82,26 @@ export class UserController {
         res.status(200).json(result.data)
         return
     }
+
+    async getUsersByCompanyId(req: Request, res: Response, next: NextFunction) {
+        const companyId = req.params.id
+        const result = await this.userService.getUsersByCompanyId(companyId)
+        if (!result.ok) {
+            next({ httpError: result.err!, exception: result.exception })
+            return
+        }
+        res.status(200).json(result.data)
+        return
+    }
+
+    async getUserByEmail(req: Request, res: Response, next: NextFunction) {
+        const email = req.params.email
+        const result = await this.userService.getUserByEmail(email)
+        if (!result.ok) {
+            next({ httpError: result.err!, exception: result.exception })
+            return
+        }
+        res.status(200).json(result.data)
+        return
+    }
 }

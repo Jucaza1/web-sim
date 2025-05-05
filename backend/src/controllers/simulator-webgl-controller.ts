@@ -1,0 +1,93 @@
+import { NextFunction, Request, Response } from 'express'
+import { SimulatorWebglService } from '../services/simulator-webgl-service'
+import { SimulatorWebglCreateDTO, SimulatorWebglUpdateDTO } from '../types/validations'
+
+export class SimulatorWebglController {
+    private simulatorWebglService: SimulatorWebglService
+
+    constructor(simulatorWebglService: SimulatorWebglService) {
+        this.simulatorWebglService = simulatorWebglService
+        this.getWebgl = this.getWebgl.bind(this)
+        this.getWebglBySimulatorId = this.getWebglBySimulatorId.bind(this)
+        this.getWebgls = this.getWebgls.bind(this)
+        this.createWebgl = this.createWebgl.bind(this)
+        this.updateWebgl = this.updateWebgl.bind(this)
+        this.deleteWebgl = this.deleteWebgl.bind(this)
+    }
+    async getWebgl(req: Request, res: Response, next: NextFunction) {
+        const id = req.params.id
+        const result = await this.simulatorWebglService.getWebgl(id)
+        if (!result.ok) {
+            next({ httpError: result.err!, exception: result.exception })
+            return
+        }
+        res.status(200).json(result.data)
+        return
+    }
+    async getWebglBySimulatorId(req: Request, res: Response, next: NextFunction) {
+        const simulatorId = req.params.simulatorId
+        const result = await this.simulatorWebglService.getWebglBySimulatorId(simulatorId)
+        if (!result.ok) {
+            next({ httpError: result.err!, exception: result.exception })
+            return
+        }
+        res.status(200).json(result.data)
+        return
+    }
+    async getWebgls(_req: Request, res: Response, next: NextFunction) {
+        const result = await this.simulatorWebglService.getWebgls()
+        if (!result.ok) {
+            next({ httpError: result.err!, exception: result.exception })
+            return
+        }
+        res.status(200).json(result.data)
+        return
+    }
+    async createWebgl(req: Request, res: Response, next: NextFunction) {
+        const webglParams = req.body as SimulatorWebglCreateDTO
+        const webglCreate: SimulatorWebglCreateDTO = {
+            simulatorId: webglParams.simulatorId,
+            kind: webglParams.kind,
+            data: webglParams.data,
+            wasm: webglParams.wasm,
+            framework: webglParams.framework,
+            loader: webglParams.loader,
+        }
+        const result = await this.simulatorWebglService.createWebgl(webglCreate)
+        if (!result.ok) {
+            next({ httpError: result.err!, exception: result.exception })
+            return
+        }
+        res.status(201).json(result.data)
+        return
+    }
+    async updateWebgl(req: Request, res: Response, next: NextFunction) {
+        const id = req.params.id
+        const webglParams = req.body as SimulatorWebglUpdateDTO
+        const webglUpdate: SimulatorWebglUpdateDTO = {
+            simulatorId: webglParams.simulatorId,
+            kind: webglParams.kind,
+            data: webglParams.data,
+            wasm: webglParams.wasm,
+            framework: webglParams.framework,
+            loader: webglParams.loader,
+        }
+        const result = await this.simulatorWebglService.updateWebgl(id, webglUpdate)
+        if (!result.ok) {
+            next({ httpError: result.err!, exception: result.exception })
+            return
+        }
+        res.status(200).json(result.data)
+        return
+    }
+    async deleteWebgl(req: Request, res: Response, next: NextFunction) {
+        const id = req.params.id
+        const result = await this.simulatorWebglService.deleteWebgl(id)
+        if (!result.ok) {
+            next({ httpError: result.err!, exception: result.exception })
+            return
+        }
+        res.status(200).json(result.data)
+        return
+    }
+}
