@@ -1,10 +1,9 @@
-/**/
-/* @import "tailwindcss/preflight"; 
-@tailwind utilities; */
 
+@import "tailwindcss";
 
 @import "./styles/variables.css";
 @import "./styles/fonts.css";
+
 
 :root {
     --bg-color: var(--color-navy);

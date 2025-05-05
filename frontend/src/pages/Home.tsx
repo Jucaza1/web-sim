@@ -1,5 +1,4 @@
 import NavBar from "../components/NavBar";
-import "../styles/Home.css"; // Asegúrate de que la ruta sea correcta
 import videoPresentacion from "../assets/video/DAVANTE_30sec_16x9_CAST_20250408.mp4";
 
 
@@ -10,8 +9,8 @@ const Home = () => {
             <main className="p-6">
                 <h1 className="text-3xl font-bold">Bienvenido a Davante</h1>
                 <video 
-                    className="w-full h-auto mt-4 rounded-lg border-navy shadow-lg" 
-                    controls 
+                    className="w-3/4 h-auto mt-4 rounded-full  border-4 border-navy dark:border-white  shadow-lg mx-auto" 
+                    controls
                     loop 
                     preload="auto" 
                     playsInline
