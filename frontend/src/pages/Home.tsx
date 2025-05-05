@@ -14,7 +14,6 @@ const Home = () => {
                     loop 
                     preload="auto" 
                     playsInline
-                    autoPlay
                 >
                     <source src={videoPresentacion} type="video/mp4" />
                     Tu navegador no soporta el elemento de video.

@@ -21,12 +21,12 @@ const NavBar = () => {
 
             {/* Menú PC */}
             <div className='hidden md:flex gap-6 items-center'>
-                <a href='/home' className='hover:underline'>Inicio</a>
-                <a href='#' className='hover:underline'>Simuladores</a>
-                <a href='#' className='hover:underline'>Perfil</a>
-                <a href='#' className='hover:underline'>Contacto</a>
-                <a href='#' className='hover:underline'>Ayuda</a>
-                <a href='#' className='hover:underline'>Sobre nosotros</a>
+                <a href='/home' className='hover:text-orange-500'>Inicio</a>
+                <a href='/simulator' className='hover:text-orange-500'>Simuladores</a>
+                <a href='#' className='hover:text-orange-500'>Perfil</a>
+                <a href='#' className='hover:text-orange-500'>Contacto</a>
+                <a href='#' className='hover:text-orange-500'>Ayuda</a>
+                <a href='#' className='hover:text-orange-500'>Sobre nosotros</a>
                 <ThemeToggle/>
             </div>
 
@@ -39,12 +39,12 @@ const NavBar = () => {
 
             {menuOpen && (
                 <div className='absolute top-24 right-0 w-full flex flex-col items-end px-6 py-4 md:hidden'>
-                    <a href='#' className='block hover:underline'>Inicio</a>
-                    <a href='#' className='block hover:underline'>Simuladores</a>
-                    <a href='#' className='block hover:underline'>Perfil</a>
-                    <a href='#' className='block hover:underline'>Contacto</a>
-                    <a href='#' className='block hover:underline'>Ayuda</a>
-                    <a href='#' className='block hover:underline'>Sobre nosotros</a>
+                    <a href='#' className='block hover:text-orange-500'>Inicio</a>
+                    <a href='#' className='block hover:text-orange-500'>Simuladores</a>
+                    <a href='#' className='block hover:text-orange-500'>Perfil</a>
+                    <a href='#' className='block hover:text-orange-500'>Contacto</a>
+                    <a href='#' className='block hover:text-orange-500'>Ayuda</a>
+                    <a href='#' className='block hover:text-orange-500'>Sobre nosotros</a>
                     <div className='py2 w-full'>
                         <ThemeToggle/>
                     </div>
