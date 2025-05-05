@@ -15,7 +15,7 @@ datasource db {
 }
 
 model User {
-    id         String   @id @default(cuid())
+    id         String   @id @default(uuid())
     name       String
     email      String   @unique
     password   String
@@ -33,7 +33,7 @@ model User {
 }
 
 model Company {
-    id      String @id @default(cuid())
+    id      String @id @default(uuid())
     name    String @unique
     image   String
     styleId String @map("style_id")
@@ -47,7 +47,7 @@ model Company {
 }
 
 model Simulator {
-    id          String @id @default(cuid())
+    id          String @id @default(uuid())
     name        String
     companyId   String @map("company_id")
     description String
@@ -61,7 +61,7 @@ model Simulator {
 }
 
 model SimulatorWebgl {
-    id          String @id @default(cuid())
+    id          String @id @default(uuid())
     kind        String
     simulatorId String @unique @map("simulator_id")
     data        String

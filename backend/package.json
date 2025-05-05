@@ -9,6 +9,7 @@
         "debug": "npm run build && node --inspect ./build/src/server.js",
         "mig-gen": "npx prisma migrate diff --from-empty --to-schema-datamodel prisma/schema.prisma --script > prisma/migrations/init.sql",
         "gen-migrate": "npx prisma migrate dev --name init",
+        "dev-migrate": "npx prisma migrate dev --create-only --name init",
         "dev-migrate-reset": "prisma migrate reset --force --skip-seed",
         "migrate-deploy": "npx prisma migrate deploy",
         "prisma-gen": "npx prisma generate",

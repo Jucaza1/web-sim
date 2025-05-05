@@ -18,8 +18,6 @@ RUN npm run build
 FROM node:20-alpine AS production
 # set working directory
 WORKDIR /app
-# # copy node_modules and build from build stage
-# COPY --from=build /app/node_modules ./node_modules
 COPY --from=build /app/package-lock.json ./package-lock.json
 COPY --from=build /app/package.json ./package.json
 RUN npm install --production
