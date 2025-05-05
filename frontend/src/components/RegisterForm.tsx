@@ -1,5 +1,6 @@
 import { useForm } from "react-hook-form";
 import styles from "../styles/RegisterForm.module.css";
+import logo from "../assets/logo/Davante_logo_endosos_navy.svg"
 
 export default function RegisterForm() {
   const { register, handleSubmit } = useForm();
@@ -10,7 +11,10 @@ export default function RegisterForm() {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className={styles.formContainer}>
+      <div className={styles.titleContainer}>
+      <img src={logo} alt="Logo de Davante" className={styles.logo}/>
       <h2 className={styles.formTitle}>Registro de Usuario</h2>
+      </div>
 
       <input
         {...register("name")}
