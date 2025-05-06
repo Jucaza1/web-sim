@@ -1,0 +1,121 @@
+import { User, UserCreate } from "../types/db"
+import { ResultStore, StoreErrorCode } from "../types/result"
+import { UserStore } from "./user"
+import { randomUUID } from "crypto"
+
+export class UserMemoryStore implements UserStore {
+    private users: Map<string, User>
+    constructor(seed: boolean = false) {
+        this.users = new Map()
+        if (seed) {
+            this.seedUsers(mockUsers)
+        }
+    }
+    async getUserByEmail(email: string): Promise<ResultStore<User>> {
+        for (const user of this.users.values()) {
+            if (user.email === email) {
+                return { ok: true, data: user }
+            }
+        }
+        return { ok: false, err: { code: StoreErrorCode.notFound, msg: "user not found" } }
+    }
+    async getUsersByCompanyId(companyId: string): Promise<ResultStore<User[]>> {
+        const result: User[] = []
+        for (const user of this.users.values()) {
+            if (user.companyId === companyId) {
+                result.push(user)
+            }
+        }
+        return { ok: true, data: result }
+    }
+
+    async getUser(id: string): Promise<ResultStore<User>> {
+        const user = this.users.get(id)
+        if (!user) {
+            return { ok: false, err: { code: StoreErrorCode.notFound, msg: "user not found" } }
+        }
+        return { ok: true, data: user }
+    }
+
+    async getUsers(): Promise<ResultStore<User[]>> {
+        const data = Array.from(this.users.values())
+        return { ok: true, data }
+    }
+
+    async createUser(user: UserCreate): Promise<ResultStore<User>> {
+        user.id = randomUUID()
+        if (this.users.has(user.id)) {
+            // User already exists
+            return { ok: false, err: { code: StoreErrorCode.unique, msg: "user already exists" } }
+        }
+        if ([...this.users.values()].some(existingUser => existingUser.email === user.email)) {
+            return { ok: false, err: { code: StoreErrorCode.unique, msg: "email already exists" } }
+        }
+        this.users.set(user.id, user as User)
+        return { ok: true, data: user as User }
+    }
+
+    async updateUser(id: string, user: Partial<User>): Promise<ResultStore<User>> {
+        const existingUser = this.users.get(id)
+        if (!existingUser) {
+            return { ok: false, err: { code: StoreErrorCode.notFound, msg: "user not found" } }
+        }
+        if ([...this.users.values()].some(existingUser => existingUser.email === user.email)) {
+            return { ok: false, err: { code: StoreErrorCode.unique, msg: "email already exists" } }
+        }
+        const updateData: User = { ...existingUser, updatedAt: new Date(), ...user }
+        this.users.set(id, updateData)
+        return { ok: true, data: updateData }
+    }
+
+    async deleteUser(id: string): Promise<ResultStore<User>> {
+        const resultUser = this.users.get(id)
+        if (!resultUser) {
+            return { ok: false, err: { code: StoreErrorCode.notFound, msg: "user not found" } }
+        }
+        this.users.delete(id)
+        return { ok: true, data: resultUser }
+    }
+
+    seedUsers(users: User[]) {
+        users.forEach(user => {
+            this.users.set(user.id, user)
+        })
+    }
+}
+// Mock data for testing
+const mockUsers: User[] = [
+    {
+        id: "9db2bdc9-65a3-4a4f-8a5d-63e73454c3ce",
+        name: "Alice",
+        email: "alice@gmail.com",
+        password: "hashedpassword1",
+        createdAt: new Date("2025-01-01"),
+        isActive: true,
+        profession: "profession1",
+        companyId: "47202dbe-b5c7-4073-8b74-f96e93941496",
+        updatedAt: new Date("2025-01-01"),
+    },
+    {
+        id: "524be767-9542-43ab-b456-5d369e75b909",
+        name: "Bob",
+        email: "bob@gmail.com",
+        password: "hashedpassword2",
+        createdAt: new Date("2025-01-01"),
+        isActive: true,
+        profession: "profession2",
+        companyId: "b637ce5c-d44a-4d6f-9912-992c109de929",
+        updatedAt: new Date("2025-01-01"),
+    },
+    {
+        id: "ab96de69-76c2-4a9c-9abb-2357aef22e3b",
+        name: "Anna",
+        email: "anna@gmail.com",
+        password: "hashedpassword3",
+        createdAt: new Date("2025-01-02"),
+        isActive: true,
+        profession: "profession1",
+        companyId: "47202dbe-b5c7-4073-8b74-f96e93941496",
+        updatedAt: new Date("2025-01-02"),
+    },
+]
