@@ -1,6 +1,7 @@
 
 import { Link, useNavigate } from "react-router-dom";
 import styles from "../styles/LoginForm.module.css";
+import logo from "../assets/logo/Davante_logo_endosos_navy.svg";
 
 const LoginForm = () => {
   const navigate = useNavigate();
@@ -12,7 +13,10 @@ const LoginForm = () => {
 
   return (
     <form onSubmit={handleSubmit} className={styles.formContainer}>
+      <div className={styles.titleContainer}>
+      <img src={logo} alt="Logo de Davante" className={styles.logo} />
       <h2 className={styles.formTitle}>Iniciar sesión</h2>
+      </div>
       <input
         type="email"
         placeholder="Correo electrónico"
