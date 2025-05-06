@@ -1,4 +1,4 @@
-import { Company, CompanyCreate } from '../types/db'
+import { Company, CompanyCreate, CompanyIdName } from '../types/db'
 import { ResultStore } from '../types/result'
 import { CompanyMemoryStore } from './company-memory'
 import { CompanyPrismaStore } from './company-prisma'
@@ -11,6 +11,7 @@ export interface CompanyStore {
     updateCompany(id: string, company: Partial<Company>): Promise<ResultStore<Company>>
     deleteCompany(id: string): Promise<ResultStore<Company>>
     getCompaniesByUserId(userId: string): Promise<ResultStore<Company[]>>
+    getCompaniesIdName(): Promise<ResultStore<CompanyIdName[]>>
 }
 export function CompanyStoreFactory(kind: string, _seed: boolean = false): CompanyStore {
     switch (kind) {

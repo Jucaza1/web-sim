@@ -1,6 +1,6 @@
 import { PrismaClient } from '@prisma/client'
 import { CompanyStore } from "./company"
-import { Company, CompanyCreate } from '../types/db'
+import { Company, CompanyCreate, CompanyIdName } from '../types/db'
 import { ResultStore, StoreErrorCode } from '../types/result'
 import { prismaCatchToStoreError } from '../types/exceptions'
 
@@ -10,6 +10,7 @@ export class CompanyPrismaStore implements CompanyStore {
         this.client = client
         this.getCompany = this.getCompany.bind(this)
         this.getCompanies = this.getCompanies.bind(this)
+        this.getCompaniesIdName = this.getCompaniesIdName.bind(this)
         this.createCompany = this.createCompany.bind(this)
         this.updateCompany = this.updateCompany.bind(this)
         this.deleteCompany = this.deleteCompany.bind(this)
@@ -35,6 +36,17 @@ export class CompanyPrismaStore implements CompanyStore {
             return { ok: false, err: { code: prismaCatchToStoreError(e), msg: "internal server error" }, exception: e as Error }
         }
         return { ok: true, data: companies }
+    }
+    async getCompaniesIdName(): Promise<ResultStore<CompanyIdName[]>> {
+        let companies: CompanyIdName[] = []
+        try {
+            companies = await this.client.company.findMany({ select: { id: true, name: true } })
+        } catch (e) {
+            return { ok: false, err: { code: prismaCatchToStoreError(e), msg: "internal server error" }, exception: e as Error }
+        }
+        return { ok : true, data: companies}
+
+
     }
     async createCompany(company: CompanyCreate): Promise<ResultStore<Company>> {
         // Check if the company already exists

@@ -28,6 +28,7 @@ export function createRouter(
     // Company routes unprotected
     router.get("/dev/companies/:id", companyController.getCompany)
     router.get("/dev/companies", companyController.getCompanies)
+    router.get("/dev/companiesid", companyController.getCompaniesIdName)
     router.post("/dev/companies", companyController.createCompany)
     router.put("/dev/companies/:id", companyController.updateCompany)
     router.delete("/dev/companies/:id", companyController.deleteCompany)
@@ -62,6 +63,7 @@ export function createRouter(
     // Company routes
     routerAuth.get("/companies/:id", companyController.getCompany)
     routerAuth.get("/companies", companyController.getCompanies)
+    routerAuth.get("/companiesid", companyController.getCompaniesIdName)
     routerAuth.post("/companies", companyController.createCompany)
     routerAuth.put("/companies/:id", companyController.updateCompany)
     routerAuth.delete("/companies/:id", companyController.deleteCompany)

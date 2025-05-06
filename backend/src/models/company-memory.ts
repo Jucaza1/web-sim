@@ -1,5 +1,5 @@
 import { randomUUID } from 'crypto'
-import { Company, CompanyCreate } from '../types/db'
+import { Company, CompanyCreate, CompanyIdName } from '../types/db'
 import { CompanyStore } from "./company"
 import { ResultStore, StoreErrorCode } from '../types/result'
 
@@ -8,7 +8,6 @@ export class CompanyMemoryStore implements CompanyStore {
     constructor() {
         this.companies = new Map<string, Company>()
     }
-
     async getCompany(id: string): Promise<ResultStore<Company>> {
         const company = this.companies.get(id)
         if (!company) {
@@ -16,9 +15,12 @@ export class CompanyMemoryStore implements CompanyStore {
         }
         return { ok: true, data: company }
     }
-
     async getCompanies(): Promise<ResultStore<Company[]>> {
         const data = Array.from(this.companies.values())
+        return { ok: true, data }
+    }
+    async getCompaniesIdName(): Promise<ResultStore<CompanyIdName[]>> {
+        const data: CompanyIdName[] = Array.from(this.companies.entries()).map(([_, company]) => { return { id: company.id, name: company.name } })
         return { ok: true, data }
     }
     async createCompany(company: CompanyCreate): Promise<ResultStore<Company>> {

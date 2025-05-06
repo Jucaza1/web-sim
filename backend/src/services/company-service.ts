@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { CompanyStore } from "../models/company";
-import { Company } from "../types/db";
+import { Company, CompanyIdName } from "../types/db";
 import { ResultHttp, resultStoreToResultHttp } from "../types/result";
 import { CompanyCreateDTO, CompanyCreateDTOSchema, CompanyUpdateDTOSchema } from "../types/validations";
 
@@ -24,6 +24,10 @@ export class CompanyService {
         const result = await this.companyStore.getCompanies()
         return resultStoreToResultHttp(result)
     }
+    async getCompaniesIdName(): Promise<ResultHttp<CompanyIdName[]>> {
+        const result = await this.companyStore.getCompaniesIdName()
+        return resultStoreToResultHttp(result)
+    }
     async createCompany(company: CompanyCreateDTO): Promise<ResultHttp<Company>> {
         const validateResult = CompanyCreateDTOSchema.safeParse(company)
         if (!validateResult.success) {
@@ -43,7 +47,7 @@ export class CompanyService {
         const result = await this.companyStore.updateCompany(id, company)
         return resultStoreToResultHttp(result)
     }
-    async deleteCompany(id: string): Promise<ResultHttp<Company>>{
+    async deleteCompany(id: string): Promise<ResultHttp<Company>> {
         if (!id || id.length === 0) {
             return { ok: false, err: { status: 400, msg: ["id is required"] } }
         }

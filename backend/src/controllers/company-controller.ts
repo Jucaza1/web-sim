@@ -9,6 +9,7 @@ export class CompanyController {
         this.companyService = companyService
         this.getCompany = this.getCompany.bind(this)
         this.getCompanies = this.getCompanies.bind(this)
+        this.getCompaniesIdName = this.getCompaniesIdName.bind(this)
         this.createCompany = this.createCompany.bind(this)
         this.updateCompany = this.updateCompany.bind(this)
         this.deleteCompany = this.deleteCompany.bind(this)
@@ -27,6 +28,16 @@ export class CompanyController {
 
     async getCompanies(_req: Request, res: Response, next: NextFunction) {
         const result = await this.companyService.getCompanies()
+        if (!result.ok) {
+            next({ httpError: result.err!, exception: result.exception })
+            return
+        }
+        res.status(200).json(result.data)
+        return
+    }
+
+    async getCompaniesIdName(_req: Request, res: Response, next: NextFunction) {
+        const result = await this.companyService.getCompaniesIdName()
         if (!result.ok) {
             next({ httpError: result.err!, exception: result.exception })
             return

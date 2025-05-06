@@ -8,6 +8,12 @@ export class SimulatorPrismaStore implements SimulatorStore {
     private client: PrismaClient
     constructor(client: PrismaClient) {
         this.client = client
+        this.getSimulator = this.getSimulator.bind(this)
+        this.getSimulators = this.getSimulators.bind(this)
+        this.getSimulatorsByCompanyId = this.getSimulatorsByCompanyId.bind(this)
+        this.createSimulator = this.createSimulator.bind(this)
+        this.updateSimulator = this.updateSimulator.bind(this)
+        this.deleteSimulator = this.deleteSimulator.bind(this)
     }
     async getSimulator(id: string): Promise<ResultStore<Simulator>> {
         let simulator: Simulator | null

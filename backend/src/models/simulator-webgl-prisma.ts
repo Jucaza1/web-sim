@@ -8,6 +8,12 @@ export class SimulatorWebglPrismaStore implements SimulatorWebglStore {
     private client: PrismaClient
     constructor(client: PrismaClient) {
         this.client = client
+        this.getSimulatorWebgl = this.getSimulatorWebgl.bind(this)
+        this.getSimulatorWebglBySimulatorId = this.getSimulatorWebglBySimulatorId.bind(this)
+        this.getSimulatorWebgls = this.getSimulatorWebgls.bind(this)
+        this.createSimulatorWebgl = this.createSimulatorWebgl.bind(this)
+        this.updateSimulatorWebgl = this.updateSimulatorWebgl.bind(this)
+        this.deleteSimulatorWebgl = this.deleteSimulatorWebgl.bind(this)
     }
     async getSimulatorWebgl(id: string): Promise<ResultStore<SimulatorWebgl>> {
         let simulatorWebgl: SimulatorWebgl | null
