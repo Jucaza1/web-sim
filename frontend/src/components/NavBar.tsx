@@ -39,8 +39,8 @@ const NavBar = () => {
 
             {menuOpen && (
                 <div className='absolute top-24 right-0 w-full flex flex-col items-end px-6 py-4 md:hidden'>
-                    <a href='#' className='block hover:text-orange-500'>Inicio</a>
-                    <a href='#' className='block hover:text-orange-500'>Simuladores</a>
+                    <a href='/home' className='block hover:text-orange-500'>Inicio</a>
+                    <a href='/simulator' className='block hover:text-orange-500'>Simuladores</a>
                     <a href='#' className='block hover:text-orange-500'>Perfil</a>
                     <a href='#' className='block hover:text-orange-500'>Contacto</a>
                     <a href='#' className='block hover:text-orange-500'>Ayuda</a>

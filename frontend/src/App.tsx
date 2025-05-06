@@ -5,12 +5,13 @@ import LoginPage from './pages/LoginPage';
 import LoadingScreen from './components/LoadingScreen';
 import { useState, useEffect } from "react";
 import SimPage from "./pages/SimPage";
+import NavBar from "./components/NavBar";
 
 
 function App() {
 
     return (
-      <Router>
+      <Router> 
         <LoadingWrapper />
       </Router>
     );
@@ -31,9 +32,12 @@ function App() {
     };
   }, [location]);
 
+  const hideNavBar = location.pathname === "/register" || location.pathname === "/"; // Oculta NavBar en estas rutas
+
   return (
     <>
         {loading && <LoadingScreen />} {/* Pantalla de carga */}
+        {!loading && !hideNavBar && <NavBar />} {/* Muestra NavBar solo si no está en login o register */}
         <Routes> 
           <Route path="/" Component={LoginPage} />
           <Route path="/register" Component={RegisterPage} />

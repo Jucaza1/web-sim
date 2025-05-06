@@ -1,11 +1,9 @@
-import NavBar from "../components/NavBar";
 import videoPresentacion from "../assets/video/DAVANTE_30sec_16x9_CAST_20250408.mp4";
 
 
 const Home = () => {
     return (
         <div>
-            <NavBar />
             <main className="p-6">
                 <h1 className="text-3xl font-bold">Bienvenido a Davante</h1>
                 <video 
