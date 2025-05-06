@@ -1,6 +1,6 @@
 import { PrismaClient } from '@prisma/client'
 import { UserStore } from "./user"
-import { User, UserCreate, UserCreatePrismaConverter } from '../types/db'
+import { Role, User, UserCreate, UserCreatePrismaConverter } from '../types/db'
 import { ResultStore, StoreErrorCode } from '../types/result'
 import { prismaCatchToStoreError } from '../types/exceptions'
 
@@ -39,7 +39,7 @@ export class UserPrismaStore implements UserStore {
         return { ok: true, data: users }
     }
 
-    async createUser(user: UserCreate): Promise<ResultStore<User>> {
+    async createUser(user: UserCreate, role: Role = "USER"): Promise<ResultStore<User>> {
         // Check if the user already exists
         let existingUser: User | null
         try {
@@ -52,7 +52,7 @@ export class UserPrismaStore implements UserStore {
         }
         // Create the user
         let userResult: User | undefined
-        let userPrisma = UserCreatePrismaConverter(user)
+        let userPrisma = UserCreatePrismaConverter(user, role)
         try {
             userResult = await this.client.user.create({ data: userPrisma })
         } catch (e) {

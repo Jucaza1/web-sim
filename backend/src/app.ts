@@ -125,7 +125,7 @@ const adminUser: UserCreate = {
     // isActive: true,
 }
 const pwd = adminUser.password
-userService.createUser(adminUser).then((res) => {
+userService.createUser(adminUser, "ADMIN").then((res) => {
     if (res.ok) {
         console.log("Admin user created")
         console.log("Admin user email: ", adminUser.email)

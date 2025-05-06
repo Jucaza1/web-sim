@@ -1,4 +1,4 @@
-import { User, UserCreate } from "../types/db"
+import { Role, User, UserCreate } from "../types/db"
 import { ResultStore } from "../types/result"
 import { UserMemoryStore } from "./user-memory"
 import { UserPrismaStore } from "./user-prisma"
@@ -7,7 +7,7 @@ import { PrismaClientSingleton } from "./prisma-singleton"
 export interface UserStore {
     getUser(id: string): Promise<ResultStore<User>>
     getUsers(): Promise<ResultStore<User[]>>
-    createUser(user: UserCreate): Promise<ResultStore<User>>
+    createUser(user: UserCreate, role?: Role): Promise<ResultStore<User>>
     updateUser(id: string, user: Partial<User>): Promise<ResultStore<User>>
     deleteUser(id: string): Promise<ResultStore<User>>
     getUserByEmail(email: string): Promise<ResultStore<User>>

@@ -1,16 +1,18 @@
-import { User, UserCreate } from "../types/db"
+import { Role, User, UserCreate } from "../types/db"
 import { ResultStore, StoreErrorCode } from "../types/result"
 import { UserStore } from "./user"
 import { randomUUID } from "crypto"
 
 export class UserMemoryStore implements UserStore {
     private users: Map<string, User>
+
     constructor(seed: boolean = false) {
         this.users = new Map()
         if (seed) {
             this.seedUsers(mockUsers)
         }
     }
+
     async getUserByEmail(email: string): Promise<ResultStore<User>> {
         for (const user of this.users.values()) {
             if (user.email === email) {
@@ -19,6 +21,7 @@ export class UserMemoryStore implements UserStore {
         }
         return { ok: false, err: { code: StoreErrorCode.notFound, msg: "user not found" } }
     }
+
     async getUsersByCompanyId(companyId: string): Promise<ResultStore<User[]>> {
         const result: User[] = []
         for (const user of this.users.values()) {
@@ -42,17 +45,27 @@ export class UserMemoryStore implements UserStore {
         return { ok: true, data }
     }
 
-    async createUser(user: UserCreate): Promise<ResultStore<User>> {
-        user.id = randomUUID()
-        if (this.users.has(user.id)) {
+    async createUser(user: UserCreate, role: Role = "USER"): Promise<ResultStore<User>> {
+        const id = randomUUID()
+        if (this.users.has(id)) {
             // User already exists
             return { ok: false, err: { code: StoreErrorCode.unique, msg: "user already exists" } }
         }
         if ([...this.users.values()].some(existingUser => existingUser.email === user.email)) {
             return { ok: false, err: { code: StoreErrorCode.unique, msg: "email already exists" } }
         }
-        this.users.set(user.id, user as User)
-        return { ok: true, data: user as User }
+        const companyId = user.companyId ?? null
+        const userwithComplete: User = {
+            ...user,
+            isActive: true,
+            companyId: companyId,
+            id: id,
+            createdAt: new Date(),
+            updatedAt: new Date(),
+            role: role,
+        }
+        this.users.set(id, userwithComplete )
+        return { ok: true, data: userwithComplete }
     }
 
     async updateUser(id: string, user: Partial<User>): Promise<ResultStore<User>> {
@@ -95,6 +108,7 @@ const mockUsers: User[] = [
         profession: "profession1",
         companyId: "47202dbe-b5c7-4073-8b74-f96e93941496",
         updatedAt: new Date("2025-01-01"),
+        role: "USER",
     },
     {
         id: "524be767-9542-43ab-b456-5d369e75b909",
@@ -106,6 +120,7 @@ const mockUsers: User[] = [
         profession: "profession2",
         companyId: "b637ce5c-d44a-4d6f-9912-992c109de929",
         updatedAt: new Date("2025-01-01"),
+        role: "ADMIN",
     },
     {
         id: "ab96de69-76c2-4a9c-9abb-2357aef22e3b",
@@ -117,5 +132,6 @@ const mockUsers: User[] = [
         profession: "profession1",
         companyId: "47202dbe-b5c7-4073-8b74-f96e93941496",
         updatedAt: new Date("2025-01-02"),
+        role: "ADMIN_COMPANY"
     },
 ]

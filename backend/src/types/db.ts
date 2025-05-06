@@ -3,7 +3,8 @@ import {
     User as User_prisma,
     Company as Company_prisma,
     Simulator as Simulator_prisma,
-    SimulatorWebgl as SimulatorWebgl_prisma
+    SimulatorWebgl as SimulatorWebgl_prisma,
+    Role as Role_prisma
 
 } from "@prisma/client"
 
@@ -11,17 +12,18 @@ export type User = User_prisma
 export type Company = Company_prisma
 export type Simulator = Simulator_prisma
 export type SimulatorWebgl = SimulatorWebgl_prisma
+export type Role = Role_prisma
 
-export type UserCreate = Omit<Prisma.UserCreateInput, "company"> & { companyId?: string }
+export type UserCreate = Omit<Prisma.UserCreateInput,"role" | "company"> & { companyId?: string }
 export type CompanyCreate = Prisma.CompanyCreateInput
 export type SimulatorCreate = Omit<Prisma.SimulatorCreateInput, "company" | "simulatorWebgl"> & { companyId: string }
 export type SimulatorWebglCreate = Omit<Prisma.SimulatorWebglCreateInput, "simulator"> & { simulatorId: string }
 
-export type CompanyIdName = {id: string, name: string}
+export type CompanyIdName = { id: string, name: string }
 
 // Prisma creation type converter functions
 
-export function UserCreatePrismaConverter(user: UserCreate): Prisma.UserCreateInput {
+export function UserCreatePrismaConverter(user: UserCreate, role: Role = "USER"): Prisma.UserCreateInput {
     if (user.companyId === null || user.companyId === undefined) {
         return {
             name: user.name,
@@ -29,6 +31,7 @@ export function UserCreatePrismaConverter(user: UserCreate): Prisma.UserCreateIn
             password: user.password,
             isActive: true,
             profession: user.profession,
+            role: role,
         }
     }
     return {
@@ -37,6 +40,7 @@ export function UserCreatePrismaConverter(user: UserCreate): Prisma.UserCreateIn
         password: user.password,
         isActive: true,
         profession: user.profession,
+        role: role,
         company: {
             connect: {
                 id: user.companyId

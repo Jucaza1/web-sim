@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { UserStore } from "../models/user";
-import { User } from "../types/db"
+import { Role, User } from "../types/db"
 import { ResultHttp, resultStoreToResultHttp } from "../types/result";
 import { UserCreateDTO, UserCreateDTOSchema, UserUpdateDTOSchema } from "../types/validations";
 import { Hasher } from "./hashing";
@@ -49,13 +49,13 @@ export class UserService {
         const result = await this.userStore.getUsers()
         return resultStoreToResultHttp(result)
     }
-    async createUser(user: UserCreateDTO): Promise<ResultHttp<User>> {
+    async createUser(user: UserCreateDTO, role: Role = "USER"): Promise<ResultHttp<User>> {
         const validateResult = UserCreateDTOSchema.safeParse(user)
         if (!validateResult.success) {
             return { ok: false, err: { status: 400, msg: validateResult.error.errors.map(e => e.message) } }
         }
         user.password = this.hasher.hash(user.password)
-        const result = await this.userStore.createUser(user)
+        const result = await this.userStore.createUser(user, role)
         return resultStoreToResultHttp(result)
     }
     async updateUser(id: string, user: Partial<UserCreateDTO>): Promise<ResultHttp<User>> {

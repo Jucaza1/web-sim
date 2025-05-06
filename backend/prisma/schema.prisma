@@ -24,19 +24,25 @@ model User {
     createdAt  DateTime @default(now()) @map("created_at")
     updatedAt  DateTime @updatedAt @map("updated_at")
 
-    isActive   Boolean  @default(true) @map("is_active")
-    // isAdmin   Boolean  @default(false) @map("is_admin")
+    isActive Boolean @default(true) @map("is_active")
+    role     Role    @default(USER)
 
     company Company? @relation(fields: [companyId], references: [id])
 
     @@map("users")
 }
 
+enum Role {
+    USER
+    ADMIN_COMPANY
+    ADMIN
+}
+
 model Company {
-    id      String @id @default(uuid())
-    name    String @unique
-    image   String
-    styleId String @map("style_id")
+    id        String   @id @default(uuid())
+    name      String   @unique
+    image     String
+    styleId   String   @map("style_id")
     createdAt DateTime @default(now()) @map("created_at")
     updatedAt DateTime @updatedAt @map("updated_at")
 
@@ -47,9 +53,9 @@ model Company {
 }
 
 model Simulator {
-    id          String @id @default(uuid())
+    id          String   @id @default(uuid())
     name        String
-    companyId   String @map("company_id")
+    companyId   String   @map("company_id")
     description String
     createdAt   DateTime @default(now()) @map("created_at")
     updatedAt   DateTime @updatedAt @map("updated_at")
@@ -61,9 +67,9 @@ model Simulator {
 }
 
 model SimulatorWebgl {
-    id          String @id @default(uuid())
+    id          String   @id @default(uuid())
     kind        String
-    simulatorId String @unique @map("simulator_id")
+    simulatorId String   @unique @map("simulator_id")
     data        String
     framework   String
     loader      String
@@ -71,7 +77,7 @@ model SimulatorWebgl {
     createdAt   DateTime @default(now()) @map("created_at")
     updatedAt   DateTime @updatedAt @map("updated_at")
 
-    simulator Simulator @relation(onDelete: Cascade ,fields: [simulatorId], references: [id])
+    simulator Simulator @relation(onDelete: Cascade, fields: [simulatorId], references: [id])
 
     @@map("simulator_webgls")
 }
