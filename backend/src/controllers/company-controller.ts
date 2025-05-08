@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express'
 import { CompanyService } from '../services/company-service'
-import { CompanyCreateDTO, CompanyUpdateDTO } from '../types/validations'
+import { CompanyCreateDTO, CompanyUpdateDTO, intCoerceSchema } from '../types/validations'
 
 export class CompanyController {
     private companyService: CompanyService
@@ -17,7 +17,12 @@ export class CompanyController {
 
     async getCompany(req: Request, res: Response, next: NextFunction) {
         const id = req.params.id
-        const result = await this.companyService.getCompany(id)
+        const intId = intCoerceSchema.safeParse(id)
+        if (!intId.success) {
+            next({ httpError: { status: 400, msg: [intId.error.message] } })
+            return
+        }
+        const result = await this.companyService.getCompany(intId.data)
         if (!result.ok) {
             next({ httpError: result.err!, exception: result.exception })
             return
@@ -64,13 +69,18 @@ export class CompanyController {
 
     async updateCompany(req: Request, res: Response, next: NextFunction) {
         const id = req.params.id
+        const intId = intCoerceSchema.safeParse(id)
+        if (!intId.success) {
+            next({ httpError: { status: 400, msg: [intId.error.message] } })
+            return
+        }
         const companyParams = req.body as Partial<CompanyUpdateDTO>
         const companyUpdate : CompanyUpdateDTO = {
             name: companyParams.name,
             image: companyParams.image,
             styleId: companyParams.styleId,
         }
-        const result = await this.companyService.updateCompany(id, companyUpdate)
+        const result = await this.companyService.updateCompany(intId.data, companyUpdate)
         if (!result.ok) {
             next({ httpError: result.err!, exception: result.exception })
             return
@@ -81,7 +91,12 @@ export class CompanyController {
 
     async deleteCompany(req: Request, res: Response, next: NextFunction) {
         const id = req.params.id
-        const result = await this.companyService.deleteCompany(id)
+        const intId = intCoerceSchema.safeParse(id)
+        if (!intId.success) {
+            next({ httpError: { status: 400, msg: [intId.error.message] } })
+            return
+        }
+        const result = await this.companyService.deleteCompany(intId.data)
         if (!result.ok) {
             next({ httpError: result.err!, exception: result.exception })
             return

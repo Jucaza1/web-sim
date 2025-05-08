@@ -15,7 +15,7 @@ export class SimulatorPrismaStore implements SimulatorStore {
         this.updateSimulator = this.updateSimulator.bind(this)
         this.deleteSimulator = this.deleteSimulator.bind(this)
     }
-    async getSimulator(id: string): Promise<ResultStore<Simulator>> {
+    async getSimulator(id: number): Promise<ResultStore<Simulator>> {
         let simulator: Simulator | null
         try {
             simulator = await this.client.simulator.findUnique({ where: { id } })
@@ -28,7 +28,7 @@ export class SimulatorPrismaStore implements SimulatorStore {
         }
         return { ok: true, data: simulator }
     }
-    async getSimulatorsByCompanyId(companyId: string): Promise<ResultStore<Simulator[]>> {
+    async getSimulatorsByCompanyId(companyId: number): Promise<ResultStore<Simulator[]>> {
         let simulators: Simulator[] = []
         try {
             simulators = await this.client.simulator.findMany({ where: { companyId } })
@@ -63,7 +63,7 @@ export class SimulatorPrismaStore implements SimulatorStore {
         }
         return { ok: true, data: simulatorResult }
     }
-    async updateSimulator(id: string, simulator: Partial<Simulator>): Promise<ResultStore<Simulator>> {
+    async updateSimulator(id: number, simulator: Partial<Simulator>): Promise<ResultStore<Simulator>> {
         let simulatorResult: Simulator | null
         try {
             simulatorResult = await this.client.simulator.update({ where: { id }, data: simulator })
@@ -76,7 +76,7 @@ export class SimulatorPrismaStore implements SimulatorStore {
         }
         return { ok: true, data: simulatorResult }
     }
-    async deleteSimulator(id: string): Promise<ResultStore<Simulator>> {
+    async deleteSimulator(id: number): Promise<ResultStore<Simulator>> {
         let simulatorResult: Simulator | null
         try {
             simulatorResult = await this.client.simulator.delete({ where: { id } })

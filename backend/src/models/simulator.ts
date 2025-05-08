@@ -5,12 +5,12 @@ import { SimulatorMemoryStore } from './simulator-memory'
 import { SimulatorPrismaStore } from './simulator-prisma'
 
 export interface SimulatorStore {
-    getSimulator(id: string): Promise<ResultStore<Simulator>>
-    getSimulatorsByCompanyId(companyId: string): Promise<ResultStore<Simulator[]>>
+    getSimulator(id: number): Promise<ResultStore<Simulator>>
+    getSimulatorsByCompanyId(companyId: number): Promise<ResultStore<Simulator[]>>
     getSimulators(): Promise<ResultStore<Simulator[]>>
     createSimulator(simulator: SimulatorCreate): Promise<ResultStore<Simulator>>
-    updateSimulator(id: string, simulator: Partial<Simulator>): Promise<ResultStore<Simulator>>
-    deleteSimulator(id: string): Promise<ResultStore<Simulator>>
+    updateSimulator(id: number, simulator: Partial<Simulator>): Promise<ResultStore<Simulator>>
+    deleteSimulator(id: number): Promise<ResultStore<Simulator>>
 }
 export function SimulatorStoreFactory(kind: string, _seed: boolean = false): SimulatorStore {
     switch (kind) {

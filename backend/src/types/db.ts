@@ -14,12 +14,12 @@ export type Simulator = Simulator_prisma
 export type SimulatorWebgl = SimulatorWebgl_prisma
 export type Role = Role_prisma
 
-export type UserCreate = Omit<Prisma.UserCreateInput,"role" | "company"> & { companyId?: string }
+export type UserCreate = Omit<Prisma.UserCreateInput, "role" | "company"> & { companyId?: number }
 export type CompanyCreate = Prisma.CompanyCreateInput
-export type SimulatorCreate = Omit<Prisma.SimulatorCreateInput, "company" | "simulatorWebgl"> & { companyId: string }
-export type SimulatorWebglCreate = Omit<Prisma.SimulatorWebglCreateInput, "simulator"> & { simulatorId: string }
+export type SimulatorCreate = Omit<Prisma.SimulatorCreateInput, "company" | "simulatorWebgl"> & { companyId: number }
+export type SimulatorWebglCreate = Omit<Prisma.SimulatorWebglCreateInput, "simulator"> & { simulatorId: number }
 
-export type CompanyIdName = { id: string, name: string }
+export type CompanyIdName = { id: number, name: string }
 
 // Prisma creation type converter functions
 

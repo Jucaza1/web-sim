@@ -5,12 +5,12 @@ import { SimulatorWebglMemoryStore } from './simulator-webgl-memory'
 import { SimulatorWebglPrismaStore } from './simulator-webgl-prisma'
 
 export interface SimulatorWebglStore {
-    getSimulatorWebgl(id: string): Promise<ResultStore<SimulatorWebgl>>
-    getSimulatorWebglBySimulatorId(simulatorModelId: string): Promise<ResultStore<SimulatorWebgl[]>>
+    getSimulatorWebgl(id: number): Promise<ResultStore<SimulatorWebgl>>
+    getSimulatorWebglBySimulatorId(simulatorId: number): Promise<ResultStore<SimulatorWebgl[]>>
     getSimulatorWebgls(): Promise<ResultStore<SimulatorWebgl[]>>
-    createSimulatorWebgl(simulatorModelCreate: SimulatorWebglCreate): Promise<ResultStore<SimulatorWebgl>>
-    updateSimulatorWebgl(id: string, simulator: Partial<SimulatorWebgl>): Promise<ResultStore<SimulatorWebgl>>
-    deleteSimulatorWebgl(id: string): Promise<ResultStore<SimulatorWebgl>>
+    createSimulatorWebgl(simulatorWebglCreate: SimulatorWebglCreate): Promise<ResultStore<SimulatorWebgl>>
+    updateSimulatorWebgl(id: number, simulator: Partial<SimulatorWebgl>): Promise<ResultStore<SimulatorWebgl>>
+    deleteSimulatorWebgl(id: number): Promise<ResultStore<SimulatorWebgl>>
 }
 
 export function SimulatorWebglStoreFactory(kind: string, _seed: boolean = false): SimulatorWebglStore {

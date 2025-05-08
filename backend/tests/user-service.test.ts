@@ -4,7 +4,6 @@ import { UserMemoryStore } from '../src/models/user-memory'
 import { HasherBcrypt } from '../src/services/hashing'
 import { UserCreateDTO } from '../src/types/validations'
 import { User } from '../src/types/db'
-import { randomUUID } from 'crypto'
 
 
 const hasher = new HasherBcrypt(10)
@@ -35,14 +34,14 @@ describe('UserService', () => {
             email: "test@gmail.com",
             password: "password",
             name: "Test User",
-            companyId: randomUUID(),
+            companyId: 1,
             profession: "Engineer",
         }
         userCreateDTO2 = {
             email: "test2@gmail.com",
             password: "password",
             name: "Test User2",
-            companyId: randomUUID(),
+            companyId: 2,
             profession: "Engineer",
         }
     })
@@ -156,7 +155,7 @@ describe('UserService', () => {
         const createdUser = createResult.data!
         expect(createdUser).toBeDefined()
 
-        const updateResult = await userService.updateUser("invalid-id", { name: "Updated User" })
+        const updateResult = await userService.updateUser(-1 ,{ name: "Updated User" })
         expect(updateResult.ok).toBe(false)
     })
     it('should not update a user with an existing email', async () => {

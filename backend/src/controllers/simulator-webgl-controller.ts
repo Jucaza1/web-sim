@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express'
 import { SimulatorWebglService } from '../services/simulator-webgl-service'
-import { SimulatorWebglCreateDTO, SimulatorWebglUpdateDTO } from '../types/validations'
+import { intCoerceSchema, SimulatorWebglCreateDTO, SimulatorWebglUpdateDTO } from '../types/validations'
 
 export class SimulatorWebglController {
     private simulatorWebglService: SimulatorWebglService
@@ -16,7 +16,12 @@ export class SimulatorWebglController {
     }
     async getWebgl(req: Request, res: Response, next: NextFunction) {
         const id = req.params.id
-        const result = await this.simulatorWebglService.getWebgl(id)
+        const intId = intCoerceSchema.safeParse(id)
+        if (!intId.success) {
+            next({ httpError: { status: 400, msg: ["id is not valid"] } })
+            return
+        }
+        const result = await this.simulatorWebglService.getWebgl(intId.data)
         if (!result.ok) {
             next({ httpError: result.err!, exception: result.exception })
             return
@@ -25,8 +30,13 @@ export class SimulatorWebglController {
         return
     }
     async getWebglBySimulatorId(req: Request, res: Response, next: NextFunction) {
-        const simulatorId = req.params.simulatorId
-        const result = await this.simulatorWebglService.getWebglBySimulatorId(simulatorId)
+        const simulatorId = req.params.id
+        const intId = intCoerceSchema.safeParse(simulatorId)
+        if (!intId.success) {
+            next({ httpError: { status: 400, msg: ["id is not valid"] } })
+            return
+        }
+        const result = await this.simulatorWebglService.getWebglBySimulatorId(intId.data)
         if (!result.ok) {
             next({ httpError: result.err!, exception: result.exception })
             return
@@ -63,6 +73,11 @@ export class SimulatorWebglController {
     }
     async updateWebgl(req: Request, res: Response, next: NextFunction) {
         const id = req.params.id
+        const intId = intCoerceSchema.safeParse(id)
+        if (!intId.success) {
+            next({ httpError: { status: 400, msg: ["id is not valid"] } })
+            return
+        }
         const webglParams = req.body as SimulatorWebglUpdateDTO
         const webglUpdate: SimulatorWebglUpdateDTO = {
             simulatorId: webglParams.simulatorId,
@@ -72,7 +87,7 @@ export class SimulatorWebglController {
             framework: webglParams.framework,
             loader: webglParams.loader,
         }
-        const result = await this.simulatorWebglService.updateWebgl(id, webglUpdate)
+        const result = await this.simulatorWebglService.updateWebgl(intId.data, webglUpdate)
         if (!result.ok) {
             next({ httpError: result.err!, exception: result.exception })
             return
@@ -82,7 +97,12 @@ export class SimulatorWebglController {
     }
     async deleteWebgl(req: Request, res: Response, next: NextFunction) {
         const id = req.params.id
-        const result = await this.simulatorWebglService.deleteWebgl(id)
+        const intId = intCoerceSchema.safeParse(id)
+        if (!intId.success) {
+            next({ httpError: { status: 400, msg: ["id is not valid"] } })
+            return
+        }
+        const result = await this.simulatorWebglService.deleteWebgl(intId.data)
         if (!result.ok) {
             next({ httpError: result.err!, exception: result.exception })
             return

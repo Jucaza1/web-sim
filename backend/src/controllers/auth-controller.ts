@@ -21,14 +21,14 @@ export class AuthController {
     }
     async authMiddleware(req: Request, res: Response, next: NextFunction) {
         if (!req.cookies) {
-            console.error({ status: 400, msg: ["no token present in cookies"] })
-            res.status(400).json({ error: ["no token present in cookies"] })
+            console.error({ status: 401, msg: ["no token present in cookies"] })
+            res.status(401).json({ error: ["no token present in cookies"] })
             return
         }
         const token = req.cookies["Authorization"]
         if (token === undefined) {
-            console.error({ status: 400, msg: ["no token present in cookies"] })
-            res.status(400).json({ error: ["no token present in cookies"] })
+            console.error({ status: 401, msg: ["no token present in cookies"] })
+            res.status(401).json({ error: ["no token present in cookies"] })
             return
         }
         const result = await this.authService.validateJWT(token)
@@ -37,8 +37,9 @@ export class AuthController {
             res.status(result.err!.status).json({ error: result.err!.msg })
             return
         }
+        // TODO: make type for user stored in locals
         res.locals.userId = result.data!.id
-        console.info(`--authMiddlware: decoded userId: ${result.data!.id as string}`)
+        console.info(`--authMiddlware: decoded userId: ${result.data!.id as number}`)
         next()
     }
 }

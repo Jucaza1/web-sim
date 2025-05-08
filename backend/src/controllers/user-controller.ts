@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express'
 import { UserService } from '../services/user-service'
-import { UserCreateDTO, UserUpdateDTO } from '../types/validations'
+import { intCoerceSchema, UserCreateDTO, UserUpdateDTO } from '../types/validations'
 
 export class UserController {
     private userService: UserService
@@ -20,7 +20,12 @@ export class UserController {
 
     async getUser(req: Request, res: Response, next: NextFunction) {
         const id = req.params.id
-        const result = await this.userService.getUser(id)
+        const intId = intCoerceSchema.safeParse(id)
+        if (!intId.success) {
+            next({ httpError: { status: 400, msg: ["id is not valid"] } })
+            return
+        }
+        const result = await this.userService.getUser(intId.data)
         if (!result.ok) {
             next({ httpError: result.err!, exception: result.exception })
             return
@@ -95,6 +100,11 @@ export class UserController {
 
     async updateUser(req: Request, res: Response, next: NextFunction) {
         const id = req.params.id
+        const intId = intCoerceSchema.safeParse(id)
+        if (!intId.success) {
+            next({ httpError: { status: 400, msg: [intId.error.message] } })
+            return
+        }
         const userParams = req.body as Partial<UserCreateDTO>
         const userUpdate: UserUpdateDTO = {
             name: userParams.name,
@@ -103,7 +113,7 @@ export class UserController {
             companyId: userParams.companyId,
             profession: userParams.profession,
         }
-        const result = await this.userService.updateUser(id, userUpdate)
+        const result = await this.userService.updateUser(intId.data, userUpdate)
         if (!result.ok) {
             next({ httpError: result.err!, exception: result.exception })
             return
@@ -114,7 +124,12 @@ export class UserController {
 
     async deleteUser(req: Request, res: Response, next: NextFunction) {
         const id = req.params.id
-        const result = await this.userService.deleteUser(id)
+        const intId = intCoerceSchema.safeParse(id)
+        if (!intId.success) {
+            next({ httpError: { status: 400, msg: [intId.error.message] } })
+            return
+        }
+        const result = await this.userService.deleteUser(intId.data)
         if (!result.ok) {
             next({ httpError: result.err!, exception: result.exception })
             return
@@ -125,7 +140,12 @@ export class UserController {
 
     async getUsersByCompanyId(req: Request, res: Response, next: NextFunction) {
         const companyId = req.params.id
-        const result = await this.userService.getUsersByCompanyId(companyId)
+        const intId = intCoerceSchema.safeParse(companyId)
+        if (!intId.success) {
+            next({ httpError: { status: 400, msg: [intId.error.message] } })
+            return
+        }
+        const result = await this.userService.getUsersByCompanyId(intId.data)
         if (!result.ok) {
             next({ httpError: result.err!, exception: result.exception })
             return

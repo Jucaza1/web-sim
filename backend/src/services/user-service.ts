@@ -1,8 +1,7 @@
-import { z } from "zod";
 import { UserStore } from "../models/user";
 import { Role, User } from "../types/db"
 import { ResultHttp, resultStoreToResultHttp } from "../types/result";
-import { UserCreateDTO, UserCreateDTOSchema, UserUpdateDTOSchema } from "../types/validations";
+import { idSchema, UserCreateDTO, UserCreateDTOSchema, UserUpdateDTOSchema } from "../types/validations";
 import { Hasher } from "./hashing";
 
 export class UserService {
@@ -12,11 +11,8 @@ export class UserService {
         this.userStore = uStore
         this.hasher = hasher
     }
-    async getUser(id: string): Promise<ResultHttp<User>> {
-        if (!id || id.length === 0) {
-            return { ok: false, err: { status: 400, msg: ["id is required"] } }
-        }
-        const validateResult = z.string().uuid().safeParse(id)
+    async getUser(id: number): Promise<ResultHttp<User>> {
+        const validateResult = idSchema.safeParse(id)
         if (!validateResult.success) {
             return { ok: false, err: { status: 400, msg: ["id is not valid"] } }
         }
@@ -34,11 +30,8 @@ export class UserService {
         const result = await this.userStore.getUserByEmail(email)
         return resultStoreToResultHttp(result)
     }
-    async getUsersByCompanyId(companyId: string): Promise<ResultHttp<User[]>> {
-        if (!companyId || companyId.length === 0) {
-            return {ok:false, err: { status: 400, msg: ["id is required"] } }
-        }
-        const validateResult = z.string().uuid().safeParse(companyId)
+    async getUsersByCompanyId(companyId: number): Promise<ResultHttp<User[]>> {
+        const validateResult = idSchema.safeParse(companyId)
         if (!validateResult.success) {
             return { ok: false, err: { status: 400, msg: ["id is not valid"] } }
         }
@@ -58,9 +51,10 @@ export class UserService {
         const result = await this.userStore.createUser(user, role)
         return resultStoreToResultHttp(result)
     }
-    async updateUser(id: string, user: Partial<UserCreateDTO>): Promise<ResultHttp<User>> {
-        if (!id || id.length === 0) {
-            return { ok: false, err: { status: 400, msg: ["id is required"] } }
+    async updateUser(id: number, user: Partial<UserCreateDTO>): Promise<ResultHttp<User>> {
+        const validateResultId = idSchema.safeParse(id)
+        if (!validateResultId.success) {
+            return { ok: false, err: { status: 400, msg: ["id is not valid"] } }
         }
         const validateResult = UserUpdateDTOSchema.safeParse(user)
         if (!validateResult.success) {
@@ -72,11 +66,8 @@ export class UserService {
         const result = await this.userStore.updateUser(id, user)
         return resultStoreToResultHttp(result)
     }
-    async deleteUser(id: string): Promise<ResultHttp<User>>{
-        if (!id || id.length === 0) {
-            return { ok: false, err: { status: 400, msg: ["id is required"] } }
-        }
-        const validateResult = z.string().uuid().safeParse(id)
+    async deleteUser(id: number): Promise<ResultHttp<User>>{
+        const validateResult = idSchema.safeParse(id)
         if (!validateResult.success) {
             return { ok: false, err: { status: 400, msg: ["id is not valid"] } }
         }

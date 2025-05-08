@@ -16,7 +16,7 @@ export class CompanyPrismaStore implements CompanyStore {
         this.deleteCompany = this.deleteCompany.bind(this)
         this.getCompaniesByUserId = this.getCompaniesByUserId.bind(this)
     }
-    async getCompany(id: string): Promise<ResultStore<Company>> {
+    async getCompany(id: number): Promise<ResultStore<Company>> {
         let company: Company | null
         try {
             company = await this.client.company.findUnique({ where: { id } })
@@ -71,7 +71,7 @@ export class CompanyPrismaStore implements CompanyStore {
         }
         return { ok: true, data: companyResult }
     }
-    async updateCompany(id: string, company: Partial<Company>): Promise<ResultStore<Company>> {
+    async updateCompany(id: number, company: Partial<Company>): Promise<ResultStore<Company>> {
         let companyResult: Company | undefined
         try {
             // TODO: check if id field collides in data
@@ -84,7 +84,7 @@ export class CompanyPrismaStore implements CompanyStore {
         }
         return { ok: true, data: companyResult }
     }
-    async deleteCompany(id: string): Promise<ResultStore<Company>> {
+    async deleteCompany(id: number): Promise<ResultStore<Company>> {
         let companyResult: Company | undefined
         try {
             companyResult = await this.client.company.delete({ where: { id } })
@@ -96,7 +96,7 @@ export class CompanyPrismaStore implements CompanyStore {
         }
         return { ok: true, data: companyResult }
     }
-    async getCompaniesByUserId(userId: string): Promise<ResultStore<Company[]>> {
+    async getCompaniesByUserId(userId: number): Promise<ResultStore<Company[]>> {
         let companies: Company[] = []
         try {
             companies = await this.client.company.findMany({ where: { users: { some: { id: userId } } } })

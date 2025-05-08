@@ -1,30 +1,23 @@
 import { SimulatorStore } from "../models/simulator"
-import z from "zod"
 import { Simulator, SimulatorCreate } from "../types/db"
 import { ResultHttp, resultStoreToResultHttp } from "../types/result"
-import { SimulatorCreateDTOSchema, SimulatorUpdateDTO } from "../types/validations"
+import { idSchema, SimulatorCreateDTOSchema, SimulatorUpdateDTO } from "../types/validations"
 
 export class SimulatorService {
     private simulatorStore: SimulatorStore
     constructor(sStore: SimulatorStore) {
         this.simulatorStore = sStore
     }
-    async getSimulator(id: string): Promise<ResultHttp<Simulator>> {
-        if (!id || id.length === 0) {
-            return { ok: false, err: { status: 400, msg: ["id is required"] } }
-        }
-        const validateResult = z.string().uuid().safeParse(id)
+    async getSimulator(id: number): Promise<ResultHttp<Simulator>> {
+        const validateResult = idSchema.safeParse(id)
         if (!validateResult.success) {
             return { ok: false, err: { status: 400, msg: ["id is not valid"] } }
         }
         const result = await this.simulatorStore.getSimulator(id)
         return resultStoreToResultHttp(result)
     }
-    async getSimulatorsByCompanyId(companyId: string): Promise<ResultHttp<Simulator[]>> {
-        if (!companyId || companyId.length === 0) {
-            return { ok: false, err: { status: 400, msg: ["id is required"] } }
-        }
-        const validateResult = z.string().uuid().safeParse(companyId)
+    async getSimulatorsByCompanyId(companyId: number): Promise<ResultHttp<Simulator[]>> {
+        const validateResult = idSchema.safeParse(companyId)
         if (!validateResult.success) {
             return { ok: false, err: { status: 400, msg: ["id is not valid"] } }
         }
@@ -43,22 +36,16 @@ export class SimulatorService {
         const result = await this.simulatorStore.createSimulator(simulator)
         return resultStoreToResultHttp(result)
     }
-    async updateSimulator(id: string, simulator: SimulatorUpdateDTO): Promise<ResultHttp<Simulator>> {
-        if (!id || id.length === 0) {
-            return { ok: false, err: { status: 400, msg: ["id is required"] } }
-        }
-        const validateResult = z.string().uuid().safeParse(id)
+    async updateSimulator(id: number, simulator: SimulatorUpdateDTO): Promise<ResultHttp<Simulator>> {
+        const validateResult = idSchema.safeParse(id)
         if (!validateResult.success) {
             return { ok: false, err: { status: 400, msg: ["id is not valid"] } }
         }
         const result = await this.simulatorStore.updateSimulator(id, simulator)
         return resultStoreToResultHttp(result)
     }
-    async deleteSimulator(id: string): Promise<ResultHttp<Simulator>> {
-        if (!id || id.length === 0) {
-            return { ok: false, err: { status: 400, msg: ["id is required"] } }
-        }
-        const validateResult = z.string().uuid().safeParse(id)
+    async deleteSimulator(id: number): Promise<ResultHttp<Simulator>> {
+        const validateResult = idSchema.safeParse(id)
         if (!validateResult.success) {
             return { ok: false, err: { status: 400, msg: ["id is not valid"] } }
         }

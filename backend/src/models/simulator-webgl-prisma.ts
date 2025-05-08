@@ -15,7 +15,7 @@ export class SimulatorWebglPrismaStore implements SimulatorWebglStore {
         this.updateSimulatorWebgl = this.updateSimulatorWebgl.bind(this)
         this.deleteSimulatorWebgl = this.deleteSimulatorWebgl.bind(this)
     }
-    async getSimulatorWebgl(id: string): Promise<ResultStore<SimulatorWebgl>> {
+    async getSimulatorWebgl(id: number): Promise<ResultStore<SimulatorWebgl>> {
         let simulatorWebgl: SimulatorWebgl | null
         try {
             simulatorWebgl = await this.client.simulatorWebgl.findUnique({ where: { id } })
@@ -28,7 +28,7 @@ export class SimulatorWebglPrismaStore implements SimulatorWebglStore {
         }
         return { ok: true, data: simulatorWebgl }
     }
-    async getSimulatorWebglBySimulatorId(simulatorId: string): Promise<ResultStore<SimulatorWebgl[]>> {
+    async getSimulatorWebglBySimulatorId(simulatorId: number): Promise<ResultStore<SimulatorWebgl[]>> {
         let simulatorWebgls: SimulatorWebgl[] = []
         try {
             this.client.simulatorWebgl.findMany({ where: { simulatorId } })
@@ -64,7 +64,7 @@ export class SimulatorWebglPrismaStore implements SimulatorWebglStore {
         }
         return { ok: true, data: simulatorResult }
     }
-    async updateSimulatorWebgl(id: string, simulator: Partial<SimulatorWebgl>): Promise<ResultStore<SimulatorWebgl>> {
+    async updateSimulatorWebgl(id: number, simulator: Partial<SimulatorWebgl>): Promise<ResultStore<SimulatorWebgl>> {
         let simulatorResult: SimulatorWebgl | null
         try {
             simulatorResult = await this.client.simulatorWebgl.update({ where: { id }, data: simulator })
@@ -77,7 +77,7 @@ export class SimulatorWebglPrismaStore implements SimulatorWebglStore {
         }
         return { ok: true, data: simulatorResult }
     }
-    async deleteSimulatorWebgl(id: string): Promise<ResultStore<SimulatorWebgl>> {
+    async deleteSimulatorWebgl(id: number): Promise<ResultStore<SimulatorWebgl>> {
         let simulatorResult: SimulatorWebgl | null
         try {
             simulatorResult = await this.client.simulatorWebgl.delete({ where: { id } })

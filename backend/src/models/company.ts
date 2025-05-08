@@ -5,12 +5,12 @@ import { CompanyPrismaStore } from './company-prisma'
 import { PrismaClientSingleton } from './prisma-singleton'
 
 export interface CompanyStore {
-    getCompany(id: string): Promise<ResultStore<Company>>
+    getCompany(id: number): Promise<ResultStore<Company>>
     getCompanies(): Promise<ResultStore<Company[]>>
     createCompany(company: CompanyCreate): Promise<ResultStore<Company>>
-    updateCompany(id: string, company: Partial<Company>): Promise<ResultStore<Company>>
-    deleteCompany(id: string): Promise<ResultStore<Company>>
-    getCompaniesByUserId(userId: string): Promise<ResultStore<Company[]>>
+    updateCompany(id: number, company: Partial<Company>): Promise<ResultStore<Company>>
+    deleteCompany(id: number): Promise<ResultStore<Company>>
+    getCompaniesByUserId(userId: number): Promise<ResultStore<Company[]>>
     getCompaniesIdName(): Promise<ResultStore<CompanyIdName[]>>
 }
 export function CompanyStoreFactory(kind: string, _seed: boolean = false): CompanyStore {

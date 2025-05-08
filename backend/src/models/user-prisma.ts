@@ -16,7 +16,7 @@ export class UserPrismaStore implements UserStore {
         this.getUserByEmail = this.getUserByEmail.bind(this)
         this.getUsersByCompanyId = this.getUsersByCompanyId.bind(this)
     }
-    async getUser(id: string): Promise<ResultStore<User>> {
+    async getUser(id: number): Promise<ResultStore<User>> {
         let user: User | null
         try {
             user = await this.client.user.findUnique({ where: { id } })
@@ -64,7 +64,7 @@ export class UserPrismaStore implements UserStore {
         return { ok: true, data: userResult as User }
     }
 
-    async updateUser(id: string, user: Partial<User>): Promise<ResultStore<User>> {
+    async updateUser(id: number, user: Partial<User>): Promise<ResultStore<User>> {
         let userResult: User | null
         try {
             // TODO: check if id field collides in data
@@ -78,7 +78,7 @@ export class UserPrismaStore implements UserStore {
         return { ok: true, data: userResult }
     }
 
-    async deleteUser(id: string): Promise<ResultStore<User>> {
+    async deleteUser(id: number): Promise<ResultStore<User>> {
         let userResult: User | null
         try {
             userResult = await this.client.user.delete({ where: { id } })
@@ -102,7 +102,7 @@ export class UserPrismaStore implements UserStore {
         }
         return { ok: true, data: user }
     }
-    async getUsersByCompanyId(companyId: string): Promise<ResultStore<User[]>> {
+    async getUsersByCompanyId(companyId: number): Promise<ResultStore<User[]>> {
         let users: User[] = []
         try {
             users = await this.client.user.findMany({ where: { companyId } })

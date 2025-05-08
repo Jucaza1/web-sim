@@ -15,12 +15,12 @@ datasource db {
 }
 
 model User {
-    id         String   @id @default(uuid())
+    id         Int      @id @default(autoincrement())
     name       String
     email      String   @unique
     password   String
     profession String
-    companyId  String?  @map("company_id")
+    companyId  Int?     @map("company_id")
     createdAt  DateTime @default(now()) @map("created_at")
     updatedAt  DateTime @updatedAt @map("updated_at")
 
@@ -39,7 +39,7 @@ enum Role {
 }
 
 model Company {
-    id        String   @id @default(uuid())
+    id        Int      @id @default(autoincrement())
     name      String   @unique
     image     String
     styleId   String   @map("style_id")
@@ -53,9 +53,9 @@ model Company {
 }
 
 model Simulator {
-    id          String   @id @default(uuid())
+    id          Int      @id @default(autoincrement())
     name        String
-    companyId   String   @map("company_id")
+    companyId   Int      @map("company_id")
     description String
     createdAt   DateTime @default(now()) @map("created_at")
     updatedAt   DateTime @updatedAt @map("updated_at")
@@ -67,9 +67,9 @@ model Simulator {
 }
 
 model SimulatorWebgl {
-    id          String   @id @default(uuid())
+    id          Int      @id @default(autoincrement())
     kind        String
-    simulatorId String   @unique @map("simulator_id")
+    simulatorId Int      @unique @map("simulator_id")
     data        String
     framework   String
     loader      String

@@ -128,7 +128,7 @@ describe('CompanyService', () => {
         expect(createResult.ok).toBe(true)
         const createdCompany = createResult.data!
         expect(createdCompany).toBeDefined()
-        const updateResult = await companyService.updateCompany("invalid-id", { name: "Updated Company" })
+        const updateResult = await companyService.updateCompany(-1, { name: "Updated Company" })
         expect(updateResult.ok).toBe(false)
     })
     it('should not update a company with invalid data', async () => {
@@ -144,7 +144,7 @@ describe('CompanyService', () => {
         expect(createResult.ok).toBe(true)
         const createdCompany = createResult.data!
         expect(createdCompany).toBeDefined()
-        const deleteResult = await companyService.deleteCompany("invalid-id")
+        const deleteResult = await companyService.deleteCompany(-1)
         expect(deleteResult.ok).toBe(false)
     })
 })

@@ -1,12 +1,20 @@
 import { Role, User, UserCreate } from "../types/db"
 import { ResultStore, StoreErrorCode } from "../types/result"
 import { UserStore } from "./user"
-import { randomUUID } from "crypto"
+
+function autoIncFn(): () => number {
+    let id = 1
+    return function () {
+        return id++
+    }
+}
 
 export class UserMemoryStore implements UserStore {
-    private users: Map<string, User>
+    private users: Map<number, User>
+    private autoInc: () => number
 
     constructor(seed: boolean = false) {
+        this.autoInc = autoIncFn()
         this.users = new Map()
         if (seed) {
             this.seedUsers(mockUsers)
@@ -22,7 +30,7 @@ export class UserMemoryStore implements UserStore {
         return { ok: false, err: { code: StoreErrorCode.notFound, msg: "user not found" } }
     }
 
-    async getUsersByCompanyId(companyId: string): Promise<ResultStore<User[]>> {
+    async getUsersByCompanyId(companyId: number): Promise<ResultStore<User[]>> {
         const result: User[] = []
         for (const user of this.users.values()) {
             if (user.companyId === companyId) {
@@ -32,7 +40,7 @@ export class UserMemoryStore implements UserStore {
         return { ok: true, data: result }
     }
 
-    async getUser(id: string): Promise<ResultStore<User>> {
+    async getUser(id: number): Promise<ResultStore<User>> {
         const user = this.users.get(id)
         if (!user) {
             return { ok: false, err: { code: StoreErrorCode.notFound, msg: "user not found" } }
@@ -46,7 +54,7 @@ export class UserMemoryStore implements UserStore {
     }
 
     async createUser(user: UserCreate, role: Role = "USER"): Promise<ResultStore<User>> {
-        const id = randomUUID()
+        const id = this.autoInc()
         if (this.users.has(id)) {
             // User already exists
             return { ok: false, err: { code: StoreErrorCode.unique, msg: "user already exists" } }
@@ -68,7 +76,7 @@ export class UserMemoryStore implements UserStore {
         return { ok: true, data: userwithComplete }
     }
 
-    async updateUser(id: string, user: Partial<User>): Promise<ResultStore<User>> {
+    async updateUser(id: number, user: Partial<User>): Promise<ResultStore<User>> {
         const existingUser = this.users.get(id)
         if (!existingUser) {
             return { ok: false, err: { code: StoreErrorCode.notFound, msg: "user not found" } }
@@ -81,7 +89,7 @@ export class UserMemoryStore implements UserStore {
         return { ok: true, data: updateData }
     }
 
-    async deleteUser(id: string): Promise<ResultStore<User>> {
+    async deleteUser(id: number): Promise<ResultStore<User>> {
         const resultUser = this.users.get(id)
         if (!resultUser) {
             return { ok: false, err: { code: StoreErrorCode.notFound, msg: "user not found" } }
@@ -99,38 +107,38 @@ export class UserMemoryStore implements UserStore {
 // Mock data for testing
 const mockUsers: User[] = [
     {
-        id: "9db2bdc9-65a3-4a4f-8a5d-63e73454c3ce",
+        id: 1,
         name: "Alice",
         email: "alice@gmail.com",
         password: "hashedpassword1",
         createdAt: new Date("2025-01-01"),
         isActive: true,
         profession: "profession1",
-        companyId: "47202dbe-b5c7-4073-8b74-f96e93941496",
+        companyId: 1,
         updatedAt: new Date("2025-01-01"),
         role: "USER",
     },
     {
-        id: "524be767-9542-43ab-b456-5d369e75b909",
+        id: 2,
         name: "Bob",
         email: "bob@gmail.com",
         password: "hashedpassword2",
         createdAt: new Date("2025-01-01"),
         isActive: true,
         profession: "profession2",
-        companyId: "b637ce5c-d44a-4d6f-9912-992c109de929",
+        companyId: 2,
         updatedAt: new Date("2025-01-01"),
         role: "ADMIN",
     },
     {
-        id: "ab96de69-76c2-4a9c-9abb-2357aef22e3b",
+        id: 3,
         name: "Anna",
         email: "anna@gmail.com",
         password: "hashedpassword3",
         createdAt: new Date("2025-01-02"),
         isActive: true,
         profession: "profession1",
-        companyId: "47202dbe-b5c7-4073-8b74-f96e93941496",
+        companyId: 1,
         updatedAt: new Date("2025-01-02"),
         role: "ADMIN_COMPANY"
     },

@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express'
 import { SimulatorService } from '../services/simulator-service'
-import { SimulatorCreateDTO, SimulatorUpdateDTO } from '../types/validations'
+import { intCoerceSchema, SimulatorCreateDTO, SimulatorUpdateDTO } from '../types/validations'
 
 export class SimulatorController {
     private simulatorService: SimulatorService
@@ -15,7 +15,12 @@ export class SimulatorController {
     }
     async getSimulator(req: Request, res: Response, next: NextFunction) {
         const id = req.params.id
-        const result = await this.simulatorService.getSimulator(id)
+        const intId = intCoerceSchema.safeParse(id)
+        if (!intId.success) {
+            next({ httpError: { status: 400, msg: [intId.error.message] } })
+            return
+        }
+        const result = await this.simulatorService.getSimulator(intId.data)
         if (!result.ok) {
             next({ httpError: result.err!, exception: result.exception })
             return
@@ -24,8 +29,13 @@ export class SimulatorController {
         return
     }
     async getSimulatorsByCompanyId(req: Request, res: Response, next: NextFunction) {
-        const companyId = req.params.companyId
-        const result = await this.simulatorService.getSimulatorsByCompanyId(companyId)
+        const companyId = req.params.id
+        const intId = intCoerceSchema.safeParse(companyId)
+        if (!intId.success) {
+            next({ httpError: { status: 400, msg: [intId.error.message] } })
+            return
+        }
+        const result = await this.simulatorService.getSimulatorsByCompanyId(intId.data)
         if (!result.ok) {
             next({ httpError: result.err!, exception: result.exception })
             return
@@ -59,12 +69,17 @@ export class SimulatorController {
     }
     async updateSimulator(req: Request, res: Response, next: NextFunction) {
         const id = req.params.id
+        const intId = intCoerceSchema.safeParse(id)
+        if (!intId.success) {
+            next({ httpError: { status: 400, msg: [intId.error.message] } })
+            return
+        }
         const simulatorParams = req.body as SimulatorUpdateDTO
         const simulatorUpdate: SimulatorUpdateDTO = {
             name: simulatorParams.name,
             description: simulatorParams.description,
         }
-        const result = await this.simulatorService.updateSimulator(id, simulatorUpdate)
+        const result = await this.simulatorService.updateSimulator(intId.data, simulatorUpdate)
         if (!result.ok) {
             next({ httpError: result.err!, exception: result.exception })
             return
@@ -74,7 +89,12 @@ export class SimulatorController {
     }
     async deleteSimulator(req: Request, res: Response, next: NextFunction) {
         const id = req.params.id
-        const result = await this.simulatorService.deleteSimulator(id)
+        const intId = intCoerceSchema.safeParse(id)
+        if (!intId.success) {
+            next({ httpError: { status: 400, msg: [intId.error.message] } })
+            return
+        }
+        const result = await this.simulatorService.deleteSimulator(intId.data)
         if (!result.ok) {
             next({ httpError: result.err!, exception: result.exception })
             return

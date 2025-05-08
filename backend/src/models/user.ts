@@ -5,13 +5,13 @@ import { UserPrismaStore } from "./user-prisma"
 import { PrismaClientSingleton } from "./prisma-singleton"
 
 export interface UserStore {
-    getUser(id: string): Promise<ResultStore<User>>
+    getUser(id: number): Promise<ResultStore<User>>
     getUsers(): Promise<ResultStore<User[]>>
     createUser(user: UserCreate, role?: Role): Promise<ResultStore<User>>
-    updateUser(id: string, user: Partial<User>): Promise<ResultStore<User>>
-    deleteUser(id: string): Promise<ResultStore<User>>
+    updateUser(id: number, user: Partial<User>): Promise<ResultStore<User>>
+    deleteUser(id: number): Promise<ResultStore<User>>
     getUserByEmail(email: string): Promise<ResultStore<User>>
-    getUsersByCompanyId(companyId: string): Promise<ResultStore<User[]>>
+    getUsersByCompanyId(companyId: number): Promise<ResultStore<User[]>>
 }
 
 export function UserStoreFactory(kind: string, seed: boolean = false): UserStore {
