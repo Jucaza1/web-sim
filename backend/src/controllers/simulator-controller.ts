@@ -1,6 +1,7 @@
-import { NextFunction, Request, Response } from 'express'
+import { Request, Response } from 'express'
 import { SimulatorService } from '../services/simulator-service'
 import { intCoerceSchema, SimulatorCreateDTO, SimulatorUpdateDTO } from '../types/validations'
+import { NextFunction } from '../types/express'
 
 export class SimulatorController {
     private simulatorService: SimulatorService

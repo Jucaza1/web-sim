@@ -1,6 +1,7 @@
-import { NextFunction, Request, Response } from 'express'
+import { Request, Response } from 'express'
 import { CompanyService } from '../services/company-service'
 import { CompanyCreateDTO, CompanyUpdateDTO, intCoerceSchema } from '../types/validations'
+import { NextFunction } from '../types/express'
 
 export class CompanyController {
     private companyService: CompanyService

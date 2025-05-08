@@ -1,6 +1,7 @@
-import { NextFunction, Request, Response } from "express";
+import { Request, Response } from "express";
 import { AuthServiceJWT } from "../services/auth-service";
 import { UserCredentials } from "../types/credentials";
+import { NextFunction } from "../types/express";
 
 export class AuthController {
     private authService: AuthServiceJWT

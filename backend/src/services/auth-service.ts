@@ -30,13 +30,14 @@ export class AuthServiceJWT {
             return { ok: false, err: { status: 401, msg: ["incorrect credentials"] } }
         }
         if (userCred.email !== userResult!.data!.email
-            && !this.hasher.compare(userCred.password, userResult!.data!.password)) {
+            && !this.hasher.compare(userCred.password, userResult!.data!.password)
+        ) {
             return { ok: false, err: { status: 401, msg: ["incorrect credentials"] } }
         }
         return { ok: true, data: this.forgeJWT(userResult!.data!) }
     }
     forgeJWT(user: User): string {
-        const payload = { id: user.id }
+        const payload = { id: user.id, role: user.role }
         return jwt.sign(payload, this.secret, { expiresIn: 3600 })
     }
     async validateJWT(token: string): Promise<ResultHttp<jwt.JwtPayload>> {
@@ -49,10 +50,11 @@ export class AuthServiceJWT {
         } catch (_) {
             return { ok: false, err: { status: 401, msg: ["invalid token"] } }
         }
-        const result = await this.userService.getUser(decoded.id as string)
-        if (!result.ok){
-            return { ok: false, err: { status: 401, msg: ["invalid token"] } }
-        }
+        // TODO: avoid calling DB
+        // const result = await this.userService.getUser(decoded.id as string)
+        // if (!result.ok) {
+        //     return { ok: false, err: { status: 401, msg: ["invalid token"] } }
+        // }
         return { ok: true, data: decoded }
     }
 }

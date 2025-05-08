@@ -1,6 +1,7 @@
-import { NextFunction, Request, Response } from 'express'
+import { Request, Response } from 'express'
 import { UserService } from '../services/user-service'
 import { intCoerceSchema, UserCreateDTO, UserUpdateDTO } from '../types/validations'
+import { NextFunction } from '../types/express'
 
 export class UserController {
     private userService: UserService

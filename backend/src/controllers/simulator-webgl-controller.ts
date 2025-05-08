@@ -1,6 +1,7 @@
-import { NextFunction, Request, Response } from 'express'
+import { Request, Response } from 'express'
 import { SimulatorWebglService } from '../services/simulator-webgl-service'
 import { intCoerceSchema, SimulatorWebglCreateDTO, SimulatorWebglUpdateDTO } from '../types/validations'
+import { NextFunction } from '../types/express'
 
 export class SimulatorWebglController {
     private simulatorWebglService: SimulatorWebglService
