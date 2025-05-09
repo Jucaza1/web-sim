@@ -1,9 +1,10 @@
-import jwt, { JwtPayload } from "jsonwebtoken"
+import jwt from "jsonwebtoken"
 import { UserService } from "./user-service"
 import { UserCredentials, UserCredentialsSchema } from "../types/credentials"
 import { ResultHttp } from "../types/result"
 import { User } from "../types/db"
 import { Hasher } from "./hashing"
+import { Payload } from "../types/jwtPayload"
 
 export class AuthServiceJWT {
     private secret: string
@@ -15,9 +16,9 @@ export class AuthServiceJWT {
         this.hasher = Hasher
         this.validateJWT = this.validateJWT.bind(this)
         this.forgeJWT = this.forgeJWT.bind(this)
-        this.validateCredentials = this.validateCredentials.bind(this)
+        this.validateCredentialsForgeJWT = this.validateCredentialsForgeJWT.bind(this)
     }
-    async validateCredentials(userCred: UserCredentials): Promise<ResultHttp<string>> {
+    async validateCredentialsForgeJWT(userCred: UserCredentials): Promise<ResultHttp<string>> {
         const validateResult = UserCredentialsSchema.safeParse(userCred)
         if (!validateResult.success) {
             return { ok: false, err: { status: 400, msg: validateResult.error.errors.map(e => e.message) } }
@@ -37,16 +38,16 @@ export class AuthServiceJWT {
         return { ok: true, data: this.forgeJWT(userResult!.data!) }
     }
     forgeJWT(user: User): string {
-        const payload = { id: user.id, role: user.role }
+        const payload: Payload = { id: user.id, role: user.role, company: user.companyId }
         return jwt.sign(payload, this.secret, { expiresIn: 3600 })
     }
-    async validateJWT(token: string): Promise<ResultHttp<jwt.JwtPayload>> {
+    async validateJWT(token: string): Promise<ResultHttp<Payload>> {
         if (token === "") {
             return { ok: false, err: { status: 401, msg: ["invalid token"] } }
         }
-        let decoded: jwt.JwtPayload
+        let decoded: Payload
         try {
-            decoded = jwt.verify(token, this.secret) as JwtPayload
+            decoded = jwt.verify(token, this.secret) as Payload
         } catch (_) {
             return { ok: false, err: { status: 401, msg: ["invalid token"] } }
         }

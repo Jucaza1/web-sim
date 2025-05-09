@@ -2,9 +2,12 @@ import { Request, Response } from 'express'
 import { SimulatorService } from '../services/simulator-service'
 import { intCoerceSchema, SimulatorCreateDTO, SimulatorUpdateDTO } from '../types/validations'
 import { NextFunction } from '../types/express'
+import { Payload } from '../types/jwtPayload'
+import { DefaultUnAuthorizedError } from './defaultError'
 
 export class SimulatorController {
     private simulatorService: SimulatorService
+
     constructor(simulatorService: SimulatorService) {
         this.simulatorService = simulatorService
         this.getSimulator = this.getSimulator.bind(this)
@@ -14,6 +17,7 @@ export class SimulatorController {
         this.updateSimulator = this.updateSimulator.bind(this)
         this.deleteSimulator = this.deleteSimulator.bind(this)
     }
+
     async getSimulator(req: Request, res: Response, next: NextFunction) {
         const id = req.params.id
         const intId = intCoerceSchema.safeParse(id)
@@ -29,6 +33,7 @@ export class SimulatorController {
         res.status(200).json(result.data)
         return
     }
+
     async getSimulatorsByCompanyId(req: Request, res: Response, next: NextFunction) {
         const companyId = req.params.id
         const intId = intCoerceSchema.safeParse(companyId)
@@ -44,6 +49,7 @@ export class SimulatorController {
         res.status(200).json(result.data)
         return
     }
+
     async getSimulators(_req: Request, res: Response, next: NextFunction) {
         const result = await this.simulatorService.getSimulators()
         if (!result.ok) {
@@ -53,7 +59,17 @@ export class SimulatorController {
         res.status(200).json(result.data)
         return
     }
+
+    /**
+     * Create a new simulator, only accessible by ADMIN and ADMIN_COMPANY
+     */
     async createSimulator(req: Request, res: Response, next: NextFunction) {
+        let payload = res.locals?.payload as Payload
+        if (payload?.role !== "ADMIN" && payload?.role !== "ADMIN_COMPANY") {
+            next(DefaultUnAuthorizedError)
+            return
+        }
+
         const simulatorParams = req.body as SimulatorCreateDTO
         const simulatorCreate: SimulatorCreateDTO = {
             name: simulatorParams.name,
@@ -68,7 +84,17 @@ export class SimulatorController {
         res.status(201).json(result.data)
         return
     }
+
+    /**
+     * Update a simulator, only accessible by ADMIN and ADMIN_COMPANY
+     */
     async updateSimulator(req: Request, res: Response, next: NextFunction) {
+        let payload = res.locals?.payload as Payload
+        if (payload?.role !== "ADMIN" && payload?.role !== "ADMIN_COMPANY") {
+            next(DefaultUnAuthorizedError)
+            return
+        }
+
         const id = req.params.id
         const intId = intCoerceSchema.safeParse(id)
         if (!intId.success) {
@@ -88,7 +114,17 @@ export class SimulatorController {
         res.status(200).json(result.data)
         return
     }
+
+    /**
+     * Delete a simulator, only accessible by ADMIN and ADMIN_COMPANY
+     */
     async deleteSimulator(req: Request, res: Response, next: NextFunction) {
+        let payload = res.locals?.payload as Payload
+        if (payload?.role !== "ADMIN" && payload?.role !== "ADMIN_COMPANY") {
+            next(DefaultUnAuthorizedError)
+            return
+        }
+
         const id = req.params.id
         const intId = intCoerceSchema.safeParse(id)
         if (!intId.success) {

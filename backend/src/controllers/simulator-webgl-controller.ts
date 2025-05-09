@@ -2,6 +2,8 @@ import { Request, Response } from 'express'
 import { SimulatorWebglService } from '../services/simulator-webgl-service'
 import { intCoerceSchema, SimulatorWebglCreateDTO, SimulatorWebglUpdateDTO } from '../types/validations'
 import { NextFunction } from '../types/express'
+import { Payload } from '../types/jwtPayload'
+import { DefaultUnAuthorizedError } from './defaultError'
 
 export class SimulatorWebglController {
     private simulatorWebglService: SimulatorWebglService
@@ -15,6 +17,7 @@ export class SimulatorWebglController {
         this.updateWebgl = this.updateWebgl.bind(this)
         this.deleteWebgl = this.deleteWebgl.bind(this)
     }
+
     async getWebgl(req: Request, res: Response, next: NextFunction) {
         const id = req.params.id
         const intId = intCoerceSchema.safeParse(id)
@@ -30,6 +33,7 @@ export class SimulatorWebglController {
         res.status(200).json(result.data)
         return
     }
+
     async getWebglBySimulatorId(req: Request, res: Response, next: NextFunction) {
         const simulatorId = req.params.id
         const intId = intCoerceSchema.safeParse(simulatorId)
@@ -45,6 +49,7 @@ export class SimulatorWebglController {
         res.status(200).json(result.data)
         return
     }
+
     async getWebgls(_req: Request, res: Response, next: NextFunction) {
         const result = await this.simulatorWebglService.getWebgls()
         if (!result.ok) {
@@ -54,7 +59,17 @@ export class SimulatorWebglController {
         res.status(200).json(result.data)
         return
     }
+
+    /**
+     * Create a new simulatorWebgl, only accessible by ADMIN and ADMIN_COMPANY
+     */
     async createWebgl(req: Request, res: Response, next: NextFunction) {
+        let payload = res.locals?.payload as Payload
+        if (payload?.role !== "ADMIN" && payload?.role !== "ADMIN_COMPANY") {
+            next(DefaultUnAuthorizedError)
+            return
+        }
+
         const webglParams = req.body as SimulatorWebglCreateDTO
         const webglCreate: SimulatorWebglCreateDTO = {
             simulatorId: webglParams.simulatorId,
@@ -72,7 +87,17 @@ export class SimulatorWebglController {
         res.status(201).json(result.data)
         return
     }
+
+    /**
+     * Update a simulatorWebgl, only accessible by ADMIN and ADMIN_COMPANY
+     */
     async updateWebgl(req: Request, res: Response, next: NextFunction) {
+        let payload = res.locals?.payload as Payload
+        if (payload?.role !== "ADMIN" && payload?.role !== "ADMIN_COMPANY") {
+            next(DefaultUnAuthorizedError)
+            return
+        }
+
         const id = req.params.id
         const intId = intCoerceSchema.safeParse(id)
         if (!intId.success) {
@@ -96,7 +121,16 @@ export class SimulatorWebglController {
         res.status(200).json(result.data)
         return
     }
+
+    /**
+     * Delete a simulatorWebgl, only accessible by ADMIN and ADMIN_COMPANY
+     */
     async deleteWebgl(req: Request, res: Response, next: NextFunction) {
+        let payload = res.locals?.payload as Payload
+        if (payload?.role !== "ADMIN" && payload?.role !== "ADMIN_COMPANY") {
+            next(DefaultUnAuthorizedError)
+            return
+        }
         const id = req.params.id
         const intId = intCoerceSchema.safeParse(id)
         if (!intId.success) {

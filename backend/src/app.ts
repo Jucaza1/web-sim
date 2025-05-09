@@ -22,15 +22,19 @@ import { SimulatorWebglService } from './services/simulator-webgl-service';
 import { SimulatorWebglController } from './controllers/simulator-webgl-controller';
 
 const app = express();
-const corsOptions = {
-    // origin: 'http://localhost:3000',
-    origin: '*',
+const corsOptions: cors.CorsOptions = {
+    origin: 'http://localhost:5173',
+    // origin: '*',
     optionsSuccessStatus: 200,
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
 }
 
 app.disable('x-powered-by')
 app.use(cookieParser())
-const jsonParser = express.json()
+
+const jsonParser = express.json({ limit: "4kb" })
 app.use((req, res, next) => {
     if (req.method !== 'GET' && req.method !== 'HEAD' && req.method !== 'OPTIONS') {
         jsonParser(req, res, next)

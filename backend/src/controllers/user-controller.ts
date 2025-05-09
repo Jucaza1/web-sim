@@ -2,6 +2,10 @@ import { Request, Response } from 'express'
 import { UserService } from '../services/user-service'
 import { intCoerceSchema, UserCreateDTO, UserUpdateDTO } from '../types/validations'
 import { NextFunction } from '../types/express'
+import { User } from '../types/db'
+import { ResultHttp } from '../types/result'
+import { Payload } from '../types/jwtPayload'
+import { DefaultUnAuthorizedError } from './defaultError'
 
 export class UserController {
     private userService: UserService
@@ -20,13 +24,22 @@ export class UserController {
     }
 
     async getUser(req: Request, res: Response, next: NextFunction) {
-        const id = req.params.id
-        const intId = intCoerceSchema.safeParse(id)
-        if (!intId.success) {
-            next({ httpError: { status: 400, msg: ["id is not valid"] } })
-            return
+        let payload = res.locals?.payload as Payload
+        let result
+        switch (payload?.role) {
+            case "USER":
+                result = await this.userService.getUser(payload.id ?? -1)
+                break
+            default:
+                const id = req.params.id
+                const intId = intCoerceSchema.safeParse(id)
+                if (!intId.success) {
+                    next({ httpError: { status: 400, msg: ["id is not valid"] } })
+                    return
+                }
+                result = await this.userService.getUser(intId.data)
+                break
         }
-        const result = await this.userService.getUser(intId.data)
         if (!result.ok) {
             next({ httpError: result.err!, exception: result.exception })
             return
@@ -36,7 +49,23 @@ export class UserController {
     }
 
     async getUsers(_req: Request, res: Response, next: NextFunction) {
-        const result = await this.userService.getUsers()
+        let result: ResultHttp<User[]> = { ok: false, data: undefined }
+        switch (res.locals?.payload?.role) {
+            case "USER":
+                let resUser = await this.userService.getUser(res.locals.payload.id)
+                result.data = (resUser.ok) ? [resUser.data!] : undefined
+                result.ok = resUser.ok
+                break
+            case "ADMIN_COMPANY":
+                result = await this.userService.getUsers()
+                break
+            case "ADMIN":
+                result = await this.userService.getUsers()
+                break
+            default:
+                next(DefaultUnAuthorizedError)
+                return
+        }
         if (!result.ok) {
             next({ httpError: result.err!, exception: result.exception })
             return
@@ -64,6 +93,11 @@ export class UserController {
     }
 
     async createAdmin(req: Request, res: Response, next: NextFunction) {
+        let payload = res.locals?.payload as Payload
+        if (payload?.role !== "ADMIN") {
+            next(DefaultUnAuthorizedError)
+            return
+        }
         const userParams = req.body as UserCreateDTO
         const userCreate: UserCreateDTO = {
             email: userParams.email,
@@ -81,7 +115,16 @@ export class UserController {
         return
     }
 
+    /**
+     * Create a new user with ADMIN_COMPANY role, only accessible by ADMIN and
+     * ADMIN_COMPANY
+     */
     async createAdminCompany(req: Request, res: Response, next: NextFunction) {
+        let payload = res.locals?.payload as Payload
+        if (payload?.role !== "ADMIN" && payload?.role !== "ADMIN_COMPANY") {
+            next(DefaultUnAuthorizedError)
+            return
+        }
         const userParams = req.body as UserCreateDTO
         const userCreate: UserCreateDTO = {
             email: userParams.email,
@@ -99,12 +142,32 @@ export class UserController {
         return
     }
 
+    /**
+     * Update a user, id only choosable by ADMIN, rest of roles can only update
+     * themselves
+     */
     async updateUser(req: Request, res: Response, next: NextFunction) {
-        const id = req.params.id
-        const intId = intCoerceSchema.safeParse(id)
-        if (!intId.success) {
-            next({ httpError: { status: 400, msg: [intId.error.message] } })
-            return
+        let payload = res.locals?.payload as Payload
+        let idFinal: number
+        switch (payload?.role) {
+            case "USER":
+                idFinal = payload.id ?? -1
+                break
+            case "ADMIN_COMPANY":
+                idFinal = payload.id ?? -1
+                break
+            case "ADMIN":
+                const id = req.params.id
+                const intId = intCoerceSchema.safeParse(id)
+                if (!intId.success) {
+                    next({ httpError: { status: 400, msg: [intId.error.message] } })
+                    return
+                }
+                idFinal = intId.data
+                break
+            default:
+                next(DefaultUnAuthorizedError)
+                return
         }
         const userParams = req.body as Partial<UserCreateDTO>
         const userUpdate: UserUpdateDTO = {
@@ -114,7 +177,7 @@ export class UserController {
             companyId: userParams.companyId,
             profession: userParams.profession,
         }
-        const result = await this.userService.updateUser(intId.data, userUpdate)
+        const result = await this.userService.updateUser(idFinal, userUpdate)
         if (!result.ok) {
             next({ httpError: result.err!, exception: result.exception })
             return
@@ -123,14 +186,34 @@ export class UserController {
         return
     }
 
+    /**
+     * Delete a user, id only choosable by ADMIN, rest of roles can only delete
+     * themselves
+     */
     async deleteUser(req: Request, res: Response, next: NextFunction) {
-        const id = req.params.id
-        const intId = intCoerceSchema.safeParse(id)
-        if (!intId.success) {
-            next({ httpError: { status: 400, msg: [intId.error.message] } })
-            return
+        let payload = res.locals?.payload as Payload
+        let idFinal: number
+        switch (payload?.role) {
+            case "USER":
+                idFinal = payload.id ?? -1
+                break
+            case "ADMIN_COMPANY":
+                idFinal = payload.id ?? -1
+                break
+            case "ADMIN":
+                const id = req.params.id
+                const intId = intCoerceSchema.safeParse(id)
+                if (!intId.success) {
+                    next({ httpError: { status: 400, msg: [intId.error.message] } })
+                    return
+                }
+                idFinal = intId.data
+                break
+            default:
+                next(DefaultUnAuthorizedError)
+                return
         }
-        const result = await this.userService.deleteUser(intId.data)
+        const result = await this.userService.deleteUser(idFinal)
         if (!result.ok) {
             next({ httpError: result.err!, exception: result.exception })
             return
@@ -139,7 +222,15 @@ export class UserController {
         return
     }
 
+    /**
+     * Get users by companyId, only accessible by ADMIN and ADMIN_COMPANY
+     */
     async getUsersByCompanyId(req: Request, res: Response, next: NextFunction) {
+        let payload = res.locals?.payload as Payload
+        if (payload?.role !== "ADMIN" && payload?.role !== "ADMIN_COMPANY") {
+            next(DefaultUnAuthorizedError)
+            return
+        }
         const companyId = req.params.id
         const intId = intCoerceSchema.safeParse(companyId)
         if (!intId.success) {
@@ -155,7 +246,15 @@ export class UserController {
         return
     }
 
+    /**
+     * Get user by email, only accessible by ADMIN and ADMIN_COMPANY
+     */
     async getUserByEmail(req: Request, res: Response, next: NextFunction) {
+        let payload = res.locals?.payload as Payload
+        if (payload?.role !== "ADMIN" && payload?.role !== "ADMIN_COMPANY") {
+            next(DefaultUnAuthorizedError)
+            return
+        }
         const email = req.params.email
         const result = await this.userService.getUserByEmail(email)
         if (!result.ok) {

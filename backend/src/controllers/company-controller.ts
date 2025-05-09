@@ -2,6 +2,8 @@ import { Request, Response } from 'express'
 import { CompanyService } from '../services/company-service'
 import { CompanyCreateDTO, CompanyUpdateDTO, intCoerceSchema } from '../types/validations'
 import { NextFunction } from '../types/express'
+import { Payload } from '../types/jwtPayload'
+import { DefaultUnAuthorizedError } from './defaultError'
 
 export class CompanyController {
     private companyService: CompanyService
@@ -52,9 +54,18 @@ export class CompanyController {
         return
     }
 
+    /**
+    * Create a new company, only accessible by ADMIN
+    */
     async createCompany(req: Request, res: Response, next: NextFunction) {
+        let payload = res.locals?.payload as Payload
+        if (payload?.role !== "ADMIN") {
+            next(DefaultUnAuthorizedError)
+            return
+        }
+
         const companyParams = req.body as CompanyCreateDTO
-        const companyCreate : CompanyCreateDTO = {
+        const companyCreate: CompanyCreateDTO = {
             name: companyParams.name,
             image: companyParams.image,
             styleId: companyParams.styleId,
@@ -68,7 +79,16 @@ export class CompanyController {
         return
     }
 
+    /**
+    * Update a company, only accessible by ADMIN
+    */
     async updateCompany(req: Request, res: Response, next: NextFunction) {
+        let payload = res.locals?.payload as Payload
+        if (payload?.role !== "ADMIN") {
+            next(DefaultUnAuthorizedError)
+            return
+        }
+
         const id = req.params.id
         const intId = intCoerceSchema.safeParse(id)
         if (!intId.success) {
@@ -76,7 +96,7 @@ export class CompanyController {
             return
         }
         const companyParams = req.body as Partial<CompanyUpdateDTO>
-        const companyUpdate : CompanyUpdateDTO = {
+        const companyUpdate: CompanyUpdateDTO = {
             name: companyParams.name,
             image: companyParams.image,
             styleId: companyParams.styleId,
@@ -90,7 +110,15 @@ export class CompanyController {
         return
     }
 
+    /**
+    * Delete a company, only accessible by ADMIN
+    */
     async deleteCompany(req: Request, res: Response, next: NextFunction) {
+        let payload = res.locals?.payload as Payload
+        if (payload?.role !== "ADMIN") {
+            next(DefaultUnAuthorizedError)
+            return
+        }
         const id = req.params.id
         const intId = intCoerceSchema.safeParse(id)
         if (!intId.success) {
