@@ -1,35 +1,52 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
+import RegisterPage from "./pages/RegisterPage";
+import Home from './pages/Home';
+import LoginPage from './pages/LoginPage';
+import LoadingScreen from './components/LoadingScreen';
+import { useState, useEffect } from "react";
+import SimPage from "./pages/SimPage";
+import NavBar from "./components/NavBar";
+
 
 function App() {
-  const [count, setCount] = useState(0)
+
+    return (
+      <Router> 
+        <LoadingWrapper />
+      </Router>
+    );
+  }
+
+  function LoadingWrapper() {
+
+  const [loading, setLoading] = useState(true);
+  const location = useLocation();
+
+
+  useEffect(() => {
+    // Muestra la pantalla de carga al cambiar de ruta
+    setLoading(true);
+    const timeout = setTimeout(() => setLoading(false), 1000); // Simula retraso de 1 segundo
+    return () => {
+      clearTimeout(timeout); // Limpia el timeout si el componente se desmonta antes de que se complete
+    };
+  }, [location]);
+
+  const hideNavBar = location.pathname === "/register" || location.pathname === "/"; // Oculta NavBar en estas rutas
 
   return (
     <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
-}
+        {loading && <LoadingScreen />} {/* Pantalla de carga */}
+        {!loading && !hideNavBar && <NavBar />} {/* Muestra NavBar solo si no está en login o register */}
+        <Routes> 
+          <Route path="/" Component={LoginPage} />
+          <Route path="/register" Component={RegisterPage} />
+          <Route path="/home" Component={Home} />
+          <Route path="/simulator" Component={SimPage} />
 
-export default App
+        </Routes>
+    </>
+  );
+  }
+
+export default App;

@@ -1,0 +1,83 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+    provider      = "prisma-client-js"
+    binaryTargets = ["linux-musl-openssl-3.0.x", "debian-openssl-3.0.x"]
+}
+
+datasource db {
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
+}
+
+model User {
+    id         Int      @id @default(autoincrement())
+    name       String
+    email      String   @unique
+    password   String
+    profession String
+    companyId  Int?     @map("company_id")
+    createdAt  DateTime @default(now()) @map("created_at")
+    updatedAt  DateTime @updatedAt @map("updated_at")
+
+    isActive Boolean @default(true) @map("is_active")
+    role     Role    @default(USER)
+
+    company Company? @relation(fields: [companyId], references: [id])
+
+    @@map("users")
+}
+
+enum Role {
+    USER
+    ADMIN_COMPANY
+    ADMIN
+}
+
+model Company {
+    id        Int      @id @default(autoincrement())
+    name      String   @unique
+    image     String
+    styleId   String   @map("style_id")
+    createdAt DateTime @default(now()) @map("created_at")
+    updatedAt DateTime @updatedAt @map("updated_at")
+
+    users      User[]
+    simulators Simulator[]
+
+    @@map("companies")
+}
+
+model Simulator {
+    id          Int      @id @default(autoincrement())
+    name        String
+    companyId   Int      @map("company_id")
+    description String
+    createdAt   DateTime @default(now()) @map("created_at")
+    updatedAt   DateTime @updatedAt @map("updated_at")
+
+    company        Company         @relation(fields: [companyId], references: [id])
+    simulatorWebgl SimulatorWebgl? @relation
+
+    @@map("simulators")
+}
+
+model SimulatorWebgl {
+    id          Int      @id @default(autoincrement())
+    kind        String
+    simulatorId Int      @unique @map("simulator_id")
+    data        String
+    framework   String
+    loader      String
+    wasm        String
+    createdAt   DateTime @default(now()) @map("created_at")
+    updatedAt   DateTime @updatedAt @map("updated_at")
+
+    simulator Simulator @relation(onDelete: Cascade, fields: [simulatorId], references: [id])
+
+    @@map("simulator_webgls")
+}
