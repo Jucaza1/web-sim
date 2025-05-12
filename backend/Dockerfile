@@ -8,7 +8,7 @@ RUN npm install
 # copy source code
 COPY ./src ./src
 COPY ./prisma ./prisma
-COPY ./.env ./tsconfig.json ./
+COPY ./tsconfig.json ./
 # build the app
 RUN npx prisma generate
 
@@ -23,7 +23,6 @@ COPY --from=build /app/package.json ./package.json
 RUN npm install --production
 COPY --from=build /app/build ./build
 COPY --from=build /app/prisma ./prisma
-COPY --from=build /app/.env ./.env
 COPY --from=build /app/node_modules/@prisma ./node_modules/@prisma
 COPY --from=build /app/node_modules/.prisma ./node_modules/.prisma
 

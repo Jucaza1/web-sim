@@ -10,7 +10,7 @@ export const UserCreateDTOSchema = z.object({
         .min(1)
         .max(50, { message: "name must be at most 50 characters" }),
     email: z.string()
-        .email({message: "Invalid email address"}),
+        .email({message: "invalid email address"}),
     password: z.string()
         .min(8, { message: "password must be at least 8 characters" })
         .max(25, { message: "password must be at most 25 characters" })
@@ -24,8 +24,6 @@ export const UserCreateDTOSchema = z.object({
         .optional(),
 }).strict()
 
-// Aplico la validación en un nuevo esquema para evitar que se repita el código
-//export const UserCreateDTOSchema = UserCreateDTOSchema.strict()
 export const UserUpdateDTOSchema = UserCreateDTOSchema.partial()
 
 export type UserCreateDTO = z.infer<typeof UserCreateDTOSchema>

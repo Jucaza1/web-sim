@@ -37,6 +37,10 @@ export class CompanyMemoryStore implements CompanyStore {
             // User already exists
             return { ok: false, err: { code: StoreErrorCode.unique, msg: "company already exists" } }
         }
+        const idAndNames = (await this.getCompaniesIdName()).data!
+        if (idAndNames.some((val) => val.name === company.name)) {
+            return { ok: false, err: { code: StoreErrorCode.unique, msg: "company already exists" } }
+        }
         const companyMemory: Company = { ...company, id: id, createdAt: new Date(), updatedAt: new Date() }
         this.companies.set(companyMemory.id, companyMemory)
         return { ok: true, data: companyMemory as Company }
