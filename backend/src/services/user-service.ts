@@ -45,7 +45,7 @@ export class UserService {
     async createUser(user: UserCreateDTO, role: Role = "USER"): Promise<ResultHttp<User>> {
         const validateResult = UserCreateDTOSchema.safeParse(user)
         if (!validateResult.success) {
-            return { ok: false, err: { status: 400, msg: validateResult.error.errors.map(e => e.message) } }
+            return { ok: false, err: { status: 400, msg: validateResult.error.errors.map(e => [e.path,e.message].join(" : ")) } }
         }
         user.password = this.hasher.hash(user.password)
         const result = await this.userStore.createUser(user, role)
@@ -58,7 +58,7 @@ export class UserService {
         }
         const validateResult = UserUpdateDTOSchema.safeParse(user)
         if (!validateResult.success) {
-            return { ok: false, err: { status: 400, msg: validateResult.error.errors.map(e => e.message) } }
+            return { ok: false, err: { status: 400, msg: validateResult.error.errors.map(e => [e.path,e.message].join(" : ")) } }
         }
         if (user.password && user.password.length > 0) {
             user.password = this.hasher.hash(user.password)

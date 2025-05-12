@@ -22,7 +22,7 @@ export class SimulatorController {
         const id = req.params.id
         const intId = intCoerceSchema.safeParse(id)
         if (!intId.success) {
-            next({ httpError: { status: 400, msg: [intId.error.message] } })
+            next({ httpError: { status: 400, msg: [["id", intId.error.message].join(" : ")] } })
             return
         }
         const result = await this.simulatorService.getSimulator(intId.data)
@@ -38,7 +38,7 @@ export class SimulatorController {
         const companyId = req.params.id
         const intId = intCoerceSchema.safeParse(companyId)
         if (!intId.success) {
-            next({ httpError: { status: 400, msg: [intId.error.message] } })
+            next({ httpError: { status: 400, msg: [["id", intId.error.message].join(" : ")] } })
             return
         }
         const result = await this.simulatorService.getSimulatorsByCompanyId(intId.data)
@@ -99,7 +99,7 @@ export class SimulatorController {
         const id = req.params.id
         const intId = intCoerceSchema.safeParse(id)
         if (!intId.success) {
-            next({ httpError: { status: 400, msg: [intId.error.message] } })
+            next({ httpError: { status: 400, msg: [["id", intId.error.message].join(" : ")] } })
             return
         }
         const simulatorParams = req.body as SimulatorUpdateDTO
@@ -131,7 +131,7 @@ export class SimulatorController {
         const id = req.params.id
         const intId = intCoerceSchema.safeParse(id)
         if (!intId.success) {
-            next({ httpError: { status: 400, msg: [intId.error.message] } })
+            next({ httpError: { status: 400, msg: [["id", intId.error.message].join(" : ")] } })
             return
         }
         const result = await this.simulatorService.deleteSimulator(intId.data)

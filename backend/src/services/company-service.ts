@@ -27,7 +27,7 @@ export class CompanyService {
     async createCompany(company: CompanyCreateDTO): Promise<ResultHttp<Company>> {
         const validateResult = CompanyCreateDTOSchema.safeParse(company)
         if (!validateResult.success) {
-            return { ok: false, err: { status: 400, msg: validateResult.error.errors.map(e => e.message) } }
+            return { ok: false, err: { status: 400, msg: validateResult.error.errors.map(e => [e.path,e.message].join(" : ")) } }
         }
         const result = await this.companyStore.createCompany(company)
         return resultStoreToResultHttp(result)
@@ -39,7 +39,7 @@ export class CompanyService {
         }
         const validateResult = CompanyUpdateDTOSchema.safeParse(company)
         if (!validateResult.success) {
-            return { ok: false, err: { status: 400, msg: validateResult.error.errors.map(e => e.message) } }
+            return { ok: false, err: { status: 400, msg: validateResult.error.errors.map(e => [e.path,e.message].join(" : ")) } }
         }
         const result = await this.companyStore.updateCompany(id, company)
         return resultStoreToResultHttp(result)

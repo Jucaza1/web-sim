@@ -21,7 +21,7 @@ export class AuthServiceJWT {
     async validateCredentialsForgeJWT(userCred: UserCredentials): Promise<ResultHttp<string>> {
         const validateResult = UserCredentialsSchema.safeParse(userCred)
         if (!validateResult.success) {
-            return { ok: false, err: { status: 400, msg: validateResult.error.errors.map(e => e.message) } }
+            return { ok: false, err: { status: 400, msg: validateResult.error.errors.map(e => [e.path, e.message].join(" : ")) } }
         }
         const userResult = await this.userService.getUserByEmail(userCred.email)
         if (!userResult.ok) {

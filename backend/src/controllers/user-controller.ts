@@ -160,7 +160,7 @@ export class UserController {
                 const id = req.params.id
                 const intId = intCoerceSchema.safeParse(id)
                 if (!intId.success) {
-                    next({ httpError: { status: 400, msg: [intId.error.message] } })
+                    next({ httpError: { status: 400, msg: [["id", intId.error.message].join(" : ")] } })
                     return
                 }
                 idFinal = intId.data
@@ -204,7 +204,7 @@ export class UserController {
                 const id = req.params.id
                 const intId = intCoerceSchema.safeParse(id)
                 if (!intId.success) {
-                    next({ httpError: { status: 400, msg: [intId.error.message] } })
+                    next({ httpError: { status: 400, msg: [["id", intId.error.message].join(" : ")] } })
                     return
                 }
                 idFinal = intId.data
@@ -234,7 +234,7 @@ export class UserController {
         const companyId = req.params.id
         const intId = intCoerceSchema.safeParse(companyId)
         if (!intId.success) {
-            next({ httpError: { status: 400, msg: [intId.error.message] } })
+            next({ httpError: { status: 400, msg: [["id", intId.error.message].join(" : ")] } })
             return
         }
         const result = await this.userService.getUsersByCompanyId(intId.data)

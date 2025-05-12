@@ -31,7 +31,7 @@ export class SimulatorWebglService {
     async createWebgl(webgl: SimulatorWebglCreateDTO): Promise<ResultHttp<SimulatorWebgl>> {
         const validateResult = SimulatorWebglCreateDTOSchema.safeParse(webgl)
         if (!validateResult.success) {
-            return { ok: false, err: { status: 400, msg: validateResult.error.errors.map(e => e.message) } }
+            return { ok: false, err: { status: 400, msg: validateResult.error.errors.map(e => [e.path,e.message].join(" : ")) } }
         }
         const result = await this.simulatorWebglStore.createSimulatorWebgl(webgl)
         return resultStoreToResultHttp(result)

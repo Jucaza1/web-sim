@@ -31,7 +31,7 @@ export class SimulatorService {
     async createSimulator(simulator: SimulatorCreate): Promise<ResultHttp<Simulator>> {
         const validateResult = SimulatorCreateDTOSchema.safeParse(simulator)
         if (!validateResult.success) {
-            return { ok: false, err: { status: 400, msg: validateResult.error.errors.map(e => e.message) } }
+            return { ok: false, err: { status: 400, msg: validateResult.error.errors.map(e => [e.path,e.message].join(" : ")) } }
         }
         const result = await this.simulatorStore.createSimulator(simulator)
         return resultStoreToResultHttp(result)
