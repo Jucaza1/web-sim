@@ -1,12 +1,11 @@
-import express, { ErrorRequestHandler, NextFunction, Request, Response } from 'express';
+import express, { Response } from 'express';
 import cors from 'cors';
 import cookieParser from "cookie-parser"
 import { UserService } from './services/user-service';
 import { UserController } from './controllers/user-controller';
 import { CompanyService } from './services/company-service';
 import { CompanyController } from './controllers/company-controller';
-import { createRouter } from './routes/routes-dev';
-import { HttpError } from './types/result';
+import { createRouter } from './routes/routes-dev-filter';
 import { AuthController } from './controllers/auth-controller';
 import { AuthServiceJWT } from './services/auth-service';
 import { HasherBcrypt } from './services/hashing';
@@ -20,6 +19,7 @@ import { SimulatorStoreFactory } from './models/simulator';
 import { SimulatorWebglStoreFactory } from './models/simulator-webgl';
 import { SimulatorWebglService } from './services/simulator-webgl-service';
 import { SimulatorWebglController } from './controllers/simulator-webgl-controller';
+import { globalErrorHandler } from './controllers/error-controller';
 
 const app = express();
 const corsOptions: cors.CorsOptions = {
@@ -83,38 +83,6 @@ app.use(fileServer(authController))
 app.use("/api/v1", router)
 
 // error handler
-const globalErrorHandler: ErrorRequestHandler = (
-    // { httpError, exception }: { httpError: HttpError, exception: Error },
-    error: any,
-    _req: Request,
-    res: Response,
-    _next: NextFunction
-) => {
-
-    if (error.httpError != undefined) {
-        //{ httpError, exception }: { httpError: HttpError, exception: Error } = error
-        console.error(error.httpError as HttpError)
-        res.status(error.httpError.status ?? 500).json({ error: error.httpError.msg })
-        if (error.exception) {
-            console.log(error.exception)
-        }
-        return
-    }
-    if (error.status != undefined) {
-        console.error({ statusCode: error.statusCode, type: error.type })
-        if (error.statusCode === 400) {
-            res.status(error.statusCode as number).json({ error: "bad request" })
-        } else {
-            res.status(error.statusCode as number).json({ error: error.status })
-        }
-        return
-    }
-    if (error instanceof Error) {
-        console.error(error)
-        res.status(500).json({ error: "internal server error" })
-        return
-    }
-}
 app.use(globalErrorHandler)
 
 // inyect addmin user
@@ -123,7 +91,6 @@ const adminUser: UserCreate = {
     email: process.env.USER_ADMIN_EMAIL ?? "admin@admin.com",
     password: process.env.USER_ADMIN_PASSWORD ?? "adminadmin",
     name: "admin",
-    // isAdmin: true,
     // companyId: "e30e81bc-4f4f-4339-a40c-feaabca0efb1",
     profession: "admin",
     // isActive: true,
