@@ -1,21 +1,38 @@
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
-import api from "../services/api";
-import styles from "../styles/RegisterForm.module.css";
 import { zodResolver } from "@hookform/resolvers/zod";
-//import { UserCreateDTO } from "../backend/src/types/validations.ts"
+import { UserCreateDTO, UserCreateDTOSchema } from "./../types/validations"; // Importar el esquema de validación
+import styles from "../styles/RegisterForm.module.css";
 import logo from "../assets/logo/Davante_logo_endosos_navy.svg"
 
 export default function RegisterForm() {
-  const { register, handleSubmit, formState: { errors } } = useForm();
   const navigate = useNavigate();
 
-  const onSubmit = async (data: any) => {
+  const { register, handleSubmit, formState: { errors } 
+  } = useForm<UserCreateDTO>({
+    resolver: zodResolver(UserCreateDTOSchema),                          // Validación de datos usando Zod
+  });
+
+  
+
+  const onSubmit = async (data: UserCreateDTO) => {
     try {
-      await api.post("/auth/register", data);                            // Enviar datos al endpoint de registro
+      const response = await fetch("http://localhost:3000/api/v1/register", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),                                    // Convertir los datos a JSON
+      });
+
+      if(!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || "Error en el usuario");
+      }
+
       navigate("/");                                                     // Redirigir a la página de inicio después del registro exitoso
     } catch (err: any) {
-      console.error(err.response?.data?.error || "Error al registrar el usuario");
+      console.error(err.message || "Error al registrar el usuario");
     }
   };
 
@@ -31,7 +48,7 @@ export default function RegisterForm() {
         placeholder="Nombre"
         className={styles.inputField}
       />
-      {errors.name && <p className="text-red-500 px-4">El nombre es obligatorio</p>}
+      {errors.name && <p className="text-red-500 px-4">{errors.name.message}</p>}
 
       <input
         {...register("email")}
@@ -39,7 +56,7 @@ export default function RegisterForm() {
         type="email"
         className={styles.inputField}
       />
-      {errors.email && <p className="text-red-500 px-4">El correo electrónico es obligatorio</p>}
+      {errors.email && <p className="text-red-500 px-4">{errors.email.message}</p>}
 
       <input
         {...register("password")}
@@ -47,22 +64,30 @@ export default function RegisterForm() {
         type="password"
         className={styles.inputField}
       />
+      {errors.password && <p className="text-red-500 px-4">{errors.password.message}</p>}
+
       <input
         {...register("confirmPassword")}
         placeholder="Confirmar contraseña"
         type="password"
         className={styles.inputField}
       />
+      {errors.confirmPassword && <p className="text-red-500 px-4">{errors.confirmPassword.message}</p>}
+
       <input
         {...register("profession")}
         placeholder="Profesión"
         className={styles.inputField}
       />
+      {errors.profession && <p className="text-red-500 px-4">{errors.profession.message}</p>}
+
       <input
-        {...register("companyId")}
+        {...register("companyId", {setValueAs: value => value === "" ? undefined : Number(value), })}
         placeholder="ID de la Compañía"
         className={styles.inputField}
       />
+      {errors.companyId && <p className="text-red-500 px-4">{errors.companyId.message}</p>}
+
 
       <button type="submit" className={styles.submitButton}>
         Registrarse
