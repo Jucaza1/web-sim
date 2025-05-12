@@ -36,7 +36,7 @@ export function UserCreatePrismaConverter(user: UserCreate, role: Role = "USER")
         profession: user.profession,
         role: role,
     }
-    if (user.companyId !== null || user.companyId !== undefined) {
+    if (user.companyId !== null && user.companyId !== undefined) {
         output.company = {
             connect: {
                 id: user.companyId
