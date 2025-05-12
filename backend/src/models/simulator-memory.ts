@@ -1,4 +1,4 @@
-import { Simulator, SimulatorCreate } from "../types/db"
+import { Simulator, SimulatorCreate, SimulatorUpdate } from "../types/db"
 import { SimulatorStore } from "./simulator"
 import { ResultStore, StoreErrorCode } from "../types/result"
 
@@ -35,15 +35,16 @@ export class SimulatorMemoryStore implements SimulatorStore {
             // Simulator already exists
             return { ok: false, err: { code: StoreErrorCode.unique, msg: "simulator already exists" } }
         }
-        this.simulators.set(simulatorMemory.id, simulatorMemory)
-        return { ok: true, data: simulatorMemory }
+        const updatedSimulator: Simulator = { ...simulatorMemory, companyId: simulatorMemory.companyId ?? null }
+        this.simulators.set(simulatorMemory.id, updatedSimulator)
+        return { ok: true, data: updatedSimulator }
     }
-    async updateSimulator(id: number, simulator: Partial<Simulator>): Promise<ResultStore<Simulator>> {
+    async updateSimulator(id: number, simulator: SimulatorUpdate): Promise<ResultStore<Simulator>> {
         const existingSimulator = await this.getSimulator(id)
         if (!existingSimulator.ok) {
             return { ok: false, err: { code: StoreErrorCode.notFound, msg: "simulator not found" } }
         }
-        const updatedSimulator = { ...existingSimulator.data!, ...simulator }
+        const updatedSimulator: Simulator = { ...existingSimulator.data!, ...simulator as Partial<Simulator>, updatedAt: new Date() }
         this.simulators.set(id, updatedSimulator)
         return { ok: true, data: updatedSimulator }
     }

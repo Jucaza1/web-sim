@@ -1,4 +1,4 @@
-import { SimulatorWebgl, SimulatorWebglCreate } from '../types/db'
+import { SimulatorWebgl, SimulatorWebglCreate, SimulatorWebglUpdate } from '../types/db'
 import { ResultStore } from '../types/result'
 import { PrismaClientSingleton } from './prisma-singleton'
 import { SimulatorWebglMemoryStore } from './simulator-webgl-memory'
@@ -9,7 +9,7 @@ export interface SimulatorWebglStore {
     getSimulatorWebglBySimulatorId(simulatorId: number): Promise<ResultStore<SimulatorWebgl[]>>
     getSimulatorWebgls(): Promise<ResultStore<SimulatorWebgl[]>>
     createSimulatorWebgl(simulatorWebglCreate: SimulatorWebglCreate): Promise<ResultStore<SimulatorWebgl>>
-    updateSimulatorWebgl(id: number, simulator: Partial<SimulatorWebgl>): Promise<ResultStore<SimulatorWebgl>>
+    updateSimulatorWebgl(id: number, simulator: SimulatorWebglUpdate): Promise<ResultStore<SimulatorWebgl>>
     deleteSimulatorWebgl(id: number): Promise<ResultStore<SimulatorWebgl>>
 }
 

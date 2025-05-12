@@ -1,10 +1,10 @@
-import { Role, User, UserCreate } from "../types/db"
+import { Role, User, UserCreate, UserUpdate } from "../types/db"
 import { ResultStore, StoreErrorCode } from "../types/result"
 import { UserStore } from "./user"
 
 function autoIncFn(): () => number {
     let id = 1
-    return function () {
+    return function() {
         return id++
     }
 }
@@ -72,11 +72,11 @@ export class UserMemoryStore implements UserStore {
             updatedAt: new Date(),
             role: role,
         }
-        this.users.set(id, userwithComplete )
+        this.users.set(id, userwithComplete)
         return { ok: true, data: userwithComplete }
     }
 
-    async updateUser(id: number, user: Partial<User>): Promise<ResultStore<User>> {
+    async updateUser(id: number, user: UserUpdate): Promise<ResultStore<User>> {
         const existingUser = this.users.get(id)
         if (!existingUser) {
             return { ok: false, err: { code: StoreErrorCode.notFound, msg: "user not found" } }
@@ -84,7 +84,8 @@ export class UserMemoryStore implements UserStore {
         if ([...this.users.values()].some(existingUser => existingUser.email === user.email)) {
             return { ok: false, err: { code: StoreErrorCode.unique, msg: "email already exists" } }
         }
-        const updateData: User = { ...existingUser, updatedAt: new Date(), ...user }
+        const updateData: User = { ...existingUser, ...user as User }
+        updateData.updatedAt = new Date()
         this.users.set(id, updateData)
         return { ok: true, data: updateData }
     }

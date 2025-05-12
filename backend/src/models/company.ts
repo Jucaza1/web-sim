@@ -1,4 +1,4 @@
-import { Company, CompanyCreate, CompanyIdName } from '../types/db'
+import { Company, CompanyCreate, CompanyIdName, CompanyUpdate } from '../types/db'
 import { ResultStore } from '../types/result'
 import { CompanyMemoryStore } from './company-memory'
 import { CompanyPrismaStore } from './company-prisma'
@@ -8,7 +8,7 @@ export interface CompanyStore {
     getCompany(id: number): Promise<ResultStore<Company>>
     getCompanies(): Promise<ResultStore<Company[]>>
     createCompany(company: CompanyCreate): Promise<ResultStore<Company>>
-    updateCompany(id: number, company: Partial<Company>): Promise<ResultStore<Company>>
+    updateCompany(id: number, company: CompanyUpdate): Promise<ResultStore<Company>>
     deleteCompany(id: number): Promise<ResultStore<Company>>
     getCompaniesByUserId(userId: number): Promise<ResultStore<Company[]>>
     getCompaniesIdName(): Promise<ResultStore<CompanyIdName[]>>

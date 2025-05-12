@@ -1,6 +1,6 @@
 import { PrismaClient } from '@prisma/client'
 import { UserStore } from "./user"
-import { Role, User, UserCreate, UserCreatePrismaConverter } from '../types/db'
+import { Role, User, UserCreate, UserCreatePrismaConverter, UserUpdate, UserUpdatePrismaConverter } from '../types/db'
 import { ResultStore, StoreErrorCode } from '../types/result'
 import { prismaCatchToStoreError } from '../types/exceptions'
 
@@ -64,11 +64,12 @@ export class UserPrismaStore implements UserStore {
         return { ok: true, data: userResult as User }
     }
 
-    async updateUser(id: number, user: Partial<User>): Promise<ResultStore<User>> {
+    async updateUser(id: number, user: UserUpdate): Promise<ResultStore<User>> {
         let userResult: User | null
+        const userPrisma = UserUpdatePrismaConverter(user)
         try {
             // TODO: check if id field collides in data
-            userResult = await this.client.user.update({ where: { id }, data: user })
+            userResult = await this.client.user.update({ where: { id }, data: userPrisma })
         } catch (e) {
             return { ok: false, err: { code: prismaCatchToStoreError(e), msg: "internal server error" }, exception: e as Error }
         }

@@ -1,4 +1,4 @@
-import { SimulatorWebgl, SimulatorWebglCreate } from '../types/db'
+import { SimulatorWebgl, SimulatorWebglCreate, SimulatorWebglUpdate } from '../types/db'
 import { ResultStore, StoreErrorCode } from '../types/result'
 import { SimulatorWebglStore } from "./simulator-webgl"
 
@@ -35,7 +35,7 @@ export class SimulatorWebglMemoryStore implements SimulatorWebglStore {
         return { ok: true, data: Array.from(this.simulatorWebgls.values()) }
     }
     async createSimulatorWebgl(simulatorWebglCreate: SimulatorWebglCreate): Promise<ResultStore<SimulatorWebgl>> {
-        let simulatorWebglMemory : SimulatorWebgl = { ...simulatorWebglCreate, id: this.autoInc(), createdAt: new Date(), updatedAt: new Date() }
+        let simulatorWebglMemory: SimulatorWebgl = { ...simulatorWebglCreate, id: this.autoInc(), createdAt: new Date(), updatedAt: new Date() }
         if (this.simulatorWebgls.has(simulatorWebglMemory.id!)) {
             // SimulatorWebgl already exists
             return { ok: false, err: { code: StoreErrorCode.unique, msg: "simulatorWebgl already exists" } }
@@ -43,14 +43,14 @@ export class SimulatorWebglMemoryStore implements SimulatorWebglStore {
         this.simulatorWebgls.set(simulatorWebglMemory.id!, simulatorWebglMemory as SimulatorWebgl)
         return { ok: true, data: simulatorWebglMemory as SimulatorWebgl }
     }
-    async updateSimulatorWebgl(id: number, simulator: Partial<SimulatorWebgl>): Promise<ResultStore<SimulatorWebgl>> {
-        const existingSimulatorWebgl = this.getSimulatorWebgl(id)
-        if (!existingSimulatorWebgl) {
+    async updateSimulatorWebgl(id: number, simulator: SimulatorWebglUpdate): Promise<ResultStore<SimulatorWebgl>> {
+        const existingSimulatorWebgl = await this.getSimulatorWebgl(id)
+        if (!existingSimulatorWebgl.ok) {
             return { ok: false, err: { code: StoreErrorCode.notFound, msg: "simulatorWebgl not found" } }
         }
-        const updatedSimulatorWebgl = { ...existingSimulatorWebgl, ...simulator }
-        this.simulatorWebgls.set(id, updatedSimulatorWebgl as SimulatorWebgl)
-        return updatedSimulatorWebgl
+        const updatedSimulatorWebgl = { ...existingSimulatorWebgl.data, ...simulator }
+        this.simulatorWebgls.set(id, updatedSimulatorWebgl.data as SimulatorWebgl)
+        return { ok: true, data: updatedSimulatorWebgl.data as SimulatorWebgl }
     }
     async deleteSimulatorWebgl(id: number): Promise<ResultStore<SimulatorWebgl>> {
         const resultSimulatorWebgl = await this.getSimulatorWebgl(id)

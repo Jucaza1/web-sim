@@ -1,4 +1,4 @@
-import { Simulator, SimulatorCreate } from '../types/db'
+import { Simulator, SimulatorCreate, SimulatorUpdate } from '../types/db'
 import { ResultStore } from '../types/result'
 import { PrismaClientSingleton } from './prisma-singleton'
 import { SimulatorMemoryStore } from './simulator-memory'
@@ -9,7 +9,7 @@ export interface SimulatorStore {
     getSimulatorsByCompanyId(companyId: number): Promise<ResultStore<Simulator[]>>
     getSimulators(): Promise<ResultStore<Simulator[]>>
     createSimulator(simulator: SimulatorCreate): Promise<ResultStore<Simulator>>
-    updateSimulator(id: number, simulator: Partial<Simulator>): Promise<ResultStore<Simulator>>
+    updateSimulator(id: number, simulator: SimulatorUpdate): Promise<ResultStore<Simulator>>
     deleteSimulator(id: number): Promise<ResultStore<Simulator>>
 }
 export function SimulatorStoreFactory(kind: string, _seed: boolean = false): SimulatorStore {

@@ -1,6 +1,6 @@
 import { PrismaClient } from '@prisma/client'
 import { CompanyStore } from "./company"
-import { Company, CompanyCreate, CompanyIdName } from '../types/db'
+import { Company, CompanyCreate, CompanyIdName, CompanyUpdate } from '../types/db'
 import { ResultStore, StoreErrorCode } from '../types/result'
 import { prismaCatchToStoreError } from '../types/exceptions'
 
@@ -71,7 +71,7 @@ export class CompanyPrismaStore implements CompanyStore {
         }
         return { ok: true, data: companyResult }
     }
-    async updateCompany(id: number, company: Partial<Company>): Promise<ResultStore<Company>> {
+    async updateCompany(id: number, company: CompanyUpdate): Promise<ResultStore<Company>> {
         let companyResult: Company | undefined
         try {
             // TODO: check if id field collides in data

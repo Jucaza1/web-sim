@@ -75,6 +75,7 @@ export class SimulatorController {
             name: simulatorParams.name,
             companyId: simulatorParams.companyId,
             description: simulatorParams.description,
+            thumbnail: simulatorParams.thumbnail
         }
         const result = await this.simulatorService.createSimulator(simulatorCreate)
         if (!result.ok) {
@@ -105,6 +106,8 @@ export class SimulatorController {
         const simulatorUpdate: SimulatorUpdateDTO = {
             name: simulatorParams.name,
             description: simulatorParams.description,
+            companyId: simulatorParams.companyId,
+            thumbnail: simulatorParams.thumbnail
         }
         const result = await this.simulatorService.updateSimulator(intId.data, simulatorUpdate)
         if (!result.ok) {

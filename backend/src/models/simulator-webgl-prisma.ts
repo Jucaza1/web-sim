@@ -1,4 +1,4 @@
-import { SimulatorWebgl, SimulatorWebglCreate, SimulatorWebglCreatePrismaConverter } from '../types/db'
+import { SimulatorWebgl, SimulatorWebglCreate, SimulatorWebglCreatePrismaConverter, SimulatorWebglUpdatePrismaConverter } from '../types/db'
 import { PrismaClient } from '@prisma/client'
 import { SimulatorWebglStore } from "./simulator-webgl"
 import { ResultStore, StoreErrorCode } from '../types/result'
@@ -66,8 +66,9 @@ export class SimulatorWebglPrismaStore implements SimulatorWebglStore {
     }
     async updateSimulatorWebgl(id: number, simulator: Partial<SimulatorWebgl>): Promise<ResultStore<SimulatorWebgl>> {
         let simulatorResult: SimulatorWebgl | null
+        const simulatorPrisma = SimulatorWebglUpdatePrismaConverter(simulator)
         try {
-            simulatorResult = await this.client.simulatorWebgl.update({ where: { id }, data: simulator })
+            simulatorResult = await this.client.simulatorWebgl.update({ where: { id }, data: simulatorPrisma })
         }
         catch (e) {
             return { ok: false, err: { code: StoreErrorCode.unknown, msg: "internal server error" } }

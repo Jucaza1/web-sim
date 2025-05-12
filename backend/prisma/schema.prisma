@@ -55,12 +55,13 @@ model Company {
 model Simulator {
     id          Int      @id @default(autoincrement())
     name        String
-    companyId   Int      @map("company_id")
+    companyId   Int?     @map("company_id")
     description String
     createdAt   DateTime @default(now()) @map("created_at")
     updatedAt   DateTime @updatedAt @map("updated_at")
+    thumbnail   String
 
-    company        Company         @relation(fields: [companyId], references: [id])
+    company        Company?        @relation(fields: [companyId], references: [id])
     simulatorWebgl SimulatorWebgl? @relation
 
     @@map("simulators")

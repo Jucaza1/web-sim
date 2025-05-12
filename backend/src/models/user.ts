@@ -1,4 +1,4 @@
-import { Role, User, UserCreate } from "../types/db"
+import { Role, User, UserCreate, UserUpdate } from "../types/db"
 import { ResultStore } from "../types/result"
 import { UserMemoryStore } from "./user-memory"
 import { UserPrismaStore } from "./user-prisma"
@@ -8,7 +8,7 @@ export interface UserStore {
     getUser(id: number): Promise<ResultStore<User>>
     getUsers(): Promise<ResultStore<User[]>>
     createUser(user: UserCreate, role?: Role): Promise<ResultStore<User>>
-    updateUser(id: number, user: Partial<User>): Promise<ResultStore<User>>
+    updateUser(id: number, user: UserUpdate): Promise<ResultStore<User>>
     deleteUser(id: number): Promise<ResultStore<User>>
     getUserByEmail(email: string): Promise<ResultStore<User>>
     getUsersByCompanyId(companyId: number): Promise<ResultStore<User[]>>

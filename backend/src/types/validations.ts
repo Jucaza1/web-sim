@@ -1,8 +1,8 @@
 import { z } from "zod"
 
 export const idSchema = z.number({ message: "invalid id" })
-.int({ message: "invalid id" })
-.positive({ message: "invalid id" })
+    .int({ message: "invalid id" })
+    .positive({ message: "invalid id" })
 export const intCoerceSchema = z.coerce.number({ message: "invalid id" })
 
 export const UserCreateDTOSchema = z.object({
@@ -19,7 +19,9 @@ export const UserCreateDTOSchema = z.object({
         .min(5, { message: "profession must be at least 5 characters" })
         .max(25, { message: "Profession must be at most 25 characters" }),
     companyId: z.number()
-        .int({ message: "invalid company ID" }).positive().optional(),
+        .int({ message: "invalid company ID" })
+        .positive({ message: "invalid company ID" })
+        .optional(),
 }).strict()
 
 export const UserUpdateDTOSchema = UserCreateDTOSchema.partial()
@@ -50,7 +52,9 @@ export const SimulatorCreateDTOSchema = z.object({
         .min(1)
         .max(250, { message: "description must be at most 250 characters" }),
     companyId: z.number({ message: "invalid company ID" })
-        .int({ message: "invalid company ID" }).positive({ message: "invalid company ID" }),
+        .int({ message: "invalid company ID" }).positive({ message: "invalid company ID" })
+        .optional(),
+    thumbnail: z.string({ message: "thumbnail is not valid" })
 }).strict()
 export const SimulatorUpdateDTOSchema = SimulatorCreateDTOSchema.partial()
 export type SimulatorCreateDTO = z.infer<typeof SimulatorCreateDTOSchema>
