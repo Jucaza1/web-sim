@@ -17,6 +17,7 @@ export function createRouter(
     //-> /api/v1
     router.post("/register", jsonMiddleware, userController.createUser)
     router.post("/login", jsonMiddleware, authController.login)
+    router.get("/companiesid", companyController.getCompaniesIdName)
 
     // User routes unprotected
     router.get("/dev/users/:id", userController.getUser)
@@ -68,7 +69,6 @@ export function createRouter(
     // Company routes
     routerAuth.get("/companies/:id", companyController.getCompany)
     routerAuth.get("/companies", companyController.getCompanies)
-    routerAuth.get("/companiesid", companyController.getCompaniesIdName)
     routerAuth.post("/companies", jsonMiddleware, companyController.createCompany)
     routerAuth.put("/companies/:id", jsonMiddleware, companyController.updateCompany)
     routerAuth.delete("/companies/:id", companyController.deleteCompany)
