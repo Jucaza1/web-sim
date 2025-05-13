@@ -12,3 +12,6 @@ build/
 *.njsproj
 *.sln
 *.sw?
+
+# Prisma ORM
+generated/prisma/
