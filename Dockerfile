@@ -15,6 +15,12 @@ RUN npx prisma generate
 RUN npm run build
 
 FROM node:20-alpine AS frontend-build
+
+# declare build-time ARG
+ARG VITE_DOMAIN_HOST
+# set ENV so that Vite can see it (redundant but common)
+ENV VITE_DOMAIN_HOST=${VITE_DOMAIN_HOST}
+
 # set working directory
 WORKDIR /app
 # install dependencies
