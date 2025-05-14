@@ -23,7 +23,7 @@ const NavBar = () => {
             <div className='hidden md:flex gap-6 items-center'>
                 <a href='/home' className='hover:text-orange-500'>Inicio</a>
                 <a href='/simulator' className='hover:text-orange-500'>Simuladores</a>
-                <a href='#' className='hover:text-orange-500'>Perfil</a>
+                <a href='/profile' className='hover:text-orange-500'>Perfil</a>
                 <a href='#' className='hover:text-orange-500'>Contacto</a>
                 <a href='#' className='hover:text-orange-500'>Ayuda</a>
                 <a href='#' className='hover:text-orange-500'>Sobre nosotros</a>

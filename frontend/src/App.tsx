@@ -6,6 +6,7 @@ import LoadingScreen from './components/LoadingScreen';
 import { useState, useEffect } from "react";
 import SimPage from "./pages/SimPage";
 import NavBar from "./components/NavBar";
+import ProfilePage from "./pages/ProfilePage";
 
 
 function App() {
@@ -43,6 +44,7 @@ function App() {
           <Route path="/register" Component={RegisterPage} />
           <Route path="/home" Component={Home} />
           <Route path="/simulator" Component={SimPage} />
+          <Route path="/profile" Component={ProfilePage} />
 
         </Routes>
     </>
