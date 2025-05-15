@@ -19,7 +19,6 @@ const SimFilter = () => {
       { name: "Agricultura", category: "Agrario" },
       { name: "Veterinaria", category: "Salud" },
       { name: "Salón de ferias", category: "Educación" },
-      { name: "Técnica", category: "Tecnología" },
       { name: "Estética", category: "Salud" },
       { name: "Visitas virtuales", category: "Educación" },
       { name: "Ascensores", category: "Tecnología" },
@@ -71,7 +70,7 @@ const SimFilter = () => {
                     .replace(/\s+/g, '_')
                     .toLowerCase()}_light.png`} 
                   alt={`${sim.name} logo`}
-                  className="w-1/2 h-32 object-cover rounded-t block dark:hidden"
+                  className="w-1/2 h-32 object-cover rounded-t logo-light"
                 />
 
                 {/*Logo modo oscuro*/}
@@ -81,9 +80,9 @@ const SimFilter = () => {
                     .replace(/\s+/g, '_')
                     .toLowerCase()}_dark.png`} 
                   alt={`${sim.name} logo`}
-                  className="w-1/2 h-32 object-cover rounded-t hidden dark:block"
+                  className="w-1/2 h-32 object-cover rounded-t hidden logo-dark"
                 />
-                <p>{sim.name}</p>  
+                <p><strong>{sim.name}</strong></p>  
               </div>
             ))}
         </div>

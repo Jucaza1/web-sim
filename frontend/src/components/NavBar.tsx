@@ -2,6 +2,7 @@ import logoNavy from "../assets/logo/Davante_simbolo_navy.svg";
 import logoWhite from "../assets/logo/Davante_simbolo_white.svg";
 import ThemeToggle from './ThemeToggle';
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 
 const NavBar = () => {
     const [menuOpen, setMenuOpen] = useState(false);
@@ -21,12 +22,12 @@ const NavBar = () => {
 
             {/* Menú PC */}
             <div className='hidden md:flex gap-6 items-center'>
-                <a href='/home' className='hover:text-orange-500'>Inicio</a>
-                <a href='/simulator' className='hover:text-orange-500'>Simuladores</a>
-                <a href='/profile' className='hover:text-orange-500'>Perfil</a>
-                <a href='#' className='hover:text-orange-500'>Contacto</a>
-                <a href='#' className='hover:text-orange-500'>Ayuda</a>
-                <a href='#' className='hover:text-orange-500'>Sobre nosotros</a>
+                <Link to='/home' className='hover:text-orange-500'>Inicio</Link>
+                <Link to='/simulator' className='hover:text-orange-500'>Simuladores</Link>
+                <Link to='/profile' className='hover:text-orange-500'>Perfil</Link>
+                <Link to='#' className='hover:text-orange-500'>Contacto</Link>
+                <Link to='#' className='hover:text-orange-500'>Ayuda</Link>
+                <Link to='#' className='hover:text-orange-500'>Sobre nosotros</Link>
                 <ThemeToggle/>
             </div>
 
@@ -39,12 +40,12 @@ const NavBar = () => {
 
             {menuOpen && (
                 <div className='absolute top-24 right-0 w-full flex flex-col items-end px-6 py-4 md:hidden'>
-                    <a href='/home' className='block hover:text-orange-500'>Inicio</a>
-                    <a href='/simulator' className='block hover:text-orange-500'>Simuladores</a>
-                    <a href='#' className='block hover:text-orange-500'>Perfil</a>
-                    <a href='#' className='block hover:text-orange-500'>Contacto</a>
-                    <a href='#' className='block hover:text-orange-500'>Ayuda</a>
-                    <a href='#' className='block hover:text-orange-500'>Sobre nosotros</a>
+                    <Link to='/home' className='hover:text-orange-500'>Inicio</Link>
+                    <Link to='/simulator' className='hover:text-orange-500'>Simuladores</Link>
+                    <Link to='/profile' className='hover:text-orange-500'>Perfil</Link>
+                    <Link to='#' className='hover:text-orange-500'>Contacto</Link>
+                    <Link to='#' className='hover:text-orange-500'>Ayuda</Link>
+                    <Link to='#' className='hover:text-orange-500'>Sobre nosotros</Link>
                     <div className='py2 w-full'>
                         <ThemeToggle/>
                     </div>
