@@ -20,10 +20,11 @@ import { SimulatorWebglStoreFactory } from './models/simulator-webgl';
 import { SimulatorWebglService } from './services/simulator-webgl-service';
 import { SimulatorWebglController } from './controllers/simulator-webgl-controller';
 import { globalErrorHandler } from './controllers/error-controller';
+import { swaggerRouter } from './routes/swagger';
 
 const app = express();
 const corsOptions: cors.CorsOptions = {
-    origin: 'http://localhost:5173',
+    origin: process.env.CORS_ORIGIN ?? 'http://localhost:5173',
     // origin: '*',
     optionsSuccessStatus: 200,
     credentials: true,
@@ -81,6 +82,7 @@ const router = createRouter(
 
 app.use(fileServer(authController))
 app.use("/api/v1", router)
+app.use("/api-docs", swaggerRouter())
 
 // error handler
 app.use(globalErrorHandler)

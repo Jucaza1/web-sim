@@ -1,0 +1,995 @@
+openapi: "3.0.4"
+info:
+  title: Swagger - OpenAPI 3.0
+  description: |-
+    This is a sample Pet Store Server based on the OpenAPI 3.0 specification.  You can find out more about
+    Swagger at [https://swagger.io](https://swagger.io). In the third iteration of the pet store, we've switched to the design first approach!
+    You can now help us improve the API whether it's by making changes to the definition itself or to the code.
+    That way, with time, we can improve the API in general, and expose some of the new features in OAS3.
+
+  termsOfService: https://swagger.io/terms/
+  contact:
+    email: apiteam@swagger.io
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+  version: 1.0.12
+externalDocs:
+  description: Find out more about Swagger
+  url: https://swagger.io
+tags:
+  - name: users
+    description: Users operations
+  - name: companies
+    description: Company operations
+  - name: simulators
+    description: Simulator operations
+  - name: simulatorWebgls
+    description: SimulatorWebgl operations
+
+servers:
+  - url: /api/v1
+
+paths:
+  /register:
+    post:
+      tags:
+        - users
+      summary: Register a new user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserCreate'
+      responses:
+        '201':
+          description: User created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+
+  /login:
+    post:
+      tags:
+        - users
+      summary: Authenticate user and return token
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Login'
+      responses:
+        '204':
+          description: Authentication successful
+          headers:
+            Authorization:
+              description: JWT token
+              schema:
+                type: string
+
+  /companiesid:
+    get:
+      security:
+        - jwtCookieAuth: []
+      tags:
+        - companies
+      summary: Get list of companies with ID and name
+      responses:
+        '200':
+          $ref: '#/components/responses/CompanyNameIDArray'
+
+  /users:
+    get:
+      security:
+        - jwtCookieAuth: []
+      tags:
+        - users
+      summary: Get all users
+      responses:
+        '200':
+          $ref: '#/components/responses/UserArray'
+    post:
+      security:
+        - jwtCookieAuth: []
+      tags:
+        - users
+      summary: Create a new user. only for admin
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserCreate'
+      responses:
+        '201':
+          description: User created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+
+  /users/me:
+    get:
+      security:
+        - jwtCookieAuth: []
+      tags:
+        - users
+      summary: Get current user
+      responses:
+        '200':
+          description: User data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+
+  /users/{id}:
+    get:
+      security:
+        - jwtCookieAuth: []
+      tags:
+        - users
+      summary: Get a user by ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: User data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+    put:
+      security:
+        - jwtCookieAuth: []
+      tags:
+        - users
+      summary: Update a user
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserUpdate'
+      responses:
+        '200':
+          description: User updated
+    delete:
+      security:
+        - jwtCookieAuth: []
+      tags:
+        - users
+      summary: Delete a user
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: User deleted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+
+  /users/email/{email}:
+    get:
+      security:
+        - jwtCookieAuth: []
+      tags:
+        - users
+      summary: Get a user by email
+      parameters:
+        - in: path
+          name: email
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: User data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+
+  /admin:
+    post:
+      security:
+        - jwtCookieAuth: []
+      tags:
+        - users
+      summary: Create a new admin user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserCreate'
+      responses:
+        '201':
+          description: Admin user created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+
+  /admincompany:
+    post:
+      security:
+        - jwtCookieAuth: []
+      tags:
+        - users
+      summary: Create a new admin company user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserCreate'
+      responses:
+        '201':
+          description: Admin company user created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+
+  /companies:
+    get:
+      security:
+        - jwtCookieAuth: []
+      tags:
+        - companies
+      summary: Get all companies
+      responses:
+        '200':
+          $ref: '#/components/responses/CompanyArray'
+    post:
+      security:
+        - jwtCookieAuth: []
+      tags:
+        - companies
+      summary: Create a new company
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CompanyCreate'
+      responses:
+        '201':
+          description: Company created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Company'
+
+  /companies/{id}:
+    get:
+      security:
+        - jwtCookieAuth: []
+      tags:
+        - companies
+      summary: Get a company by ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Company data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Company'
+    put:
+      security:
+        - jwtCookieAuth: []
+      tags:
+        - companies
+      summary: Update a company
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CompanyUpdate'
+      responses:
+        '200':
+          description: Company updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Company'
+    delete:
+      security:
+        - jwtCookieAuth: []
+      tags:
+        - companies
+      summary: Delete a company
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Company deleted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Company'
+
+  /companies/{id}/users:
+    get:
+      security:
+        - jwtCookieAuth: []
+      tags:
+        - companies
+      summary: Get all users in a company
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          $ref: '#/components/responses/UserArray'
+
+  /companies/{id}/simulators:
+    get:
+      security:
+        - jwtCookieAuth: []
+      tags:
+        - companies
+      summary: Get simulators by company ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          $ref: '#/components/responses/SimulatorArray'
+
+  /simulators:
+    get:
+      security:
+        - jwtCookieAuth: []
+      tags:
+        - simulators
+      summary: Get all simulators
+      responses:
+        '200':
+          $ref: '#/components/responses/SimulatorArray'
+    post:
+      security:
+        - jwtCookieAuth: []
+      tags:
+        - simulators
+      summary: Create a new simulator
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SimulatorCreate'
+      responses:
+        '201':
+          description: Simulator created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Simulator'
+
+  /simulators/{id}:
+    get:
+      security:
+        - jwtCookieAuth: []
+      tags:
+        - simulators
+      summary: Get a simulator by ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Simulator data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Simulator'
+    put:
+      security:
+        - jwtCookieAuth: []
+      tags:
+        - simulators
+      summary: Update a simulator
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SimulatorUpdate'
+      responses:
+        '200':
+          description: Simulator updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Simulator'
+    delete:
+      security:
+        - jwtCookieAuth: []
+      tags:
+        - simulators
+      summary: Delete a simulator
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Simulator deleted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Simulator'
+
+  /simulator/{id}/webgl/:
+    get:
+      security:
+        - jwtCookieAuth: []
+      tags:
+        - simulators
+      summary: Get WebGL simulator asset by simulator ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: WebGL simulator asset
+
+  /webgl:
+    get:
+      security:
+        - jwtCookieAuth: []
+      tags:
+        - simulators
+      summary: Get all WebGL assets
+      responses:
+        '200':
+          $ref: '#/components/responses/SimulatorWebglArray'
+    post:
+      security:
+        - jwtCookieAuth: []
+      tags:
+        - simulators
+      summary: Create a WebGL asset
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SimulatorWebglCreate'
+      responses:
+        '201':
+          description: WebGL asset created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SimulatorWebgl'
+
+  /webgl/{id}:
+    get:
+      security:
+        - jwtCookieAuth: []
+      tags:
+        - simulatorWebgls
+      summary: Get a WebGL asset by ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: WebGL asset data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SimulatorWebgl'
+    put:
+      security:
+        - jwtCookieAuth: []
+      tags:
+        - simulatorWebgls
+      summary: Update a WebGL asset
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SimulatorWebglUpdate'
+      responses:
+        '200':
+          description: WebGL updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SimulatorWebgl'
+    delete:
+      security:
+        - jwtCookieAuth: []
+      tags:
+        - simulatorWebgls
+      summary: Delete a WebGL asset
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: WebGL asset deleted
+components:
+  schemas:
+    UserCreate:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+          example: example@gmail.com
+        name:
+          type: string
+          format: int32
+          example: James
+        password:
+          type: string
+          example: password123
+        profession:
+          type: string
+          example: developer
+        companyId:
+          type: integer
+          format: int64
+          example: 1
+      required:
+        - email
+        - name
+        - password
+        - profession
+    CompanyCreate:
+      type: object
+      properties:
+        name:
+          type: string
+          example: Nestle
+        image:
+          type: string
+          example: url/to/image
+        styleId:
+          type: string
+      required:
+        - name
+        - image
+        - styleId
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        email:
+          type: string
+          format: email
+          example: example@gmail.com
+        name:
+          type: string
+          format: int32
+          example: James
+        password:
+          type: string
+        profession:
+          type: string
+          example: developer
+        companyId:
+          type: integer
+          format: int64
+          example: 1
+        createdAt:
+          type: string
+          format: date-time
+          example: 2023-10-01T12:00:00Z
+        updatedAt:
+          type: string
+          format: date-time
+          example: 2023-10-01T12:00:00Z
+        isActive:
+          type: boolean
+          example: true
+        role:
+          type: string
+          enum:
+            - USER
+            - ADMIN_COMPANY
+            - ADMIN
+          example: USER
+    Company:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        name:
+          type: string
+          example: Nestle
+        image:
+          type: string
+          example: url/to/image
+        styleId:
+          type: string
+          example: style1
+        createdAt:
+          type: string
+          format: date-time
+          example: 2023-10-01T12:00:00Z
+        updatedAt:
+          type: string
+          format: date-time
+          example: 2023-10-01T12:00:00Z
+    SimulatorCreate:
+      type: object
+      properties:
+        name:
+          type: string
+          example: simulator 1
+        companyId:
+          type: integer
+          format: int64
+          example: 1
+        description:
+          type: string
+          example: simulator description
+        thumbnail:
+          type: string
+          example: url/to/thumbnail
+      required:
+        - name
+        - description
+        - thumbnail
+    Simulator:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        name:
+          type: string
+          example: simulator 1
+        companyId:
+          type: integer
+          format: int64
+          example: 1
+        description:
+          type: string
+          example: simulator description
+        thumbnail:
+          type: string
+          example: url/to/thumbnail
+        createdAt:
+          type: string
+          format: date-time
+          example: 2023-10-01T12:00:00Z
+        updatedAt:
+          type: string
+          format: date-time
+          example: 2023-10-01T12:00:00Z
+    SimulatorWebglCreate:
+      type: object
+      properties:
+        kind:
+          type: string
+          example: webgl
+        simulatorId:
+          type: integer
+          format: int64
+          example: 1
+        data:
+          type: string
+          example: url/to/webgl.data
+        loader:
+          type: string
+          example: url/to/webgl.loader.js
+        wasm:
+          type: string
+          example: url/to/webgl.wasm
+        framework:
+          type: string
+          example: url/to/webgl.framework.js
+      required:
+        - simulatorId
+        - data
+        - loader
+        - wasm
+        - framework
+    SimulatorWebgl:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        kind:
+          type: string
+          example: webgl
+        simulatorId:
+          type: integer
+          format: int64
+          example: 1
+        data:
+          type: string
+          example: url/to/webgl.data
+        loader:
+          type: string
+          example: url/to/webgl.loader.js
+        wasm:
+          type: string
+          example: url/to/webgl.wasm
+        framework:
+          type: string
+          example: url/to/webgl.framework.js
+        createdAt:
+          type: string
+          format: date-time
+          example: 2023-10-01T12:00:00Z
+        updatedAt:
+          type: string
+          format: date-time
+          example: 2023-10-01T12:00:00Z
+    SimulatorUpdate:
+      type: object
+      properties:
+        name:
+          type: string
+          example: simulator 1
+        companyId:
+          type: integer
+          format: int64
+          example: 1
+        description:
+          type: string
+          example: simulator description
+        thumbnail:
+          type: string
+          example: url/to/thumbnail
+    SimulatorWebglUpdate:
+      type: object
+      properties:
+        kind:
+          type: string
+          example: webgl
+        simulatorId:
+          type: integer
+          format: int64
+          example: 1
+        data:
+          type: string
+          example: url/to/webgl.data
+        loader:
+          type: string
+          example: url/to/webgl.loader.js
+        wasm:
+          type: string
+          example: url/to/webgl.wasm
+        framework:
+          type: string
+          example: url/to/webgl.framework.js
+    UserUpdate:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+          example: example@gmail.com
+        name:
+          type: string
+          format: int32
+          example: James
+        password:
+          type: string
+        profession:
+          type: string
+          example: developer
+        companyId:
+          type: integer
+          format: int64
+          example: 1
+    CompanyUpdate:
+      type: object
+      properties:
+        name:
+          type: string
+          example: Nestle
+        image:
+          type: string
+          example: url/to/image
+        styleId:
+          type: string
+          example: style1
+    Login:
+      type: object
+      properties:
+        email:
+          type: string
+          example: admin@admin.com
+        password:
+          type: string
+          example: adminadmin
+      required: [email, password]
+    CompanyNameID:
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        name:
+          type: string
+          example: Nestle
+    Error:
+      type: object
+      properties:
+        error:
+          type: array
+          items:
+            type: string
+            example: id is not valid
+  requestBodies:
+    UserCreate:
+      description: User object that needs to be added to the store
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/UserCreate'
+    CompanyCreate:
+      description: Company object that needs to be added to the store
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/CompanyCreate'
+    SimulatorCreate:
+      description: Simulator object that needs to be added to the store
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/SimulatorCreate'
+    SimulatorWebglCreate:
+      description: SimulatorWebgl object that needs to be added to the store
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/SimulatorWebglCreate'
+    UserUpdate:
+      description: User object that needs to be updated in the store
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/UserUpdate'
+    CompanyUpdate:
+      description: Company object that needs to be updated in the store
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/CompanyUpdate'
+    SimulatorUpdate:
+      description: Simulator object that needs to be updated in the store
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/SimulatorUpdate'
+    SimulatorWebglUpdate:
+      description: SimulatorWebgl object that needs to be updated in the store
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/SimulatorWebglUpdate'
+  responses:
+    UserArray:
+      description: List of user object
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/User'
+    CompanyArray:
+      description: List of company object
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/Company'
+    SimulatorArray:
+      description: List of simulator object
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/Simulator'
+    SimulatorWebglArray:
+      description: List of simulatorWebgl object
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/SimulatorWebgl'
+    CompanyNameIDArray:
+      description: List of company object with ID and name
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/CompanyNameID'
+  securitySchemes:
+    jwtCookieAuth:
+      type: apiKey
+      in: cookie
+      name: Authorization
+
