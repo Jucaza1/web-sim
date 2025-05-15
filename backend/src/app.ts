@@ -80,9 +80,9 @@ const router = createRouter(
     authController
 )
 
-app.use(fileServer(authController))
+app.use("/api/v1/docs", swaggerRouter())
 app.use("/api/v1", router)
-app.use("/api-docs", swaggerRouter())
+app.use(fileServer(authController))
 
 // error handler
 app.use(globalErrorHandler)
