@@ -9,6 +9,7 @@ RUN npm install
 COPY ./backend/src ./src
 COPY ./backend/prisma ./prisma
 COPY ./backend/tsconfig.json ./
+COPY ./backend/docs/ ./docs
 # build the app
 RUN npx prisma generate
 
@@ -44,6 +45,7 @@ FROM node:20-alpine AS production
 WORKDIR /app
 COPY --from=backend-build /app/package-lock.json ./package-lock.json
 COPY --from=backend-build /app/package.json ./package.json
+COPY --from=backend-build /app/docs ./docs
 RUN npm install --production
 COPY --from=backend-build /app/build ./build
 COPY --from=backend-build /app/prisma ./prisma
@@ -52,6 +54,7 @@ COPY --from=backend-build /app/node_modules/.prisma ./node_modules/.prisma
 
 # copy frontend build
 COPY --from=frontend-build /app/dist ./public
+COPY ./backend/public/swagger-response-interceptor.js ./public/
 
 EXPOSE 3000
 # start the app
