@@ -21,6 +21,7 @@ export function createRouter(
 
     const routerAuth = Router()
     // User routes
+    routerAuth.get("/users/me",userController.getCurrentUser)
     routerAuth.get("/users/:id", userController.getUser)
     routerAuth.get("/users/email/:email", userController.getUserByEmail)
     routerAuth.get("/users", userController.getUsers)
