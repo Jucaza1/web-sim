@@ -61,7 +61,7 @@ const SimFilter = () => {
             {filteredSimulators.map((sim, index) => (
               <div 
                 key={index} 
-                className="card px-4 py-2 rounded mb-4 shadow-md justify-center items-center flex flex-col hover:scale-105 transition-transform duration-300"
+                className="card px-4 py-2 rounded mb-4 shadow-md justify-center items-center flex flex-col hover:scale-105 transition-transform duration-300 mx-4"
               >
                 {/*Logo modo claro*/}
                 <img 

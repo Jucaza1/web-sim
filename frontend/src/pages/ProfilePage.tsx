@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import ProfileCard from '../components/ProfileCard';
 
  interface ProfileData {
@@ -12,11 +13,12 @@ function ProfilePage() {
     const [profileData, setProfileData] = useState<ProfileData | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchProfileData = async () => {
             try {
-                const response = await fetch('http://localhost:3000/api/v1/dev/users', {
+                const response = await fetch('http://localhost:3000/api/v1/users/me', {
                     method: 'GET',
                     //credentials: 'include',
                     headers: {
@@ -44,6 +46,13 @@ function ProfilePage() {
         fetchProfileData();
     }, []);
 
+    // Función para cerrar sesión
+    const handleLogout = () => {
+        document.cookie = "Authorization=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+        localStorage.removeItem('token'); 
+        navigate('/'); 
+    }
+
     if (loading) {
         return <div>Cargando...</div>;
     }
@@ -62,6 +71,16 @@ function ProfilePage() {
         email={profileData.email}
         profession={profileData.profession}
        />
+        <div>
+            <button 
+             className="bg-red-500 text-white px-4 py-2 rounded-full mt-6 hover:bg-red-900 "
+             onClick={handleLogout}
+         >
+               Cerrar sesión
+            </button>    
+        </div>
+
+
     </div>
   )
 }
