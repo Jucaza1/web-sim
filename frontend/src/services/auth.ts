@@ -4,7 +4,7 @@ type LoginPayload = {
 };
 
 export async function login(payload: LoginPayload) {
-  const response = await fetch("http://localhost:3000/api/v1/auth/login", {
+  const response = await fetch("http://localhost:3000/api/v1/login", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -22,11 +22,12 @@ export async function login(payload: LoginPayload) {
   if (response.status === 204) {
     // Obtener el token del header Authorization
     const jwt = response.headers.get("Authorization");
-
+    console.log(jwt)
     // Guardar la cookie
     if (jwt) {
       document.cookie = `Authorization=${jwt}; path=/; httpOnly;`;
     }
+    return null;
   }
 
   return await response.json();
