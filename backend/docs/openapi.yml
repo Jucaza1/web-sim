@@ -479,7 +479,7 @@ paths:
       security:
         - jwtCookieAuth: []
       tags:
-        - simulators
+        - simulatorWebgls
       summary: Get WebGL simulator asset by simulator ID
       parameters:
         - in: path
@@ -496,7 +496,7 @@ paths:
       security:
         - jwtCookieAuth: []
       tags:
-        - simulators
+        - simulatorWebgls
       summary: Get all WebGL assets
       responses:
         '200':
@@ -505,7 +505,7 @@ paths:
       security:
         - jwtCookieAuth: []
       tags:
-        - simulators
+        - simulatorWebgls
       summary: Create a WebGL asset
       requestBody:
         required: true

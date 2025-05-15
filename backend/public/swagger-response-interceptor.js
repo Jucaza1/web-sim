@@ -7,7 +7,7 @@ window.addEventListener("load", function () {
     if (res.status === 204) {
       const authHeader = res.headers.get("Authorization");
       if (authHeader) {
-        document.cookie = `Authorization=${encodeURIComponent(authHeader)}; path=/; HttpOnly; max-age=360`;
+        document.cookie = `Authorization=${encodeURIComponent(authHeader)}; path=/; max-age=360`;
       }
     }
     return res;
