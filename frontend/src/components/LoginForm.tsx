@@ -13,7 +13,6 @@ const LoginFormSchema = z.object({
     .string()
     .min(8, { message: "Debe tener al menos 8 caracteres" })
     .max(25, { message: "Máximo 25 caracteres" }),
-  companyId: z.string().uuid({ message: "ID de empresa inválido" }),
 });
 
 type LoginFormData = z.infer<typeof LoginFormSchema>;
@@ -64,17 +63,6 @@ const LoginForm = () => {
       {errors.password && (
         <p className={styles.error}>{errors.password.message}</p>
       )}
-
-      <input
-        type="text"
-        placeholder="ID de la empresa"
-        className={styles.inputField}
-        {...register("companyId")}
-      />
-      {errors.companyId && (
-        <p className={styles.error}>{errors.companyId.message}</p>
-      )}
-
       <button type="submit" className={styles.submitButton}>
         Iniciar sesión
       </button>
