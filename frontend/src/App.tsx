@@ -42,7 +42,7 @@ function App() {
           <Route path="/" Component={LoginPage} />
           <Route path="/register" Component={RegisterPage} />
           <Route path="/home" Component={Home} />
-          <Route path="/simulatorpage" Component={SimPage} />
+          <Route path="/simulatorspage" Component={SimPage} />
           <Route path="/simulator" Component={SimulatorApp} />
         </Routes>
     </>

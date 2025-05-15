@@ -27,7 +27,7 @@ export type Sim = {
     {
       id: 2,
       name: "Ascensores",
-      thumbnail: "/Ascensores/ascensor.png",
+      thumbnail: "/Ascensores/Ascensores_01.webp",
       description: "Simulador de mantenimiento de ascensores"
     },
     {
@@ -35,6 +35,12 @@ export type Sim = {
         name: "Veterinaria",
         thumbnail: "/Veterinaria/veterinaria.png",
         description: "Simulador de Veterinaria"
+      },
+      {
+        id: 4,
+        name: "Dentista",
+        thumbnail: "/DentistaWebGL/dentista.png",
+        description: "Simulador de Dentista"
       }
   ];
   
@@ -70,6 +76,17 @@ export type Sim = {
         wasm: "/Veterinaria/Build/build.wasm",
         data: "/Veterinaria/Build/webgl.data",
         framework: "/Veterinaria/Build/build.framework.js",
+        
+      }
+    ],
+    [
+      4,
+      {
+        id: 4,
+        loader: "/DentistaWebGL/Build/DentistaWebGL.loader.js",
+        wasm: "/DentistaWebGL/Build/build.wasm",
+        data: "/DentistaWebGL/Build/webgl.data",
+        framework: "/DentistaWebGL/Build/build.framework.js",
         
       }
     ]
