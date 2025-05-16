@@ -24,9 +24,9 @@ jobs:
 
       - name: Build and tag new image
         run: |
-          docker build -t ${{ secrets.DOCKER_USERNAME }}/myapp:latest -t ${{ secrets.DOCKER_USERNAME }}/myapp:$GIT_SHA .
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/web-sim:latest -t ${{ secrets.DOCKER_USERNAME }}/web-sim:$GIT_SHA .
 
       - name: Push image tags
         run: |
-          docker push ${{ secrets.DOCKER_USERNAME }}/myapp:latest
-          docker push ${{ secrets.DOCKER_USERNAME }}/myapp:$GIT_SHA
+          docker push ${{ secrets.DOCKER_USERNAME }}/web-sim:latest
+          docker push ${{ secrets.DOCKER_USERNAME }}/web-sim:$GIT_SHA
