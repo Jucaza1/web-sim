@@ -33,8 +33,8 @@ export default function RegisterForm() {
       }
 
       navigate("/");                                                     // Redirigir a la página de inicio después del registro exitoso
-    } catch (err: any) {
-      console.error(err.message || "Error al registrar el usuario");
+    } catch (err) {
+      console.error((err as Error).message || "Error al registrar el usuario");
     }
   };
 

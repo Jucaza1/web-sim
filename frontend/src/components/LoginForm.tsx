@@ -34,8 +34,8 @@ const LoginForm = () => {
       const result = await login(data);
       console.log("Login correcto:", result);
       navigate("/home");
-    } catch (err: any) {
-      console.error("Error en login:", err.message);
+    } catch (err) {
+      console.error("Error en login:", (err as Error).message);
     }
   };
 

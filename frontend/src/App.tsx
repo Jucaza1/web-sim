@@ -46,7 +46,6 @@ function App() {
           <Route path="/home" Component={Home} />
           <Route path="/simulatorspage" Component={SimPage} />
           <Route path="/simulator" Component={SimulatorApp} />
-          <Route path="/simulator" Component={SimPage} />
           <Route path="/profile" Component={ProfilePage} />
 
         </Routes>
