@@ -1,11 +1,14 @@
 import logoNavy from "../assets/logo/Davante_simbolo_navy.svg";
 import logoWhite from "../assets/logo/Davante_simbolo_white.svg";
 import ThemeToggle from './ThemeToggle';
+import defaultProfileDark from  "../assets/logo/user_icon_16_dark.png" 
+import defaultProfileLight from  "../assets/logo/user_icon_16_light.png" 
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const NavBar = () => {
     const [menuOpen, setMenuOpen] = useState(false);
+    const navigate = useNavigate();
 
     return (
         <nav className='px-6 py-4 flex items-center justify-between'>
@@ -25,6 +28,22 @@ const NavBar = () => {
                 <Link to='#' className='hover:text-orange-500'>Contacto</Link>
                 <Link to='#' className='hover:text-orange-500'>Ayuda</Link>
                 <Link to='#' className='hover:text-orange-500'>Sobre nosotros</Link>
+                {/* Icono de usuario */}
+                { isAuthenticated() ? (
+                    <div>
+                        <img src={defaultProfileDark} alt="Perfil" className='h-8 w-8 rounded-full logo-dark' onClick={() => navigate("/profile")}/>
+                        <img src={defaultProfileLight} alt="Perfil" className='h-8 w-8 rounded-full logo-light' onClick={() => navigate("/profile")}/>
+                        <div className="cursor-pointer text-sm text-gray-700 dark:text-white hover:underline" onClick={() => navigate("/profile")} >
+                            {user?.name} <span className="text-gray-500">({user?.role})</span>
+                        </div>
+                    </div>
+                ) : (
+                    <Link to='/login' className='hover:text-orange-500'>
+                        <div className=" text-white dark:text-navy hover:underline">
+                            Iniciar sesión
+                        </div>
+                    </Link>  
+                )}
                 <ThemeToggle/>
             </div>
 
