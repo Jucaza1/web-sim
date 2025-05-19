@@ -1,0 +1,43 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        VITE_DOMAIN_HOST: /
+    depends_on:
+      - db
+    ports:
+      - "3000:3000"
+    environment:
+      NODE_ENV: development
+      DB_KIND: postgresql
+      SERVER_HOST: 0.0.0.0
+      SERVER_PORT: 3000
+      CORS_ORIGIN: http://localhost:5273
+      DATABASE_URL: postgresql://user:password@db:5432/web-sim-db?schema=public
+      USER_ADMIN_PASSWORD: adminadmin
+      USER_ADMIN_EMAIL: admin@admin.com
+    command: sh -c "npm run gen-migrate && node /app/build/src/server.js"
+    networks:
+      - app-network
+    # volumes:
+    #   - ./prisma/migrations:/app/prisma/migrations
+  db:
+    image: "postgres:17"
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: web-sim-db
+    # ports:
+    #   - "5432:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    networks:
+      - app-network
+networks:
+  app-network:
+    driver: bridge
+volumes:
+  db_data:
+    driver: local

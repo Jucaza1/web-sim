@@ -1,14 +1,17 @@
 import React from 'react';
 import { simulators } from '../components/simulatorsData';
 import { useNavigate } from 'react-router-dom';
+//import SimFilter from "../components/SimFilter";
 
 const SimPage: React.FC = () => {
 
   const allSimulators = simulators;
-  
+
   const navigate = useNavigate();
 
   return (
+    <div>
+      {/*<SimFilter />*/}
 
     <div className="p-8 min-h-screen">
 
@@ -34,7 +37,7 @@ const SimPage: React.FC = () => {
                 alt={sim.name}
                 className="h-32 w-32 object-contain mb-4"
               />
-              
+
             </div>
 
             <p className="text-white text-sm mb-4 text-center">{sim.description}</p>
@@ -46,6 +49,7 @@ const SimPage: React.FC = () => {
 
       </div>
 
+    </div>
     </div>
 
   );

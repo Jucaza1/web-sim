@@ -1,19 +1,15 @@
 import { createContext, PropsWithChildren, useState } from 'react';
+import { UserInfo } from '../types/state';
 
-export const UserContext = createContext({});
-type UserInfoType = {
-  id: number;
-  role: string;
-  company: string;
-};
+export const UserContext = createContext({} as UserContextType);
 export type UserContextType = {
-  user: UserInfoType | null;
-  setUser: (user: UserInfoType) => void;
+  user: UserInfo | null;
+  setUser: (user: UserInfo) => void;
   loggedIn: boolean;
   setLoggedIn: (loggedIn: boolean) => void;
 };
 export function UserContextProvider({ children }: PropsWithChildren) {
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState(null as UserInfo | null);
   const [loggedIn, setLoggedIn] = useState(false);
 
   return (
