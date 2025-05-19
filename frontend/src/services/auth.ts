@@ -1,4 +1,4 @@
-import jwt from "jsonwebtoken"
+import { jwtDecode } from "jwt-decode";
 type LoginPayload = {
   email: string;
   password: string;
@@ -31,8 +31,10 @@ export async function login(payload: LoginPayload): Promise<jwtPayload | null> {
     console.log(token)
     // Guardar la cookie
     if (token) {
-      document.cookie = `Authorization=${jwt}; path=/; httpOnly;`;
-      return jwt.decode(token, { json: true }) as jwtPayload
+      document.cookie = `Authorization=${token}; path=/ ; max-age=3600`;
+      return jwtDecode(token) as jwtPayload
+      //return null;
+      
     }
     return null;
   }

@@ -3,10 +3,12 @@ import logoWhite from "../assets/logo/Davante_simbolo_white.svg";
 import ThemeToggle from './ThemeToggle';
 import defaultProfileDark from  "../assets/logo/user_icon_16_dark.png" 
 import defaultProfileLight from  "../assets/logo/user_icon_16_light.png" 
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { UserContext } from '../context/userContext';
 
 const NavBar = () => {
+    const { user, loggedIn } = useContext(UserContext);
     const [menuOpen, setMenuOpen] = useState(false);
     const navigate = useNavigate();
 
@@ -22,19 +24,19 @@ const NavBar = () => {
 
             {/* Menú PC */}
             <div className='hidden md:flex gap-6 items-center'>
-                <Link to='/home' className='hover:text-orange-500'>Inicio</Link>
+                <Link to='/' className='hover:text-orange-500'>Inicio</Link>
                 <Link to='/simulatorspage' className='hover:text-orange-500'>Simuladores</Link>
                 <Link to='/profile' className='hover:text-orange-500'>Perfil</Link>
                 <Link to='#' className='hover:text-orange-500'>Contacto</Link>
                 <Link to='#' className='hover:text-orange-500'>Ayuda</Link>
                 <Link to='#' className='hover:text-orange-500'>Sobre nosotros</Link>
                 {/* Icono de usuario */}
-                { isAuthenticated() ? (
+                { loggedIn ? (
                     <div>
                         <img src={defaultProfileDark} alt="Perfil" className='h-8 w-8 rounded-full logo-dark' onClick={() => navigate("/profile")}/>
                         <img src={defaultProfileLight} alt="Perfil" className='h-8 w-8 rounded-full logo-light' onClick={() => navigate("/profile")}/>
                         <div className="cursor-pointer text-sm text-gray-700 dark:text-white hover:underline" onClick={() => navigate("/profile")} >
-                            {user?.name} <span className="text-gray-500">({user?.role})</span>
+                            {user?.id} <span className="text-gray-500">({user?.role})</span>
                         </div>
                     </div>
                 ) : (

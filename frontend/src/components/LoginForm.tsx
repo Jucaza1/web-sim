@@ -6,7 +6,7 @@ import logo from "../assets/logo/Davante_logo_endosos_navy.svg";
 import { z } from "zod";
 import { login } from "../services/auth";
 import { useContext } from "react";
-import { UserContext } from "../context/user";
+import { UserContext } from "../context/userContext";
 
 // 1. Validación
 const LoginFormSchema = z.object({
@@ -40,7 +40,7 @@ const LoginForm = () => {
           setLoggedIn(true);
         }
       console.log("Login correcto:", result);
-      navigate("/home");
+      navigate("/");
     } catch (err) {
       console.error("Error en login:", (err as Error).message);
     }

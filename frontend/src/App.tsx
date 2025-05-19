@@ -7,7 +7,7 @@ import { useState, useEffect } from "react";
 import SimPage from "./pages/SimPage";
 import NavBar from "./components/NavBar";
 import SimulatorApp from "./pages/Simulator";
-import { UserContextProvider } from "./context/user";
+import { UserContextProvider } from "./context/UserContextProvider";
 import ProfilePage from "./pages/ProfilePage";
 
 function App() {
@@ -34,7 +34,7 @@ function App() {
     };
   }, [location]);
 
-  const hideNavBar = location.pathname === "/register" || location.pathname === "/"; // Oculta NavBar en estas rutas
+  const hideNavBar = location.pathname === "/register" || location.pathname === "/login"; // Oculta NavBar en estas rutas
 
   return (
     <>
