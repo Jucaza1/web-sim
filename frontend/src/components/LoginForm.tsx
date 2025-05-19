@@ -5,6 +5,8 @@ import styles from "../styles/LoginForm.module.css";
 import logo from "../assets/logo/Davante_logo_endosos_navy.svg";
 import { z } from "zod";
 import { login } from "../services/auth";
+import { useContext } from "react";
+import { UserContext } from "../context/user";
 
 // 1. Validación
 const LoginFormSchema = z.object({
@@ -19,6 +21,7 @@ type LoginFormData = z.infer<typeof LoginFormSchema>;
 
 const LoginForm = () => {
   const navigate = useNavigate();
+  const { setUser, setLoggedIn } = useContext(UserContext);
 
   const {
     register,
@@ -32,10 +35,14 @@ const LoginForm = () => {
   const onSubmit = async (data: LoginFormData) => {
     try {
       const result = await login(data);
+        if (result) {
+          setUser(result);
+          setLoggedIn(true);
+        }
       console.log("Login correcto:", result);
       navigate("/home");
-    } catch (err: any) {
-      console.error("Error en login:", err.message);
+    } catch (err) {
+      console.error("Error en login:", (err as Error).message);
     }
   };
 

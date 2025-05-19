@@ -1,9 +1,15 @@
+import jwt from "jsonwebtoken"
 type LoginPayload = {
   email: string;
   password: string;
 };
+type jwtPayload = {
+  id: number
+  role: "USER" | "ADMIN_COMPANY" | "ADMIN"
+  company: number | null
+}
 
-export async function login(payload: LoginPayload) {
+export async function login(payload: LoginPayload): Promise<jwtPayload | null> {
   const response = await fetch("http://localhost:3000/api/v1/login", {
     method: "POST",
     headers: {
@@ -21,14 +27,15 @@ export async function login(payload: LoginPayload) {
 
   if (response.status === 204) {
     // Obtener el token del header Authorization
-    const jwt = response.headers.get("Authorization");
-    console.log(jwt)
+    const token = response.headers.get("Authorization");
+    console.log(token)
     // Guardar la cookie
-    if (jwt) {
+    if (token) {
       document.cookie = `Authorization=${jwt}; path=/; httpOnly;`;
+      return jwt.decode(token, { json: true }) as jwtPayload
     }
     return null;
   }
 
-  return await response.json();
+  return null
 }

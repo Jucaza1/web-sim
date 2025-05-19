@@ -7,11 +7,12 @@ import { useState, useEffect } from "react";
 import SimPage from "./pages/SimPage";
 import NavBar from "./components/NavBar";
 import SimulatorApp from "./pages/Simulator";
+import { UserContextProvider } from "./context/user";
 
 function App() {
 
     return (
-      <Router> 
+      <Router>
         <LoadingWrapper />
       </Router>
     );
@@ -36,15 +37,17 @@ function App() {
 
   return (
     <>
-        {loading && <LoadingScreen />} {/* Pantalla de carga */}
-        {!loading && !hideNavBar && <NavBar />} {/* Muestra NavBar solo si no está en login o register */}
-        <Routes> 
-          <Route path="/" Component={LoginPage} />
-          <Route path="/register" Component={RegisterPage} />
-          <Route path="/home" Component={Home} />
-          <Route path="/simulatorspage" Component={SimPage} />
-          <Route path="/simulator" Component={SimulatorApp} />
-        </Routes>
+        <UserContextProvider>
+          {loading && <LoadingScreen />} {/* Pantalla de carga */}
+          {!loading && !hideNavBar && <NavBar />} {/* Muestra NavBar solo si no está en login o register */}
+          <Routes>
+            <Route path="/" Component={LoginPage} />
+            <Route path="/register" Component={RegisterPage} />
+            <Route path="/home" Component={Home} />
+            <Route path="/simulatorspage" Component={SimPage} />
+            <Route path="/simulator" Component={SimulatorApp} />
+          </Routes>
+        </UserContextProvider>
     </>
   );
   }
