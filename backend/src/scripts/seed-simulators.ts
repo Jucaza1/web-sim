@@ -8,7 +8,7 @@ type SimulatorData = Array<{
 }>
 const simulatorData: SimulatorData = simulatordata as SimulatorData
 
-async function seedSimulators() {
+export async function seedSimulators() {
     if (simulatorData.length = 0) {
         console.log("error no simulators to seed")
         return
@@ -27,4 +27,3 @@ async function seedSimulators() {
         }
     }
 }
-seedSimulators()

@@ -21,6 +21,7 @@ import { SimulatorWebglService } from './services/simulator-webgl-service';
 import { SimulatorWebglController } from './controllers/simulator-webgl-controller';
 import { globalErrorHandler } from './controllers/error-controller';
 import { swaggerRouter } from './routes/swagger';
+import { seedSimulators } from './scripts/seed-simulators';
 
 const app = express();
 const corsOptions: cors.CorsOptions = {
@@ -112,6 +113,8 @@ userService.createUser(adminUser, "ADMIN").then((res) => {
 }).catch((e) => {
     console.log("Admin user creation failed: ", e)
 })
-
+if (DB_SEED) {
+    seedSimulators()
+}
 
 export default app
