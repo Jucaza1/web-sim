@@ -1,0 +1,32 @@
+[
+    {
+        "simulator":{
+            "name": "name1",
+            "description": "ios",
+            "thumbnail": "url"
+        },
+        "webgl":{
+            "kind": "webgl",
+            "simulatorId": 0,
+            "data": "/static/sim1/sim1.data",
+            "wasm":"/static/sim1/sim1.wasm",
+            "framework": "/static/sim1/framework.js",
+            "loader": "/static/sim1/loader.js"
+        }
+    },
+    {
+        "simulator":{
+            "name": "name2",
+            "description": "android",
+            "thumbnail": "url"
+        },
+        "webgl":{
+            "kind": "webgl",
+            "simulatorId": 1,
+            "data": "url",
+            "wasm": "url",
+            "framework": "url",
+            "loader": "url"
+        }
+    }
+]

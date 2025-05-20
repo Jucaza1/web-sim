@@ -14,6 +14,7 @@
         "migrate-deploy": "npx prisma migrate deploy",
         "prisma-gen": "npx prisma generate",
         "dev-compose": "docker compose -f docker-compose.dev.yml up --build",
+        "dev-compose-it": "docker compose -f docker-compose.dev.yml run app sh",
         "dev-compose-no-build": "docker compose -f docker-compose.dev.yml up",
         "dev-compose-down": "docker compose -f docker-compose.dev.yml down",
         "prod-compose": "docker compose -f docker-compose.prod.yml up --build",

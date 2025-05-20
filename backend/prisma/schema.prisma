@@ -54,7 +54,7 @@ model Company {
 
 model Simulator {
     id          Int      @id @default(autoincrement())
-    name        String
+    name        String   @unique
     companyId   Int?     @map("company_id")
     description String
     createdAt   DateTime @default(now()) @map("created_at")

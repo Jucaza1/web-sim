@@ -65,10 +65,10 @@ const userController = new UserController(userService)
 const companyService = new CompanyService(companyStore)
 const companyController = new CompanyController(companyService)
 
-const simulatorService = new SimulatorService(simulatorStore)
+export const simulatorService = new SimulatorService(simulatorStore)
 const simulatorController = new SimulatorController(simulatorService)
 
-const simulatorWebglService = new SimulatorWebglService(simulatorWebglStore)
+export const simulatorWebglService = new SimulatorWebglService(simulatorWebglStore)
 const simulatorWebglController = new SimulatorWebglController(simulatorWebglService)
 
 const authService = new AuthServiceJWT(JWT_SECRET, userService, pwdHasher)

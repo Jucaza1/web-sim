@@ -19,8 +19,8 @@ services:
     command: sh -c "npm run migrate-deploy && node /app/build/src/server.js"
     networks:
       - app-network
-    volumes:
-      - ./prisma/migrations:/app/prisma/migrations
+    # volumes:
+    #   - ./prisma/migrations:/app/prisma/migrations
   db:
     image: "postgres:17"
     environment:
