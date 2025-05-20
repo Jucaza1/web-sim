@@ -490,7 +490,10 @@ paths:
       responses:
         '200':
           description: WebGL simulator asset
-
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SimulatorWebgl'
   /webgl:
     get:
       security:

@@ -24,12 +24,12 @@ export class SimulatorWebglMemoryStore implements SimulatorWebglStore {
         }
         return { ok: true, data: simulatorWebgl }
     }
-    async getSimulatorWebglBySimulatorId(simulatorId: number): Promise<ResultStore<SimulatorWebgl[]>> {
-        const simulatorWebgls = Array.from(this.simulatorWebgls.values()).filter(simulatorWebgl => simulatorWebgl.simulatorId === simulatorId)
-        if (!simulatorWebgls) {
+    async getSimulatorWebglBySimulatorId(simulatorId: number): Promise<ResultStore<SimulatorWebgl>> {
+        const simulatorWebgl = Array.from(this.simulatorWebgls.values()).filter(simulatorWebgl => simulatorWebgl.simulatorId === simulatorId)[0]
+        if (!simulatorWebgl) {
             return { ok: false, err: { code: StoreErrorCode.notFound, msg: "simulatorWebgl not found" } }
         }
-        return { ok: true, data: simulatorWebgls }
+        return { ok: true, data: simulatorWebgl }
     }
     async getSimulatorWebgls(): Promise<ResultStore<SimulatorWebgl[]>> {
         return { ok: true, data: Array.from(this.simulatorWebgls.values()) }

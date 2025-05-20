@@ -114,6 +114,7 @@ userService.createUser(adminUser, "ADMIN").then((res) => {
     console.log("Admin user creation failed: ", e)
 })
 if (DB_SEED) {
+    console.log("seeding simulators")
     seedSimulators()
 }
 
