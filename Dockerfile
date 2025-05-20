@@ -18,9 +18,10 @@ RUN npm run build
 FROM node:20-alpine AS frontend-build
 
 # declare build-time ARG
-ARG VITE_DOMAIN_HOST
+# ARG VITE_DOMAIN_HOST
 # set ENV so that Vite can see it (redundant but common)
-ENV VITE_DOMAIN_HOST=${VITE_DOMAIN_HOST}
+# ENV VITE_DOMAIN_HOST=${VITE_DOMAIN_HOST}
+ENV VITE_DOMAIN_HOST=/
 
 # set working directory
 WORKDIR /app
@@ -51,6 +52,7 @@ COPY --from=backend-build /app/build ./build
 COPY --from=backend-build /app/prisma ./prisma
 COPY --from=backend-build /app/node_modules/@prisma ./node_modules/@prisma
 COPY --from=backend-build /app/node_modules/.prisma ./node_modules/.prisma
+COPY ./backend/static/ ./static
 
 # copy frontend build
 COPY --from=frontend-build /app/dist ./public

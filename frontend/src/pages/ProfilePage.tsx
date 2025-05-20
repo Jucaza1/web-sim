@@ -1,6 +1,7 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ProfileCard from '../components/ProfileCard';
+import { UserContext } from '../context/userContext';
 
  interface ProfileData {
         name: string;  
@@ -9,11 +10,11 @@ import ProfileCard from '../components/ProfileCard';
 }
 
 function ProfilePage() {
-   
     const [profileData, setProfileData] = useState<ProfileData | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const navigate = useNavigate();
+    const {setUser, setLoggedIn} = useContext(UserContext);
 
     useEffect(() => {
         const fetchProfileData = async () => {
@@ -49,7 +50,9 @@ function ProfilePage() {
     // Función para cerrar sesión
     const handleLogout = () => {
         document.cookie = "Authorization=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-        localStorage.removeItem('token'); 
+        localStorage.removeItem('token');
+        setUser(null);
+        setLoggedIn(false); 
         navigate('/'); 
     }
 

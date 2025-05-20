@@ -16,7 +16,7 @@ export class SimulatorWebglService {
         const result = await this.simulatorWebglStore.getSimulatorWebgl(id)
         return resultStoreToResultHttp(result)
     }
-    async getWebglBySimulatorId(simulatorId: number): Promise<ResultHttp<SimulatorWebgl[]>> {
+    async getWebglBySimulatorId(simulatorId: number): Promise<ResultHttp<SimulatorWebgl>> {
         const validateResult = idSchema.safeParse(simulatorId)
         if (!validateResult.success) {
             return { ok: false, err: { status: 400, msg: ["simulatorId is not valid"] } }

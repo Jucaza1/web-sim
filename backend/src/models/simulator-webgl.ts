@@ -6,7 +6,7 @@ import { SimulatorWebglPrismaStore } from './simulator-webgl-prisma'
 
 export interface SimulatorWebglStore {
     getSimulatorWebgl(id: number): Promise<ResultStore<SimulatorWebgl>>
-    getSimulatorWebglBySimulatorId(simulatorId: number): Promise<ResultStore<SimulatorWebgl[]>>
+    getSimulatorWebglBySimulatorId(simulatorId: number): Promise<ResultStore<SimulatorWebgl>>
     getSimulatorWebgls(): Promise<ResultStore<SimulatorWebgl[]>>
     createSimulatorWebgl(simulatorWebglCreate: SimulatorWebglCreate): Promise<ResultStore<SimulatorWebgl>>
     updateSimulatorWebgl(id: number, simulator: SimulatorWebglUpdate): Promise<ResultStore<SimulatorWebgl>>
