@@ -1,31 +1,40 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { simulators } from '../components/simulatorsData';
 import { useNavigate } from 'react-router-dom';
-//import SimFilter from "../components/SimFilter";
 
 const SimPage: React.FC = () => {
-
-  const allSimulators = simulators;
-
+  const [isDarkMode, setIsDarkMode] = useState(false);
   const navigate = useNavigate();
 
+  useEffect(() => {
+    const darkModeMediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+    setIsDarkMode(darkModeMediaQuery.matches);
+
+    const handleChange = (e: MediaQueryListEvent) => {
+      setIsDarkMode(e.matches);
+    };
+
+    darkModeMediaQuery.addEventListener('change', handleChange);
+    return () => {
+      darkModeMediaQuery.removeEventListener('change', handleChange);
+    };
+  }, []);
+
+  // Clonar y ordenar simuladores por nombre
+  const sortedSimulators = [...simulators].sort((a, b) =>
+    a.name.localeCompare(b.name, 'es', { sensitivity: 'base' })
+  );
+
   return (
-    <div>
-      {/*<SimFilter />*/}
-
     <div className="p-8 min-h-screen">
-
       <h1 className="text-3xl font-bold mb-8 text-center">Selecciona un Simulador</h1>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-
-        {allSimulators.map((sim) => (
-
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+        {sortedSimulators.map((sim) => (
           <div
-
             key={sim.id}
-            className="rounded-lg border-2 border-white bg-gray-800 shadow-md p-6 flex flex-col items-center justify-between">
-
+            className="rounded-lg border-2 border-white bg-gray-800 shadow-md p-6 flex flex-col items-center justify-between"
+          >
             <h2 className="text-xl font-semibold mb-2">{sim.name}</h2>
 
             <div
@@ -33,27 +42,20 @@ const SimPage: React.FC = () => {
               className="cursor-pointer active:animate-bounce transition-transform duration-200 hover:scale-105"
             >
               <img
-                src={sim.thumbnail}
+                src={`/sim_logos/${sim.name
+                  .normalize('NFD')
+                  .replace(/[\u0300-\u036f]/g, '')
+                  .replace(/\s+/g, '_')
+                  .toLowerCase()}_${isDarkMode ? 'dark' : 'light'}.png`}
                 alt={sim.name}
-                className="h-32 w-32 object-contain mb-4"
+                className="h-60 w-60 object-contain mb-4"
               />
-
             </div>
-
-            <p className="text-white text-sm mb-4 text-center">{sim.description}</p>
-
-
           </div>
-
         ))}
-
       </div>
-
     </div>
-    </div>
-
   );
-
 };
 
 export default SimPage;

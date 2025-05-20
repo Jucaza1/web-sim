@@ -1,11 +1,10 @@
 import { useState } from 'react';
 
-
-
 const SimFilter = () => {
-
   const [selectedCategory, setSelectedCategory] = useState("");
 
+
+  
     // Lista de simuladores
   const simulators = [
       { name: "Informática Ciberseguridad", category: "Tecnología" },
@@ -58,7 +57,7 @@ const SimFilter = () => {
         </div>
       </div>
       <div className='mt-6 grid grid-cols-1 sm:grid-cols-2 mg:grid-cols-3 lg:grid-cols-4 gap-4'>
-            {filteredSimulators.map((sim, index) => (
+             {filteredSimulators.map((sim, index) => (
               <div 
                 key={index} 
                 className="card px-4 py-2 rounded mb-4 shadow-md justify-center items-center flex flex-col hover:scale-105 transition-transform duration-300 mx-4"
