@@ -22,7 +22,7 @@ export async function login(payload: LoginPayload) {
   if (response.status === 204) {
     // Obtener el token del header Authorization
     const jwt = response.headers.get("Authorization");
-    console.log(jwt)
+    console.log(jwt);
     // Guardar la cookie
     if (jwt) {
       document.cookie = `Authorization=${jwt}; path=/; httpOnly;`;

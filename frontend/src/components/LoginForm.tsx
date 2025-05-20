@@ -29,15 +29,19 @@ const LoginForm = () => {
   });
 
   // 2. Enviar al backend con fetch
-  const onSubmit = async (data: LoginFormData) => {
-    try {
-      const result = await login(data);
-      console.log("Login correcto:", result);
-      navigate("/home");
-    } catch (err: any) {
+const onSubmit = async (data: LoginFormData) => {
+  try {
+    const result = await login(data);
+    console.log("Login correcto:", result);
+    navigate("/home");
+  } catch (err: unknown) {
+    if (err instanceof Error) {
       console.error("Error en login:", err.message);
+    } else {
+      console.error("Error desconocido:", err);
     }
-  };
+  }
+};
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className={styles.formContainer}>
