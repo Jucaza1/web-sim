@@ -1,4 +1,4 @@
-[
+export const simulatorData = [
     {
         "simulator":{
             "name": "Localización Averías Eléctricas",

@@ -28,20 +28,23 @@ export class SimulatorWebglPrismaStore implements SimulatorWebglStore {
         }
         return { ok: true, data: simulatorWebgl }
     }
-    async getSimulatorWebglBySimulatorId(simulatorId: number): Promise<ResultStore<SimulatorWebgl[]>> {
-        let simulatorWebgls: SimulatorWebgl[] = []
+    async getSimulatorWebglBySimulatorId(simulatorId: number): Promise<ResultStore<SimulatorWebgl>> {
+        let simulatorWebgl: SimulatorWebgl | null
         try {
-            this.client.simulatorWebgl.findMany({ where: { simulatorId } })
+            simulatorWebgl = await this.client.simulatorWebgl.findUnique({ where: { simulatorId } })
         }
         catch (e) {
             return { ok: false, err: { code: prismaCatchToStoreError(e), msg: "internal server error" }, exception: e as Error }
         }
-        return { ok: true, data: simulatorWebgls }
+        if (!simulatorWebgl) {
+            return { ok: false, err: { code: StoreErrorCode.notFound, msg: "simulatorWebgl not found" } }
+        }
+        return { ok: true, data: simulatorWebgl }
     }
     async getSimulatorWebgls(): Promise<ResultStore<SimulatorWebgl[]>> {
         let simulatorWebgls: SimulatorWebgl[] = []
         try {
-            this.client.simulatorWebgl.findMany()
+            simulatorWebgls = await this.client.simulatorWebgl.findMany()
         }
         catch (e) {
             return { ok: false, err: { code: prismaCatchToStoreError(e), msg: "internal server error" }, exception: e as Error }
