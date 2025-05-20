@@ -52,6 +52,7 @@ COPY --from=backend-build /app/build ./build
 COPY --from=backend-build /app/prisma ./prisma
 COPY --from=backend-build /app/node_modules/@prisma ./node_modules/@prisma
 COPY --from=backend-build /app/node_modules/.prisma ./node_modules/.prisma
+COPY ./backend/static/ ./static
 
 # copy frontend build
 COPY --from=frontend-build /app/dist ./public

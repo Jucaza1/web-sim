@@ -27,6 +27,7 @@ COPY --from=build /app/node_modules/@prisma ./node_modules/@prisma
 COPY --from=build /app/node_modules/.prisma ./node_modules/.prisma
 COPY ./public/swagger-response-interceptor.js ./public/
 COPY ./docs ./docs
+COPY ./backend/static/ ./static
 
 EXPOSE 3000
 # start the app
