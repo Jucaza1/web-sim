@@ -167,10 +167,10 @@ export const simulatorConfigs = new Map<number, SimWgl>([
         14,
         {
             id: 14,
-            loader: "/Ascensores/Build/WebGL.loader.js",
-            wasm: "/Ascensores/Build/build.wasm",
-            data: "/Ascensores/Build/webgl.data",
-            framework: "/Ascensores/Build/build.framework.js",
+            loader: "/ascensores/Build/WebGL.loader.js",
+            wasm: "/ascensores/Build/build.wasm",
+            data: "/ascensores/Build/webgl.data",
+            framework: "/ascensores/Build/build.framework.js",
         }
     ]
 ]);

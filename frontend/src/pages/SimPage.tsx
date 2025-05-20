@@ -1,11 +1,19 @@
 import React, { useState, useEffect } from 'react';
-import { simulators } from '../components/simulatorsData';
 import { useNavigate } from 'react-router-dom';
 
+interface Simulator {
+  id: string;
+  name: string;
+  
+}
+
 const SimPage: React.FC = () => {
+  const [simulators, setSimulators] = useState<Simulator[]>([]);
   const [isDarkMode, setIsDarkMode] = useState(false);
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
+  // Detectar modo oscuro
   useEffect(() => {
     const darkModeMediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
     setIsDarkMode(darkModeMediaQuery.matches);
@@ -20,17 +28,38 @@ const SimPage: React.FC = () => {
     };
   }, []);
 
-  // Clonar y ordenar simuladores por nombre
-  const sortedSimulators = [...simulators].sort((a, b) =>
-    a.name.localeCompare(b.name, 'es', { sensitivity: 'base' })
-  );
+  // Obtener simuladores desde una API
+  useEffect(() => {
+    const fetchSimulators = async () => {
+      try {
+        const response = await fetch('https://your-api.com/simulators'); // cambiar la url del back no olvidar
+        const data: Simulator[] = await response.json();
+
+        const sorted = data.sort((a, b) =>
+          a.name.localeCompare(b.name, 'es', { sensitivity: 'base' })
+        );
+
+        setSimulators(sorted);
+      } catch (error) {
+        console.error('Error al obtener simuladores:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchSimulators();
+  }, []);
+
+  if (loading) {
+    return <div className="p-8 text-center">Cargando simuladores...</div>;
+  }
 
   return (
     <div className="p-8 min-h-screen">
       <h1 className="text-3xl font-bold mb-8 text-center">Selecciona un Simulador</h1>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
-        {sortedSimulators.map((sim) => (
+        {simulators.map((sim) => (
           <div
             key={sim.id}
             className="rounded-lg border-2 border-white bg-gray-800 shadow-md p-6 flex flex-col items-center justify-between"
