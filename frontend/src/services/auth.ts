@@ -5,6 +5,7 @@ type LoginPayload = {
 };
 type jwtPayload = {
   id: number
+  name: string
   role: "USER" | "ADMIN_COMPANY" | "ADMIN"
   company: number | null
 }
@@ -34,7 +35,7 @@ export async function login(payload: LoginPayload): Promise<jwtPayload | null> {
       document.cookie = `Authorization=${token}; path=/ ; max-age=3600`;
       return jwtDecode(token) as jwtPayload
       //return null;
-      
+
     }
     return null;
   }

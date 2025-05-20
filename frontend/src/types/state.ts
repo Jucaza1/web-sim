@@ -1,6 +1,6 @@
 export type UserInfo = {
   id: number
-  //name: string
+  name: string
   role: "USER" | "ADMIN_COMPANY" | "ADMIN"
   company: number | null
 }

@@ -14,14 +14,17 @@ export type Simulator = Simulator_prisma
 export type SimulatorWebgl = SimulatorWebgl_prisma
 export type Role = Role_prisma
 
-export type UserCreate = Omit<Prisma.UserCreateInput, "role" | "company" | "updateAt" | "createAt"> & { companyId?: number }
-export type UserUpdate = Omit<Prisma.UserUpdateInput, "role" | "company" | "updateAt" | "createAt"> & { companyId?: number }
-export type CompanyCreate = Omit<Prisma.CompanyCreateInput, "createdAt" | "updatedAt">
-export type CompanyUpdate = Omit<Prisma.CompanyUpdateInput, "updateAt" | "createAt">
-export type SimulatorCreate = Omit<Prisma.SimulatorCreateInput, "company" | "simulatorWebgl" | "updateAt" | "createAt"> & { companyId?: number }
-export type SimulatorUpdate = Omit<Prisma.SimulatorUpdateInput, "company" | "simulatorWebgl" | "updateAt" | "createAt"> & { companyId?: number }
-export type SimulatorWebglCreate = Omit<Prisma.SimulatorWebglCreateInput, "simulator"> & { simulatorId: number }
-export type SimulatorWebglUpdate = Omit<Prisma.SimulatorWebglUpdateInput, "simulator"> & { simulatorId?: number }
+type Pretty<T> = {
+    [K in keyof T]: T[K]
+}
+export type UserCreate = Pretty<Omit<Prisma.UserCreateInput, "role" | "company" | "updateAt" | "createAt"> & { companyId?: number }>
+export type UserUpdate = Pretty<Omit<Prisma.UserUpdateInput, "role" | "company" | "updateAt" | "createAt"> & { companyId?: number }>
+export type CompanyCreate = Pretty<Omit<Prisma.CompanyCreateInput, "createdAt" | "updatedAt" | "users" | "simulators">>
+export type CompanyUpdate = Pretty<Omit<Prisma.CompanyUpdateInput, "updateAt" | "createAt">>
+export type SimulatorCreate = Pretty<Omit<Prisma.SimulatorCreateInput, "company" | "simulatorWebgl" | "updateAt" | "createAt"> & { companyId?: number }>
+export type SimulatorUpdate = Pretty<Omit<Prisma.SimulatorUpdateInput, "company" | "simulatorWebgl" | "updateAt" | "createAt"> & { companyId?: number }>
+export type SimulatorWebglCreate = Pretty<Omit<Prisma.SimulatorWebglCreateInput, "simulator"> & { simulatorId: number }>
+export type SimulatorWebglUpdate = Pretty<Omit<Prisma.SimulatorWebglUpdateInput, "simulator"> & { simulatorId?: number }>
 
 export type CompanyIdName = { id: number, name: string }
 

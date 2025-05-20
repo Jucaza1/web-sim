@@ -38,7 +38,7 @@ export class AuthServiceJWT {
         return { ok: true, data: this.forgeJWT(userResult!.data!) }
     }
     forgeJWT(user: User): string {
-        const payload: Payload = { id: user.id, role: user.role, company: user.companyId }
+        const payload: Payload = { id: user.id, role: user.role, name: user.name, company: user.companyId }
         return jwt.sign(payload, this.secret, { expiresIn: 3600 })
     }
     async validateJWT(token: string): Promise<ResultHttp<Payload>> {
