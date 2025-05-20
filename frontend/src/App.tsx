@@ -6,12 +6,14 @@ import LoadingScreen from './components/LoadingScreen';
 import { useState, useEffect } from "react";
 import SimPage from "./pages/SimPage";
 import NavBar from "./components/NavBar";
-
+import SimulatorApp from "./pages/Simulator";
+import { UserContextProvider } from "./context/UserContextProvider";
+import ProfilePage from "./pages/ProfilePage";
 
 function App() {
 
     return (
-      <Router> 
+      <Router>
         <LoadingWrapper />
       </Router>
     );
@@ -32,19 +34,23 @@ function App() {
     };
   }, [location]);
 
-  const hideNavBar = location.pathname === "/register" || location.pathname === "/"; // Oculta NavBar en estas rutas
+  const hideNavBar = location.pathname === "/register" || location.pathname === "/login"; // Oculta NavBar en estas rutas
 
   return (
     <>
+        <UserContextProvider>
         {loading && <LoadingScreen />} {/* Pantalla de carga */}
         {!loading && !hideNavBar && <NavBar />} {/* Muestra NavBar solo si no está en login o register */}
-        <Routes> 
-          <Route path="/" Component={LoginPage} />
+        <Routes>
+          <Route path="/" Component={Home} />
+          <Route path="/login" Component={LoginPage} />
           <Route path="/register" Component={RegisterPage} />
-          <Route path="/home" Component={Home} />
-          <Route path="/simulator" Component={SimPage} />
+          <Route path="/simulatorspage" Component={SimPage} />
+          <Route path="/simulator" Component={SimulatorApp} />
+          <Route path="/profile" Component={ProfilePage} />
 
         </Routes>
+        </UserContextProvider>
     </>
   );
   }

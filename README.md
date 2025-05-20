@@ -27,7 +27,22 @@ web-sim/
     └── .env
 ```
 
-## Getting Started
+## Run the whole project with docker compose
+```bash
+git clone https://github.com/jucaza1/web-sim.git
+```
+
+```bash
+cd web-sim
+```
+
+```bash
+docker-compose up
+```
+This will start both the frontend and backend together in a Docker container alongside a container for . The
+app will be served at `http://localhost:3000`
+
+## Getting Started (Development)
 
 ### Prerequisites
 

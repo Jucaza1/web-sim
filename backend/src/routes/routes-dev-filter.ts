@@ -19,43 +19,9 @@ export function createRouter(
     router.post("/login", jsonMiddleware, authController.login)
     router.get("/companiesid", companyController.getCompaniesIdName)
 
-    // User routes unprotected
-    router.get("/dev/users/:id", userController.getUser)
-    router.get("/dev/users/email/:email", userController.getUserByEmail)
-    router.get("/dev/users", userController.getUsers)
-    router.post("/dev/users", jsonMiddleware, userController.createUser)
-    router.post("/dev/admin", jsonMiddleware, userController.createAdmin)
-    router.post("/dev/admincompany", jsonMiddleware, userController.createAdminCompany)
-    router.put("/dev/users/:id", jsonMiddleware, userController.updateUser)
-    router.delete("/dev/users/:id", userController.deleteUser)
-
-    // Company routes unprotected
-    router.get("/dev/companies/:id", companyController.getCompany)
-    router.get("/dev/companies", companyController.getCompanies)
-    router.get("/dev/companiesid", companyController.getCompaniesIdName)
-    router.post("/dev/companies", jsonMiddleware, companyController.createCompany)
-    router.put("/dev/companies/:id", jsonMiddleware, companyController.updateCompany)
-    router.delete("/dev/companies/:id", companyController.deleteCompany)
-
-    // Simulator routes unprotected
-    router.get("/dev/companies/:id/simulators", simulatorController.getSimulatorsByCompanyId)
-    router.get("/dev/simulators/:id", simulatorController.getSimulator)
-    router.get("/dev/simulators", simulatorController.getSimulators)
-    router.post("/dev/simulators", jsonMiddleware, simulatorController.createSimulator)
-    router.put("/dev/simulators/:id", jsonMiddleware, simulatorController.updateSimulator)
-    router.delete("/dev/simulators/:id", simulatorController.deleteSimulator)
-
-    // Simulator WebGL routes unprotected
-
-    router.get("/dev/simulator/:id/webgl/", simulatorWebglController.getWebglBySimulatorId)
-    router.get("/dev/webgl", simulatorWebglController.getWebgls)
-    router.get("/dev/webgl/:id", simulatorWebglController.getWebgl)
-    router.post("/dev/webgl", jsonMiddleware, simulatorWebglController.createWebgl)
-    router.put("/dev/webgl/:id", jsonMiddleware, simulatorWebglController.updateWebgl)
-    router.delete("/dev/webgl/:id", simulatorWebglController.deleteWebgl)
-
     const routerAuth = Router()
     // User routes
+    routerAuth.get("/users/me",userController.getCurrentUser)
     routerAuth.get("/users/:id", userController.getUser)
     routerAuth.get("/users/email/:email", userController.getUserByEmail)
     routerAuth.get("/users", userController.getUsers)
