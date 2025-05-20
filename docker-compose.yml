@@ -22,7 +22,7 @@ services:
     networks:
       - app-network
     # volumes:
-    #   - ./prisma/migrations:/app/prisma/migrations
+    #   - ./backend/prisma/migrations:/app/prisma/migrations
   db:
     image: "postgres:17"
     environment:
