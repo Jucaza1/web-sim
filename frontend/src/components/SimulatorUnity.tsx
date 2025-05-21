@@ -1,14 +1,18 @@
-import { Unity, useUnityContext } from "react-unity-webgl";
-import { SimulatorWebgl } from "../types/response";
 import { useEffect } from "react";
+import { Unity, useUnityContext } from "react-unity-webgl";
+interface SimulatorWebgl {
+    loader: string
+    data: string
+    framework: string
+    wasm: string
+}
+const SimulatorUnity  = (sim:SimulatorWebgl) => {
 
-export default function SimulatorUnity(props:SimulatorWebgl) {
-
-   const { unityProvider, unload } = useUnityContext({
-    loaderUrl: props.loader,
-    dataUrl: props.data,
-    frameworkUrl: props.framework,
-    codeUrl: props.wasm,
+  const { unityProvider, unload } = useUnityContext({
+    loaderUrl: sim.loader,
+    dataUrl: sim.data,
+    frameworkUrl: sim.framework,
+    codeUrl: sim.wasm,
     companyName: "MiEmpresa",
     productVersion: "1.0",
     productName: "Simulador",
@@ -24,11 +28,14 @@ useEffect(() => {
           console.error("Error al descargar Unity:", e);
         });
     };
-  }, [unload, props]);
-  
+  }, [unload,sim]);
+
   return (
     <div className="w-full h-screen">
       <Unity className="w-full h-full" unityProvider={unityProvider} />
     </div>
-  ); 
+  );
 }
+
+export default SimulatorUnity;
+

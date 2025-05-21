@@ -4,6 +4,12 @@ import { Simulator } from "../types/response";
 
 const HOST = import.meta.env.VITE_DOMAIN_HOST?? "http://localhost:3000";
 const API_URL = `${HOST}/api/v1`;
+interface Simulator {
+  id: string;
+  name: string;
+  thumbnail: string
+
+}
 
 const SimPage: React.FC = () => {
   const [simulators, setSimulators] = useState<Simulator[]>([]);

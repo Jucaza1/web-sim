@@ -3,7 +3,7 @@ export const simulatorData = [
         "simulator":{
             "name": "Localización Averías Eléctricas",
             "description": "Simulador de localización de averias eléctricas",
-            "thumbnail": "/public/sim_logos/localizacion_averias_electricas_dark.png"
+            "thumbnail": "/sim_logos/localizacion_averias_electricas_dark.png"
         },
         "webgl":{
             "kind": "webgl",
@@ -18,7 +18,7 @@ export const simulatorData = [
         "simulator":{
             "name": "Clínica Dental",
             "description": "Simulador de clínica dental",
-            "thumbnail": "/public/sim_logos/clinica_dental_dark.png"
+            "thumbnail": "/sim_logos/clinica_dental_dark.png"
         },
         "webgl":{
             "kind": "webgl",
@@ -33,7 +33,7 @@ export const simulatorData = [
         "simulator":{
             "name": "Ascensores",
             "description": "Simulador de ascensores",
-            "thumbnail": "/public/sim_logos/ascensores_dark.png"
+            "thumbnail": "/sim_logos/ascensores_dark.png"
         },
         "webgl":{
             "kind": "webgl",

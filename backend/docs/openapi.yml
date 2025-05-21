@@ -492,7 +492,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Simulator'
 
-  /simulator/{id}/webgl/:
+  /simulators/{id}/webgl/:
     get:
       security:
         - jwtCookieAuth: []

@@ -49,7 +49,7 @@ export function createRouter(
     routerAuth.delete("/simulators/:id", simulatorController.deleteSimulator)
 
     // Simulator WebGL routes
-    routerAuth.get("/simulator/:id/webgl/", simulatorWebglController.getWebglBySimulatorId)
+    routerAuth.get("/simulators/:id/webgl/", simulatorWebglController.getWebglBySimulatorId)
     routerAuth.get("/webgl", simulatorWebglController.getWebgls)
     routerAuth.get("/webgl/:id", simulatorWebglController.getWebgl)
     routerAuth.post("/webgl", jsonMiddleware, simulatorWebglController.createWebgl)
