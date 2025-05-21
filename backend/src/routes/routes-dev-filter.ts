@@ -17,6 +17,7 @@ export function createRouter(
     //-> /api/v1
     router.post("/register", jsonMiddleware, userController.createUser)
     router.post("/login", jsonMiddleware, authController.login)
+    router.get("/logout", authController.logout)
     router.get("/companiesid", companyController.getCompaniesIdName)
 
     const routerAuth = Router()
