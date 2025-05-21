@@ -25,7 +25,7 @@ export class AuthController {
             secure: false,
             sameSite: "lax",
             path: "/"
-        });
+        })
         res.sendStatus(204)
     }
     async logout(_req: Request, res: Response, _next: NextFunction) {
