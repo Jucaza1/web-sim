@@ -1,29 +1,29 @@
 services:
   app:
-    build:
-      context: .
-      dockerfile: Dockerfile
-      args:
-        VITE_DOMAIN_HOST: /
+    image: jucaza/web-sim:latest
     depends_on:
       - db
     ports:
-      - "3000:3000"
+      - "80:3000"
     environment:
-      NODE_ENV: development
+      NODE_ENV: production
       DB_KIND: postgresql
-      DB_SEED: true
       SERVER_HOST: 0.0.0.0
       SERVER_PORT: 3000
       CORS_ORIGIN: http://localhost:5173
       DATABASE_URL: postgresql://user:password@db:5432/web-sim-db?schema=public
       USER_ADMIN_PASSWORD: adminadmin
       USER_ADMIN_EMAIL: admin@admin.com
-    command: sh -c "npm run gen-migrate && node /app/build/src/server.js"
+    command: sh -c "npm run migrate-deploy && node /app/build/src/server.js"
+    logging:
+      driver: "json-file"  # default, stores logs in /var/lib/docker/containers/<id>/...
+      options:
+        max-size: "10m"
+        max-file: "3"
     networks:
       - app-network
-    # volumes:
-    #   - ./backend/prisma/migrations:/app/prisma/migrations
+    volumes:
+      - /persistence/static:/app/static
   db:
     image: "postgres:17"
     environment:
@@ -33,7 +33,7 @@ services:
     # ports:
     #   - "5432:5432"
     volumes:
-      - db_data:/var/lib/postgresql/data
+      - /persistence/data:/var/lib/postgresql/data
     networks:
       - app-network
 networks:
