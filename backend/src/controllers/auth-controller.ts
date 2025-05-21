@@ -20,6 +20,21 @@ export class AuthController {
             return
         }
         res.setHeader("Authorization", result.data!)
+        res.cookie("Authorization", result.data!, {
+            httpOnly: true,
+            secure: false,
+            sameSite: "lax",
+            path: "/"
+        });
+        res.sendStatus(204)
+    }
+    async logout(_req: Request, res: Response, _next: NextFunction) {
+        res.clearCookie('Authorization', {
+            path: '/',
+            httpOnly: true,
+            sameSite: 'lax',
+            secure: false
+        })
         res.sendStatus(204)
     }
 
@@ -43,8 +58,8 @@ export class AuthController {
         }
         res.locals.payload = result.data!
         console.info(`--authMiddlware: decoded userId     : ${result.data!.id as number}`)
-        console.info(`--authMiddlware: decoded userRole   : ${result.data!.role as string}`)
-        console.info(`--authMiddlware: decoded userCompany: ${result.data!.company}`)
+        // console.info(`--authMiddlware: decoded userRole   : ${result.data!.role as string}`)
+        // console.info(`--authMiddlware: decoded userCompany: ${result.data!.company}`)
         next()
     }
 }
