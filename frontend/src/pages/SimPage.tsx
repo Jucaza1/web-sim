@@ -4,12 +4,6 @@ import { Simulator } from "../types/response";
 
 const HOST = import.meta.env.VITE_DOMAIN_HOST?? "http://localhost:3000";
 const API_URL = `${HOST}/api/v1`;
-interface Simulator {
-  id: string;
-  name: string;
-  thumbnail: string
-
-}
 
 const SimPage: React.FC = () => {
   const [simulators, setSimulators] = useState<Simulator[]>([]);
@@ -39,7 +33,14 @@ const SimPage: React.FC = () => {
         const response = await fetch(`${API_URL}/simulators`,{
           method:'GET',
           credentials: 'include',
-        }); // cambiar la url del back no olvidar
+        });
+         if (response.status !== 200 && response.status !== 401) {
+          throw new Error('Error al obtener los simuladores');
+        }
+        if (response.status === 401) {
+          navigate("/login");
+          return;
+        }
         const data: Simulator[] = await response.json();
 
         const sorted = data.sort((a, b) =>
@@ -55,7 +56,7 @@ const SimPage: React.FC = () => {
     };
 
     fetchSimulators();
-  }, []);
+  }, [navigate]);
 
   if (loading) {
     return <div className="p-8 text-center">Cargando simuladores...</div>;
