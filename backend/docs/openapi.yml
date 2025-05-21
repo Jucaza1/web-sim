@@ -69,6 +69,24 @@ paths:
               description: JWT token
               schema:
                 type: string
+            Set-Cookie:
+              description: set JWT in cookie
+              schema:
+                type: string
+
+  /logout:
+    get:
+      tags:
+        - users
+      summary: Clear authorization cookie
+      responses:
+        '204':
+          description: Authentication successful
+          headers:
+            Set-Cookie:
+              description: clear cookie
+              schema:
+                type: string
 
   /companiesid:
     get:
