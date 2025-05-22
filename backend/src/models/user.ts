@@ -3,6 +3,7 @@ import { ResultStore } from "../types/result"
 import { UserMemoryStore } from "./user-memory"
 import { UserPrismaStore } from "./user-prisma"
 import { PrismaClientSingleton } from "./prisma-singleton"
+import logger from "../logger"
 
 export interface UserStore {
     getUser(id: number): Promise<ResultStore<User>>
@@ -17,13 +18,13 @@ export interface UserStore {
 export function UserStoreFactory(kind: string, seed: boolean = false): UserStore {
     switch (kind) {
         case "memory":
-            console.log("runing in-memory DB for user")
+            logger.debug("runing in-memory DB for user")
             return new UserMemoryStore(seed)
         case "postgresql":
-            console.log("runing postgresql DB for user")
+            logger.debug("runing postgresql DB for user")
             return new UserPrismaStore(PrismaClientSingleton.getInstance())
         default:
-            console.log("runing in-memory DB for user")
+            logger.debug("runing in-memory DB for user")
             return new UserMemoryStore(seed)
     }
 }

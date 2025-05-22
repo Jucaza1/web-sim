@@ -22,6 +22,7 @@ import { SimulatorWebglController } from './controllers/simulator-webgl-controll
 import { globalErrorHandler } from './controllers/error-controller';
 import { swaggerRouter } from './routes/swagger';
 import { seedSimulators } from './scripts/seed-simulators';
+import logger from './logger';
 
 const app = express();
 const corsOptions: cors.CorsOptions = {
@@ -99,23 +100,19 @@ const adminUser: UserCreate = {
     profession: "admin",
     // isActive: true,
 }
-const pwd = adminUser.password
+        logger.info(adminUser,"seeding admin user")
 userService.createUser(adminUser, "ADMIN").then((res) => {
     if (res.ok) {
-        console.log("Admin user created")
-        console.log("Admin user email: ", adminUser.email)
-        console.log("Admin user password: ", pwd)
     } else {
-        console.log("Admin user creation failed")
-        console.log(res.err!.msg)
+        logger.error({error:res.err, exception:res.exception},"error seeding Admin")
     }
 
 }).catch((e) => {
-    console.log("Admin user creation failed: ", e)
+        logger.error({exception:e},"error seeding Admin")
 })
 if (DB_SEED) {
-    console.log("seeding simulators")
-    seedSimulators()
+    logger.info("seeding simulators")
+    seedSimulators(logger)
 }
 
 export default app
