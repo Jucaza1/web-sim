@@ -43,5 +43,35 @@ export const simulatorData = [
             "data": "/static/ascensores/Build/WebGL.data.gz",
             "framework": "/static/ascensores/Build/WebGL.framework.js.gz"
         }
+    },
+    {
+        "simulator":{
+            "name": "Compresores",
+            "description": "Simulador de compresores",
+            "thumbnail": "/sim_logos/presostato_dark.png"
+        },
+        "webgl":{
+            "kind": "webgl",
+            "simulatorId": 0,
+            "loader": "/static/compresores/Build/WebGL.loader.js",
+            "wasm": "/static/compresores/Build/WebGL.wasm.gz",
+            "data": "/static/compresores/Build/WebGL.data.gz",
+            "framework": "/static/compresores/Build/WebGL.framework.js.gz"
+        }
+    },
+    {
+        "simulator":{
+            "name": "Agricultura",
+            "description": "Simulador de Agricultura",
+            "thumbnail": "/sim_logos/agricultura_dark.png"
+        },
+        "webgl":{
+            "kind": "webgl",
+            "simulatorId": 0,
+            "loader": "/static/agricultura/Build/WebGL.loader.js",
+            "wasm": "/static/agricultura/Build/WebGL.wasm.gz",
+            "data": "/static/agricultura/Build/WebGL.data.gz",
+            "framework": "/static/agricultura/Build/WebGL.framework.js.gz"
+        }
     }
 ]
