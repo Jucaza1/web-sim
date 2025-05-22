@@ -1,5 +1,6 @@
 import { jwtDecode } from "jwt-decode";
-import { API_URL } from "../config"; 
+import { API_URL } from "../config";
+import { UserInfo } from "../types/state";
 
 type LoginPayload = {
   email: string;
@@ -35,9 +36,13 @@ export async function login(payload: LoginPayload): Promise<jwtPayload | null> {
     // Guardar la cookie
     if (token) {
       // Guardar el token en el localStorage
-      localStorage.setItem("token", token);
+      // localStorage.setItem("token", token);
       document.cookie = `Authorization=${token}; path=/ ; max-age=3600`;
-      return jwtDecode(token) as jwtPayload
+
+      const user: UserInfo =  jwtDecode(token) as jwtPayload
+      localStorage.setItem("user", JSON.stringify(user));
+
+      return user
       //return null;
 
     }
