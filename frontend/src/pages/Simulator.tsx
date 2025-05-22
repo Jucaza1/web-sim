@@ -5,7 +5,6 @@ import SimulatorUnity from "../components/SimulatorUnity";
 
 
 const HOST = import.meta.env.VITE_DOMAIN_HOST?? "http://localhost:3000";
-//const HOST = "http://localhost:3000/";
 const API_URL = `${HOST}/api/v1`;
 
 const SimulatorApp: React.FC = () => {
@@ -34,9 +33,8 @@ const SimulatorApp: React.FC = () => {
         setWebgl(data);
 
       } catch (error) {
+        //TODO: handle error
         console.error('Error al obtener simuladores:', error);
-      } finally {
-        //setLoading(false);
       }
     };
 
@@ -45,14 +43,13 @@ const SimulatorApp: React.FC = () => {
   },[id, navigate]);
 
   return(
-  webgl && webgl.loader && webgl.data && webgl.framework && webgl.wasm ?
-    <div className="w-full h-screen">
-      <SimulatorUnity {...webgl}/>
+    webgl && webgl.loader && webgl.data && webgl.framework && webgl.wasm ?
+    <div className="w-10/12 h-auto mx-auto my-5 flex items-center justify-center">
+        <SimulatorUnity {...webgl!}/>
     </div> :
-    <div className="w-full h-screen flex items-center justify-center">
-      <h1 className="text-3xl font-bold mb-8 text-center">Cargando simulador...</h1>
+    <div className="w-10/12 h-auto mx-auto my-5 flex items-center justify-center">
+        <h1 className="text-3xl font-bold mb-8 text-center">Cargando simulador...</h1>
     </div>
-
   )
 };
 

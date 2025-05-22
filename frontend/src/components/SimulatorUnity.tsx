@@ -8,7 +8,7 @@ interface SimulatorWebgl {
 }
 const SimulatorUnity  = (sim:SimulatorWebgl) => {
 
-  const { unityProvider, unload } = useUnityContext({
+  const { unityProvider, unload, isLoaded, loadingProgression } = useUnityContext({
     loaderUrl: sim.loader,
     dataUrl: sim.data,
     frameworkUrl: sim.framework,
@@ -17,6 +17,7 @@ const SimulatorUnity  = (sim:SimulatorWebgl) => {
     productVersion: "1.0",
     productName: "Simulador",
   });
+    const loadingPercentage = Math.round(loadingProgression * 100)
 
 useEffect(() => {
     return () => {
@@ -28,13 +29,25 @@ useEffect(() => {
           console.error("Error al descargar Unity:", e);
         });
     };
-  }, [unload,sim]);
+  }, [unload]);
 
+  // return (
+    // <div className="w-full h-screen">
+    //   <Unity className="w-full h-full" unityProvider={unityProvider} />
+    // </div>
+  // );
   return (
-    <div className="w-full h-screen">
-      <Unity className="w-full h-full" unityProvider={unityProvider} />
+    <div className="size-full">
+      {isLoaded === false && (
+        // We'll conditionally render the loading overlay if the Unity
+        // Application is not loaded.
+        <div className="text-5xl">
+          <p>Loading... ({loadingPercentage}%)</p>
+        </div>
+      )}
+      <Unity className="size-full" unityProvider={unityProvider} />
     </div>
-  );
+  )
 }
 
 export default SimulatorUnity;
