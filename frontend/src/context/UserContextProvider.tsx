@@ -43,8 +43,9 @@ export function UserContextProvider({ children }: PropsWithChildren) {
               name : data.name,
             }
             console.log("Usuario recuperado:", data);
-            setUser(user);
+            setUser(userInfo);
             setLoggedIn(true);
+            localStorage.setItem("user", JSON.stringify(userInfo));
           }
 
       } catch (error) {

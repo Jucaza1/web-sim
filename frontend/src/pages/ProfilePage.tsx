@@ -5,8 +5,8 @@ import { UserContext } from '../context/userContext';
 import { API_URL } from '../config';
 
 
- interface ProfileData { 
-        name: string;  
+ interface ProfileData {
+        name: string;
         email: string;
         profession: string;
 }
@@ -25,8 +25,8 @@ function ProfilePage() {
                     method: 'GET',
                     //credentials: 'include',
                     headers: {
-                        'Content-Type': 'application/json', 
-                        'Authorization': `Bearer ${localStorage.getItem('token')}`
+                        'Content-Type': 'application/json',
+                        // 'Authorization': `Bearer ${localStorage.getItem('token')}`
                     }
                 });
 
@@ -45,7 +45,7 @@ function ProfilePage() {
             } finally {
                 setLoading(false);
             }
-        }   
+        }
         fetchProfileData();
     }, []);
 
@@ -55,20 +55,18 @@ function ProfilePage() {
     //     localStorage.removeItem('token');
 
     //     setUser(null);
-    //     setLoggedIn(false); 
-    //     navigate('/'); 
+    //     setLoggedIn(false);
+    //     navigate('/');
     // }
     const handleLogout = async () => {
         try {
             const response = await fetch(`${API_URL}/logout`, {
                 method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                }
             });
             if (response.status === 204) {
                 setUser(null);
                 setLoggedIn(false);
+                localStorage.removeItem("user");
                 navigate('/');
             } else {
                 setError('Error al cerrar sesión');
@@ -79,7 +77,7 @@ function ProfilePage() {
                 } else {
                     setError('Error desconocido');
                 }
-        } 
+        }
     }
 
     if (loading) {
@@ -101,12 +99,12 @@ function ProfilePage() {
         profession={profileData.profession}
        />
         <div>
-            <button 
+            <button
              className="bg-red-500 text-white px-4 py-2 rounded-full mt-6 hover:bg-red-900 "
              onClick={handleLogout}
          >
                Cerrar sesión
-            </button>    
+            </button>
         </div>
 
 
