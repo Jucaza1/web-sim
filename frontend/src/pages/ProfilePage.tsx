@@ -2,8 +2,10 @@ import { useEffect, useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ProfileCard from '../components/ProfileCard';
 import { UserContext } from '../context/userContext';
+import { API_URL } from '../config';
 
- interface ProfileData {
+
+ interface ProfileData { 
         name: string;  
         email: string;
         profession: string;
@@ -19,7 +21,7 @@ function ProfilePage() {
     useEffect(() => {
         const fetchProfileData = async () => {
             try {
-                const response = await fetch('http://localhost:3000/api/v1/users/me', {
+                const response = await fetch(`${API_URL}/users/me`, {
                     method: 'GET',
                     //credentials: 'include',
                     headers: {
@@ -48,12 +50,36 @@ function ProfilePage() {
     }, []);
 
     // Función para cerrar sesión
-    const handleLogout = () => {
-        document.cookie = "Authorization=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-        localStorage.removeItem('token');
-        setUser(null);
-        setLoggedIn(false); 
-        navigate('/'); 
+    // const handleLogout = () => {
+    //     document.cookie = "Authorization=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    //     localStorage.removeItem('token');
+
+    //     setUser(null);
+    //     setLoggedIn(false); 
+    //     navigate('/'); 
+    // }
+    const handleLogout = async () => {
+        try {
+            const response = await fetch(`${API_URL}/logout`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            });
+            if (response.status === 204) {
+                setUser(null);
+                setLoggedIn(false);
+                navigate('/');
+            } else {
+                setError('Error al cerrar sesión');
+            }
+        } catch (err) {
+            if (err instanceof Error) {
+                    setError(err.message);
+                } else {
+                    setError('Error desconocido');
+                }
+        } 
     }
 
     if (loading) {

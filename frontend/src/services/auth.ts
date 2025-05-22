@@ -1,4 +1,6 @@
 import { jwtDecode } from "jwt-decode";
+import { API_URL } from "../config"; 
+
 type LoginPayload = {
   email: string;
   password: string;
@@ -11,7 +13,7 @@ type jwtPayload = {
 }
 
 export async function login(payload: LoginPayload): Promise<jwtPayload | null> {
-  const response = await fetch("http://localhost:3000/api/v1/login", {
+  const response = await fetch(`${API_URL}/login`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -32,6 +34,8 @@ export async function login(payload: LoginPayload): Promise<jwtPayload | null> {
     console.log(token)
     // Guardar la cookie
     if (token) {
+      // Guardar el token en el localStorage
+      localStorage.setItem("token", token);
       document.cookie = `Authorization=${token}; path=/ ; max-age=3600`;
       return jwtDecode(token) as jwtPayload
       //return null;

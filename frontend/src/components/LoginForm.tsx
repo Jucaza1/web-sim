@@ -3,25 +3,21 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import styles from "../styles/LoginForm.module.css";
 import logo from "../assets/logo/Davante_logo_endosos_navy.svg";
-import { z } from "zod";
+
+import { UserCredentialsSchema, UserCredentials } from "../types/credentials";
 import { login } from "../services/auth";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { UserContext } from "../context/userContext";
 
-// 1. Validación
-const LoginFormSchema = z.object({
-  email: z.string().email({ message: "Correo inválido" }),
-  password: z
-    .string()
-    .min(8, { message: "Debe tener al menos 8 caracteres" })
-    .max(25, { message: "Máximo 25 caracteres" }),
-});
 
-type LoginFormData = z.infer<typeof LoginFormSchema>;
+
+const LoginFormSchema = UserCredentialsSchema;
+type LoginFormData = UserCredentials;
 
 const LoginForm = () => {
   const navigate = useNavigate();
   const { setUser, setLoggedIn } = useContext(UserContext);
+  const [logginError, setLogginError] = useState<string | null>(null);
 
   const {
     register,
@@ -34,13 +30,16 @@ const LoginForm = () => {
   // 2. Enviar al backend con fetch
   const onSubmit = async (data: LoginFormData) => {
     try {
+      setLogginError(null);
+
       const result = await login(data);
         if (result) {
           setUser(result);
           setLoggedIn(true);
+          navigate("/");
+        } else {
+          setLogginError("Usuario o contraseña incorrectos");
         }
-      console.log("Login correcto:", result);
-      navigate("/");
     } catch (err) {
       console.error("Error en login:", (err as Error).message);
     }
@@ -52,6 +51,8 @@ const LoginForm = () => {
         <img src={logo} alt="Logo de Davante" className={styles.logo} />
         <h2 className={styles.formTitle}>Iniciar sesión</h2>
       </div>
+
+      {logginError && <p className={styles.error}>{logginError}</p>}
 
       <input
         type="email"

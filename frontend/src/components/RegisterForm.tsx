@@ -4,6 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { UserCreateDTO, UserCreateDTOSchema } from "./../types/validations"; // Importar el esquema de validación
 import styles from "../styles/RegisterForm.module.css";
 import logo from "../assets/logo/Davante_logo_endosos_navy.svg"
+import { API_URL } from "../config"; 
 
 export default function RegisterForm() {
 
@@ -19,7 +20,7 @@ export default function RegisterForm() {
   const onSubmit = async (data: UserCreateDTO) => {
     try {
 
-      const response = await fetch("http://localhost:3000/api/v1/register", {
+      const response = await fetch(`${API_URL}/register`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
