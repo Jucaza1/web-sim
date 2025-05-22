@@ -3,45 +3,45 @@ export const simulatorData = [
         "simulator":{
             "name": "Localización Averías Eléctricas",
             "description": "Simulador de localización de averias eléctricas",
-            "thumbnail": "/public/sim_logos/localizacion_averias_electricas_dark.png"
+            "thumbnail": "/sim_logos/localizacion_averias_electricas_dark.png"
         },
         "webgl":{
             "kind": "webgl",
             "simulatorId": 0,
             "loader": "/static/localizacion_averias/Build/WebGL.loader.js",
-            "wasm": "/static/localizacion_averias/Build/build.wasm",
-            "data": "/static/localizacion_averias/Build/webgl.data",
-            "framework": "/static/localizacion_averias/Build/build.framework.js"
+            "wasm": "/static/localizacion_averias/Build/WebGL.wasm.gz",
+            "data": "/static/localizacion_averias/Build/WebGL.data.gz",
+            "framework": "/static/localizacion_averias/Build/WebGL.framework.js.gz"
         }
     },
     {
         "simulator":{
             "name": "Clínica Dental",
             "description": "Simulador de clínica dental",
-            "thumbnail": "/public/sim_logos/clinica_dental_dark.png"
+            "thumbnail": "/sim_logos/clinica_dental_dark.png"
         },
         "webgl":{
             "kind": "webgl",
             "simulatorId": 0,
             "loader": "/static/dentista/Build/WebGL.loader.js",
-            "wasm": "/static/dentista/Build/build.wasm",
-            "data": "/static/dentista/Build/webgl.data",
-            "framework": "/static/dentista/Build/build.framework.js"
+            "wasm": "/static/dentista/Build/DentistaWebGL.wasm.gz",
+            "data": "/static/dentista/Build/DentistaWebGL.data.gz",
+            "framework": "/static/dentista/Build/DentistaWebGL.framework.js.gz"
         }
     },
     {
         "simulator":{
             "name": "Ascensores",
             "description": "Simulador de ascensores",
-            "thumbnail": "/public/sim_logos/ascensores_dark.png"
+            "thumbnail": "/sim_logos/ascensores_dark.png"
         },
         "webgl":{
             "kind": "webgl",
             "simulatorId": 0,
             "loader": "/static/ascensores/Build/WebGL.loader.js",
-            "wasm": "/static/ascensores/Build/build.wasm",
-            "data": "/static/ascensores/Build/webgl.data",
-            "framework": "/static/ascensores/Build/build.framework.js"
+            "wasm": "/static/ascensores/Build/WebGL.wasm.gz",
+            "data": "/static/ascensores/Build/WebGL.data.gz",
+            "framework": "/static/ascensores/Build/WebGL.framework.js.gz"
         }
     }
 ]

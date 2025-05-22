@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Simulator } from "../types/response";
 
-interface Simulator {
-  id: string;
-  name: string;
-  
-}
+const HOST = import.meta.env.VITE_DOMAIN_HOST?? "http://localhost:3000";
+const API_URL = `${HOST}/api/v1`;
 
 const SimPage: React.FC = () => {
   const [simulators, setSimulators] = useState<Simulator[]>([]);
@@ -32,7 +30,17 @@ const SimPage: React.FC = () => {
   useEffect(() => {
     const fetchSimulators = async () => {
       try {
-        const response = await fetch('https://your-api.com/simulators'); // cambiar la url del back no olvidar
+        const response = await fetch(`${API_URL}/simulators`,{
+          method:'GET',
+          credentials: 'include',
+        });
+         if (response.status !== 200 && response.status !== 401) {
+          throw new Error('Error al obtener los simuladores');
+        }
+        if (response.status === 401) {
+          navigate("/login");
+          return;
+        }
         const data: Simulator[] = await response.json();
 
         const sorted = data.sort((a, b) =>
@@ -48,7 +56,7 @@ const SimPage: React.FC = () => {
     };
 
     fetchSimulators();
-  }, []);
+  }, [navigate]);
 
   if (loading) {
     return <div className="p-8 text-center">Cargando simuladores...</div>;
@@ -71,10 +79,12 @@ const SimPage: React.FC = () => {
               className="cursor-pointer active:animate-bounce transition-transform duration-200 hover:scale-105"
             >
               <img
-                src={`/sim_logos/${sim.name
+                src={`${sim.thumbnail
                   .normalize('NFD')
                   .replace(/[\u0300-\u036f]/g, '')
                   .replace(/\s+/g, '_')
+                  .replace('_dark.png', '')
+                  .replace('_light.png', '')
                   .toLowerCase()}_${isDarkMode ? 'dark' : 'light'}.png`}
                 alt={sim.name}
                 className="h-60 w-60 object-contain mb-4"
