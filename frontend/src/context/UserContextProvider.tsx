@@ -56,7 +56,7 @@ export function UserContextProvider({ children }: PropsWithChildren) {
     }
 
     fetchUser();
-  }, [user]);
+  }, []);
 
   return (
     <UserContext.Provider value={{ user, setUser, loggedIn, setLoggedIn }}>

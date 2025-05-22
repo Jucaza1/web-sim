@@ -74,7 +74,7 @@ export const simulatorWebglService = new SimulatorWebglService(simulatorWebglSto
 const simulatorWebglController = new SimulatorWebglController(simulatorWebglService)
 
 const authService = new AuthServiceJWT(JWT_SECRET, userService, pwdHasher)
-const authController = new AuthController(authService)
+const authController = new AuthController(authService,logger)
 const router = createRouter(
     userController,
     companyController,
