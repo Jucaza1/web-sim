@@ -1,11 +1,7 @@
 import { useEffect } from "react";
 import { Unity, useUnityContext } from "react-unity-webgl";
-interface SimulatorWebgl {
-    loader: string
-    data: string
-    framework: string
-    wasm: string
-}
+import { SimulatorWebgl } from "../types/response";
+
 const SimulatorUnity  = (sim:SimulatorWebgl) => {
 
   const { unityProvider, unload, isLoaded, loadingProgression } = useUnityContext({
@@ -13,9 +9,10 @@ const SimulatorUnity  = (sim:SimulatorWebgl) => {
     dataUrl: sim.data,
     frameworkUrl: sim.framework,
     codeUrl: sim.wasm,
-    companyName: "MiEmpresa",
-    productVersion: "1.0",
-    productName: "Simulador",
+    streamingAssetsUrl: sim.loader.replace("Build/WebGL.loader.js", "StreamingAssets"),
+    companyName: "",
+    productVersion: "",
+    productName: "",
   });
     const loadingPercentage = Math.round(loadingProgression * 100)
 

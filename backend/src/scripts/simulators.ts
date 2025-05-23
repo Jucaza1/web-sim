@@ -24,9 +24,9 @@ export const simulatorData = [
             "kind": "webgl",
             "simulatorId": 0,
             "loader": "/static/dentista/Build/WebGL.loader.js",
-            "wasm": "/static/dentista/Build/DentistaWebGL.wasm.gz",
-            "data": "/static/dentista/Build/DentistaWebGL.data.gz",
-            "framework": "/static/dentista/Build/DentistaWebGL.framework.js.gz"
+            "wasm": "/static/dentista/Build/WebGL.wasm.gz",
+            "data": "/static/dentista/Build/WebGL.data.gz",
+            "framework": "/static/dentista/Build/WebGL.framework.js.gz"
         }
     },
     {
@@ -79,6 +79,70 @@ export const simulatorData = [
             "name": "Visitas viruales",
             "description": "Simulador de Visitas virtuales",
             "thumbnail": "/sim_logos/visitas_virtuales_dark.png"
+        },
+        "webgl":{
+            "kind": "webgl",
+            "simulatorId": 0,
+            "loader": "/static/visitas_virtuales/Build/WebGL.loader.js",
+            "wasm": "/static/visitas_virtuales/Build/WebGL.wasm.gz",
+            "data": "/static/visitas_virtuales/Build/WebGL.data.gz",
+            "framework": "/static/visitas_virtuales/Build/WebGL.framework.js.gz"
+        }
+    },
+    {
+        "simulator":{
+            "name": "Aire Acondicionado",
+            "description": "Simulador de Aires Acondicionados",
+            "thumbnail": "/sim_logos/aire_acondicionado_dark.png"
+        }
+    },
+    {
+        "simulator":{
+            "name": "Calderas",
+            "description": "Simulador de Calderas",
+            "thumbnail": "/sim_logos/calderas_dark.png"
+        }
+    },
+    {
+        "simulator":{
+            "name": "Estetica",
+            "description": "Simulador de Estetica",
+            "thumbnail": "/sim_logos/estetica_dark.png"
+        }
+    },
+    {
+        "simulator":{
+            "name": "Ciberseguridad",
+            "description": "Simulador de Ciberseguridad",
+            "thumbnail": "/sim_logos/informatica_ciberseguridad_dark.png"
+        }
+    },
+    {
+        "simulator":{
+            "name": "Instituto virtual Medac",
+            "description": "Simulador de Instituto virtual Medac",
+            "thumbnail": "/sim_logos/instituto_virtual_medac_dark.png"
+        }
+    },
+    {
+        "simulator":{
+            "name": "Presostasto",
+            "description": "Simulador de Presostato",
+            "thumbnail": "/sim_logos/presostato_dark.png"
+        }
+    },
+    {
+        "simulator":{
+            "name": "Salon de Actos",
+            "description": "Simulador de Salon de Actos",
+            "thumbnail": "/sim_logos/salon_de_actos_dark.png"
+        }
+    },
+    {
+        "simulator":{
+            "name": "Salon de Ferias",
+            "description": "Simulador de Salon de Ferias",
+            "thumbnail": "/sim_logos/salon_de_ferias_dark.png"
         }
     }
 ]
