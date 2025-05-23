@@ -1,8 +1,8 @@
 import { z } from "zod"
 
-export const UserCreateDTOSchema = z.object({
+const UserCreateDTOSchema = z.object({
     name: z.string()
-        .min(1)
+        .min(1,{ message: "Name must be at least 1 character"})
         .max(50, { message: "Name must be at most 50 characters" }),
     email: z.string()
         .email({message: "Invalid email address"}),
@@ -16,12 +16,20 @@ export const UserCreateDTOSchema = z.object({
         .max(25, { message: "Profession must be at most 25 characters" }),
     companyId: z.number({ message: "Invalid company ID" }).optional(),
 })
-
+export const UserCreateSchema = UserCreateDTOSchema
+.refine((data) => data.password === data.confirmPassword, {
+  message: "Passwords must match",
+  path: ["confirmPassword"], // Optional: points error at confirmPassword
+});
 // Aplico la validación en un nuevo esquema para evitar que se repita el código
 //export const UserCreateDTOSchema = UserCreateDTOSchema.strict()
 export const UserUpdateDTOSchema = UserCreateDTOSchema.partial()
+.refine((data) => data.password === data.confirmPassword, {
+  message: "Passwords must match",
+  path: ["confirmPassword"], // Optional: points error at confirmPassword
+});
 
-export type UserCreateDTO = z.infer<typeof UserCreateDTOSchema>
+export type UserCreateDTO = z.infer<typeof UserCreateSchema>
 export type UserUpdateDTO = z.infer<typeof UserUpdateDTOSchema>
 
 
