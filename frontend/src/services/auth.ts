@@ -25,8 +25,9 @@ export async function login(payload: LoginPayload): Promise<jwtPayload | null> {
 
   if (!response.ok) {
     const error = await response.json();
-    console.error("Detalles del error:", error);
-    throw new Error(error.message || "Error al iniciar sesión");
+    console.error("Detalles del error:", error?.error);
+    throw new Error(error?.error || "Error al iniciar sesión");
+    // return null
   }
 
   if (response.status === 204) {

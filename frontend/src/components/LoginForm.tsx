@@ -29,19 +29,19 @@ const LoginForm = () => {
 
   // 2. Enviar al backend con fetch
   const onSubmit = async (data: LoginFormData) => {
-    try {
       setLogginError(null);
-
-      const result = await login(data);
-        if (result) {
-          setUser(result);
-          setLoggedIn(true);
-          navigate("/");
-        } else {
-          setLogginError("Usuario o contraseña incorrectos");
-        }
+    let result
+    try {
+      result = await login(data);
     } catch (err) {
       console.error("Error en login:", (err as Error).message);
+    }
+    if (result) {
+      setUser(result);
+      setLoggedIn(true);
+      navigate("/");
+    } else {
+      setLogginError("Usuario o contraseña incorrectos");
     }
   };
 
@@ -52,7 +52,7 @@ const LoginForm = () => {
         <h2 className={styles.formTitle}>Iniciar sesión</h2>
       </div>
 
-      {logginError && <p className={styles.error}>{logginError}</p>}
+      {logginError && <p className="text-red-700 px-4">{logginError}</p>}
 
       <input
         type="email"
@@ -60,7 +60,7 @@ const LoginForm = () => {
         className={styles.inputField}
         {...register("email")}
       />
-      {errors.email && <p className={styles.error}>{errors.email.message}</p>}
+      {errors.email && <p className="text-red-700 px-4">{errors.email.message}</p>}
 
       <input
         type="password"
@@ -69,7 +69,7 @@ const LoginForm = () => {
         {...register("password")}
       />
       {errors.password && (
-        <p className={styles.error}>{errors.password.message}</p>
+        <p className="text-red-700 px-4">{errors.password.message}</p>
       )}
       <button type="submit" className={styles.submitButton}>
         Iniciar sesión

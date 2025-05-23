@@ -29,7 +29,10 @@ function ProfilePage() {
                         // 'Authorization': `Bearer ${localStorage.getItem('token')}`
                     }
                 });
-
+                if (response.status === 401){
+                    navigate('/login')
+                    return
+                }
                 if (!response.ok) {
                     throw new Error('Error al recuperar los datos del perfil');
                 }
@@ -42,6 +45,7 @@ function ProfilePage() {
                 } else {
                     setError('Error desconocido');
                 }
+
             } finally {
                 setLoading(false);
             }
