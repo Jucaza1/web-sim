@@ -31,7 +31,7 @@ export class AuthServiceJWT {
             return { ok: false, err: { status: 401, msg: ["incorrect credentials"] } }
         }
         if (userCred.email !== userResult!.data!.email
-            && !this.hasher.compare(userCred.password, userResult!.data!.password)
+            || !this.hasher.compare(userCred.password, userResult!.data!.password)
         ) {
             return { ok: false, err: { status: 401, msg: ["incorrect credentials"] } }
         }
