@@ -31,57 +31,64 @@ const LoginForm = () => {
     resolver: zodResolver(LoginFormSchema),
   });
 
-  // 2. Enviar al backend con fetch
   const onSubmit = async (data: LoginFormData) => {
     try {
       const result = await login(data);
-        if (result) {
-          setUser(result);
-          setLoggedIn(true);
-        }
+      if (result) {
+        setUser(result);
+        setLoggedIn(true);
+      }
       console.log("Login correcto:", result);
       navigate("/");
     } catch (err) {
       console.error("Error en login:", (err as Error).message);
     }
-  }
-;
+  };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className={styles.formContainer}>
-      <div className={styles.titleContainer}>
-        <img src={logo} alt="Logo de Davante" className={styles.logo} />
-        <h2 className={styles.formTitle}>Iniciar sesión</h2>
-      </div>
+    
+    <div className={styles.pageContainer}>
+  <div className={styles.backContainer}>
+    <button onClick={() => navigate("/")} className={styles.backButton}>
+      ← Volver
+    </button>
+  </div>
 
-      <input
-        type="email"
-        placeholder="Correo electrónico"
-        className={styles.inputField}
-        {...register("email")}
-      />
-      {errors.email && <p className={styles.error}>{errors.email.message}</p>}
+      <form onSubmit={handleSubmit(onSubmit)} className={styles.formContainer}>
+        <div className={styles.titleContainer}>
+          <img src={logo} alt="Logo de Davante" className={styles.logo} />
+          <h2 className={styles.formTitle}>Iniciar sesión</h2>
+        </div>
 
-      <input
-        type="password"
-        placeholder="Contraseña"
-        className={styles.inputField}
-        {...register("password")}
-      />
-      {errors.password && (
-        <p className={styles.error}>{errors.password.message}</p>
-      )}
-      <button type="submit" className={styles.submitButton}>
-        Iniciar sesión
-      </button>
+        <input
+          type="email"
+          placeholder="Correo electrónico"
+          className={styles.inputField}
+          {...register("email")}
+        />
+        {errors.email && <p className={styles.error}>{errors.email.message}</p>}
 
-      <p className={styles.redirectText}>
-        ¿No tienes cuenta?{" "}
-        <Link to="/register" className={styles.linkButton}>
-          Regístrate aquí
-        </Link>
-      </p>
-    </form>
+        <input
+          type="password"
+          placeholder="Contraseña"
+          className={styles.inputField}
+          {...register("password")}
+        />
+        {errors.password && (
+          <p className={styles.error}>{errors.password.message}</p>
+        )}
+        <button type="submit" className={styles.submitButton}>
+          Iniciar sesión
+        </button>
+
+        <p className={styles.redirectText}>
+          ¿No tienes cuenta?{" "}
+          <Link to="/register" className={styles.linkButton}>
+            Regístrate aquí
+          </Link>
+        </p>
+      </form>
+    </div>
   );
 };
 
