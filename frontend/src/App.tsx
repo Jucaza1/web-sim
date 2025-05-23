@@ -9,6 +9,7 @@ import NavBar from "./components/NavBar";
 import SimulatorApp from "./pages/Simulator";
 import { UserContextProvider } from "./context/UserContextProvider";
 import ProfilePage from "./pages/ProfilePage";
+import Footer from "./components/Footer";
 
 function App() {
 
@@ -35,21 +36,27 @@ function App() {
   }, [location]);
 
   const hideNavBar = location.pathname === "/register" || location.pathname === "/login"; // Oculta NavBar en estas rutas
+  const hideFooter = hideNavBar; // Oculta Footer en las mismas rutas
 
   return (
     <>
         <UserContextProvider>
+        <div className="min-h-screen flex flex-col">
         {loading && <LoadingScreen />} {/* Pantalla de carga */}
         {!loading && !hideNavBar && <NavBar />} {/* Muestra NavBar solo si no está en login o register */}
-        <Routes>
-          <Route path="/" Component={Home} />
-          <Route path="/login" Component={LoginPage} />
-          <Route path="/register" Component={RegisterPage} />
-          <Route path="/simulatorspage" Component={SimPage} />
-          <Route path="/simulator" Component={SimulatorApp} />
-          <Route path="/profile" Component={ProfilePage} />
-
-        </Routes>
+        <div className="flex-1">
+          <Routes>
+            <Route path="/" Component={Home} />
+            <Route path="/login" Component={LoginPage} />
+            <Route path="/register" Component={RegisterPage} />
+            <Route path="/simulatorspage" Component={SimPage} />
+            <Route path="/simulator" Component={SimulatorApp} />
+            <Route path="/profile" Component={ProfilePage} />
+          </Routes>
+        </div>
+        
+        {!hideFooter && <Footer />} {/* Muestra Footer solo si no está en login o register */}
+        </div>
         </UserContextProvider>
     </>
   );

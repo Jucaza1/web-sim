@@ -11,9 +11,9 @@ const ProfileCard = ({ name, email, profession }: ProfileCardProps) => {
   return (
     <div className="card shadow-md rounded-lg p-4">
        
-        <div className="flex items-center mb-4">
-            <img src={defaultProfileDark32} alt="Perfil" className='rounded-full logo-dark justify-center'/>
-            <img src={defaultProfileLight32} alt="Perfil" className='rounded-full logo-light justify-center'/>
+        <div className="flex items-center mb-4 gap-x-4">
+            <img src={defaultProfileDark32} alt="Perfil" className='rounded-full logo-light justify-center'/>
+            <img src={defaultProfileLight32} alt="Perfil" className='rounded-full logo-dark justify-center'/>
             <h2 className="text-xl font-bold">{name}</h2>
         </div>
       <h1 className="text-2xl font-bold mb-4">Perfil de Usuario</h1>

@@ -62,5 +62,13 @@ html.dark .card {
     background-color: var(--color-navy);
 }
 
+.footer {
+    background-color: var(--color-white);
+    color: var(--color-navy);
+}
 
+html.dark .footer {
+    background-color: var(--color-navy);
+    color: var(--color-white);
+}
 

@@ -35,7 +35,7 @@ const NavBar = () => {
                     <div className="flex items-center gap-2 cursor-pointer">
                         <img src={defaultProfileDark32} alt="Perfil" className='rounded-full logo-dark justify-center' onClick={() => navigate("/profile")}/>
                         <img src={defaultProfileLight32} alt="Perfil" className='rounded-full logo-light justify-center' onClick={() => navigate("/profile")}/>
-                        <div className="text-sm text-gray-700 dark:text-navy hover:underline" onClick={() => navigate("/profile")} >
+                        <div className="text-sm text-white dark:text-navy hover:underline" onClick={() => navigate("/profile")} >
                             {user?.name} <span className="text-gray-500">({user?.role})</span>
                         </div>
                     </div>
