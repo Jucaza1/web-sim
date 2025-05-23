@@ -63,5 +63,23 @@
     margin-bottom: 1rem;
     margin-bottom: -0.5rem;
   }
+  .backButton {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  background-color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 16px;
+  color: #074a8d;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.backButton:hover {
+  background-color: #f0f0f0;
+}
+
   
   

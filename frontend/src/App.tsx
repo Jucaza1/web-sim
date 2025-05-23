@@ -10,6 +10,7 @@ import SimulatorApp from "./pages/Simulator";
 import { UserContextProvider } from "./context/UserContextProvider";
 import ProfilePage from "./pages/ProfilePage";
 import Footer from "./components/Footer";
+import ContactPage from "./pages/ContactPage";
 
 function App() {
 
@@ -52,9 +53,10 @@ function App() {
             <Route path="/simulatorspage" Component={SimPage} />
             <Route path="/simulator" Component={SimulatorApp} />
             <Route path="/profile" Component={ProfilePage} />
+            <Route path="/contact" Component={ContactPage} />
           </Routes>
         </div>
-        
+
         {!hideFooter && <Footer />} {/* Muestra Footer solo si no está en login o register */}
         </div>
         </UserContextProvider>

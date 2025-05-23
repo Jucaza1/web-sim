@@ -46,6 +46,11 @@ export default function RegisterForm() {
   };
 
   return (
+    <>
+    <button onClick={() => navigate("/")} className={styles.backButton}>
+      ← Volver
+    </button>
+
     <form onSubmit={handleSubmit(onSubmit)} className={styles.formContainer}>
       <div className={styles.titleContainer}>
         <img src={logo} alt="Logo de Davante" className={styles.logo} />
@@ -107,5 +112,6 @@ export default function RegisterForm() {
         Registrarse
       </button>
     </form>
+    </>
   );
 }

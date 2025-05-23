@@ -27,7 +27,6 @@ const LoginForm = () => {
     resolver: zodResolver(LoginFormSchema),
   });
 
-  // 2. Enviar al backend con fetch
   const onSubmit = async (data: LoginFormData) => {
       setLogginError(null);
     let result
@@ -46,12 +45,19 @@ const LoginForm = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className={styles.formContainer}>
-      <div className={styles.titleContainer}>
-        <img src={logo} alt="Logo de Davante" className={styles.logo} />
-        <h2 className={styles.formTitle}>Iniciar sesión</h2>
-      </div>
 
+    <div className={styles.pageContainer}>
+  <div className={styles.backContainer}>
+    <button onClick={() => navigate("/")} className={styles.backButton}>
+      ← Volver
+    </button>
+  </div>
+
+      <form onSubmit={handleSubmit(onSubmit)} className={styles.formContainer}>
+        <div className={styles.titleContainer}>
+          <img src={logo} alt="Logo de Davante" className={styles.logo} />
+          <h2 className={styles.formTitle}>Iniciar sesión</h2>
+        </div>
       {logginError && <p className="text-red-700 px-4">{logginError}</p>}
 
       <input
@@ -81,7 +87,8 @@ const LoginForm = () => {
           Regístrate aquí
         </Link>
       </p>
-    </form>
+      </form>
+    </div>
   );
 };
 
