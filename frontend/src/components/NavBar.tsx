@@ -27,7 +27,7 @@ const NavBar = () => {
                 <Link to='/' className='hover:text-orange-500'>Inicio</Link>
                 <Link to='/simulatorspage' className='hover:text-orange-500'>Simuladores</Link>
                 <Link to='/profile' className='hover:text-orange-500'>Perfil</Link>
-                <Link to='#' className='hover:text-orange-500'>Contacto</Link>
+                <Link to='/contact' className='hover:text-orange-500'>Contacto</Link>
                 <Link to='#' className='hover:text-orange-500'>Ayuda</Link>
                 <Link to='#' className='hover:text-orange-500'>Sobre nosotros</Link>
                 {/* Icono de usuario */}
@@ -61,7 +61,7 @@ const NavBar = () => {
                     <Link to='/home' className='hover:text-orange-500'>Inicio</Link>
                     <Link to='/simulatorspage' className='hover:text-orange-500'>Simuladores</Link>
                     <Link to='/profile' className='hover:text-orange-500'>Perfil</Link>
-                    <Link to='#' className='hover:text-orange-500'>Contacto</Link>
+                    <Link to='/contact' className='hover:text-orange-500'>Contacto</Link>
                     <Link to='#' className='hover:text-orange-500'>Ayuda</Link>
                     <Link to='#' className='hover:text-orange-500'>Sobre nosotros</Link>
                     <div className='py2 w-full'>

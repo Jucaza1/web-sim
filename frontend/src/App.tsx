@@ -9,6 +9,7 @@ import NavBar from "./components/NavBar";
 import SimulatorApp from "./pages/Simulator";
 import { UserContextProvider } from "./context/UserContextProvider";
 import ProfilePage from "./pages/ProfilePage";
+import ContactPage from "./pages/ContactPage";
 
 function App() {
 
@@ -48,6 +49,7 @@ function App() {
           <Route path="/simulatorspage" Component={SimPage} />
           <Route path="/simulator" Component={SimulatorApp} />
           <Route path="/profile" Component={ProfilePage} />
+          <Route path="/contact" Component={ContactPage} />
 
         </Routes>
         </UserContextProvider>

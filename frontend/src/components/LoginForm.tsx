@@ -45,7 +45,7 @@ const LoginForm = () => {
       console.error("Error en login:", (err as Error).message);
     }
   }
-};
+;
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className={styles.formContainer}>
