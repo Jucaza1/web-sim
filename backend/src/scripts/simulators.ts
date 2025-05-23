@@ -73,5 +73,12 @@ export const simulatorData = [
             "data": "/static/agricultura/Build/WebGL.data.gz",
             "framework": "/static/agricultura/Build/WebGL.framework.js.gz"
         }
+    },
+    {
+        "simulator":{
+            "name": "Visitas viruales",
+            "description": "Simulador de Visitas virtuales",
+            "thumbnail": "/sim_logos/visitas_virtuales_dark.png"
+        }
     }
 ]

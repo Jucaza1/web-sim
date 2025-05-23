@@ -12,19 +12,25 @@ const SimPage: React.FC = () => {
   const navigate = useNavigate();
 
   // Detectar modo oscuro
-  useEffect(() => {
-    const darkModeMediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-    setIsDarkMode(darkModeMediaQuery.matches);
-
-    const handleChange = (e: MediaQueryListEvent) => {
-      setIsDarkMode(e.matches);
-    };
-
-    darkModeMediaQuery.addEventListener('change', handleChange);
-    return () => {
-      darkModeMediaQuery.removeEventListener('change', handleChange);
-    };
-  }, []);
+  // useEffect(() => {
+  //   const darkModeMediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+  //   setIsDarkMode(darkModeMediaQuery.matches);
+  //
+  //   const handleChange = (e: MediaQueryListEvent) => {
+  //     setIsDarkMode(e.matches);
+  //   };
+  //
+  //   darkModeMediaQuery.addEventListener('change', handleChange);
+  //   return () => {
+  //     darkModeMediaQuery.removeEventListener('change', handleChange);
+  //   };
+  // }, []);
+    useEffect(() => {
+        const currentTheme = localStorage.getItem("theme");
+        const prefersDark = currentTheme === 'dark';
+        setIsDarkMode(prefersDark);
+        document.documentElement.classList.toggle("dark", prefersDark);
+    }, []);
 
   // Obtener simuladores desde una API
   useEffect(() => {
@@ -70,7 +76,7 @@ const SimPage: React.FC = () => {
         {simulators.map((sim) => (
           <div
             key={sim.id}
-            className="rounded-lg border-2 border-white bg-gray-800 shadow-md p-6 flex flex-col items-center justify-between"
+            className="rounded-lg border-2 dark:border-white dark:bg-gray-800 bg-white border-gray-800 shadow-md p-6 flex flex-col items-center justify-between"
           >
             <h2 className="text-xl font-semibold mb-2">{sim.name}</h2>
 
@@ -90,6 +96,16 @@ const SimPage: React.FC = () => {
                 className="h-60 w-60 object-contain mb-4"
               />
             </div>
+              {!sim.ready && (
+              <div className="flex flex-col items-center">
+                {isDarkMode ? (
+                <img src="/svg/proximamente_light.svg" alt="Próximamente" className="h-10 w-10 object-contain mb-4" />
+                ) : (
+                <img src="/svg/proximamente_dark.svg" alt="Próximamente" className="h-10 w-10 object-contain mb-4" />
+                )}
+                <p className="text-sm text-gray-700 dark:text-navy">Próximamente</p>
+              </div>
+              )}
           </div>
         ))}
       </div>

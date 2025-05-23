@@ -6,6 +6,7 @@ export interface Simulator {
     thumbnail:   string
     createdAt:   Date
     updatedAt:   Date
+    ready:       boolean
 }
 export interface SimulatorWebgl {
     id:          number
