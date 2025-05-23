@@ -60,6 +60,7 @@ model Simulator {
     createdAt   DateTime @default(now()) @map("created_at")
     updatedAt   DateTime @updatedAt @map("updated_at")
     thumbnail   String
+    ready       Boolean  @default(false)
 
     company        Company?        @relation(fields: [companyId], references: [id])
     simulatorWebgl SimulatorWebgl? @relation

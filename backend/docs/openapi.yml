@@ -156,7 +156,7 @@ paths:
           name: id
           required: true
           schema:
-            type: string
+            type: integer
       responses:
         '200':
           description: User data
@@ -175,7 +175,7 @@ paths:
           name: id
           required: true
           schema:
-            type: string
+            type: integer
       requestBody:
         required: true
         content:
@@ -196,7 +196,7 @@ paths:
           name: id
           required: true
           schema:
-            type: string
+            type: integer
       responses:
         '200':
           description: User deleted
@@ -310,7 +310,7 @@ paths:
           name: id
           required: true
           schema:
-            type: string
+            type: integer
       responses:
         '200':
           description: Company data
@@ -329,7 +329,7 @@ paths:
           name: id
           required: true
           schema:
-            type: string
+            type: integer
       requestBody:
         required: true
         content:
@@ -354,7 +354,7 @@ paths:
           name: id
           required: true
           schema:
-            type: string
+            type: integer
       responses:
         '200':
           description: Company deleted
@@ -375,7 +375,7 @@ paths:
           name: id
           required: true
           schema:
-            type: string
+            type: integer
       responses:
         '200':
           $ref: '#/components/responses/UserArray'
@@ -392,7 +392,7 @@ paths:
           name: id
           required: true
           schema:
-            type: string
+            type: integer
       responses:
         '200':
           $ref: '#/components/responses/SimulatorArray'
@@ -439,7 +439,7 @@ paths:
           name: id
           required: true
           schema:
-            type: string
+            type: integer
       responses:
         '200':
           description: Simulator data
@@ -458,7 +458,7 @@ paths:
           name: id
           required: true
           schema:
-            type: string
+            type: integer
       requestBody:
         required: true
         content:
@@ -483,10 +483,31 @@ paths:
           name: id
           required: true
           schema:
-            type: string
+            type: integer
       responses:
         '200':
           description: Simulator deleted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Simulator'
+
+  /simulators/name/{name}:
+    get:
+      security:
+        - jwtCookieAuth: []
+      tags:
+        - simulators
+      summary: Get a simulator by name
+      parameters:
+        - in: path
+          name: name
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Simulator data
           content:
             application/json:
               schema:
@@ -504,7 +525,7 @@ paths:
           name: id
           required: true
           schema:
-            type: string
+            type: integer
       responses:
         '200':
           description: WebGL simulator asset
@@ -554,7 +575,7 @@ paths:
           name: id
           required: true
           schema:
-            type: string
+            type: integer
       responses:
         '200':
           description: WebGL asset data
@@ -573,7 +594,7 @@ paths:
           name: id
           required: true
           schema:
-            type: string
+            type: integer
       requestBody:
         required: true
         content:
@@ -598,7 +619,7 @@ paths:
           name: id
           required: true
           schema:
-            type: string
+            type: integer
       responses:
         '204':
           description: WebGL asset deleted
@@ -751,6 +772,9 @@ components:
         thumbnail:
           type: string
           example: url/to/thumbnail
+        ready:
+          type: boolean
+          example: true
         createdAt:
           type: string
           format: date-time

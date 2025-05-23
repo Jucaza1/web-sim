@@ -21,8 +21,8 @@ export type UserCreate = Pretty<Omit<Prisma.UserCreateInput, "role" | "company" 
 export type UserUpdate = Pretty<Omit<Prisma.UserUpdateInput, "role" | "company" | "updateAt" | "createAt"> & { companyId?: number }>
 export type CompanyCreate = Pretty<Omit<Prisma.CompanyCreateInput, "createdAt" | "updatedAt" | "users" | "simulators">>
 export type CompanyUpdate = Pretty<Omit<Prisma.CompanyUpdateInput, "updateAt" | "createAt">>
-export type SimulatorCreate = Pretty<Omit<Prisma.SimulatorCreateInput, "company" | "simulatorWebgl" | "updateAt" | "createAt"> & { companyId?: number }>
-export type SimulatorUpdate = Pretty<Omit<Prisma.SimulatorUpdateInput, "company" | "simulatorWebgl" | "updateAt" | "createAt"> & { companyId?: number }>
+export type SimulatorCreate = Pretty<Omit<Prisma.SimulatorCreateInput, "company" | "simulatorWebgl" | "updateAt" | "createAt" | "ready"> & { companyId?: number }>
+export type SimulatorUpdate = Pretty<Omit<Prisma.SimulatorUpdateInput, "company" | "simulatorWebgl" | "updateAt" | "createAt" | "ready"> & { companyId?: number }>
 export type SimulatorWebglCreate = Pretty<Omit<Prisma.SimulatorWebglCreateInput, "simulator"> & { simulatorId: number }>
 export type SimulatorWebglUpdate = Pretty<Omit<Prisma.SimulatorWebglUpdateInput, "simulator"> & { simulatorId?: number }>
 

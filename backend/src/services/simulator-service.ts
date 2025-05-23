@@ -16,6 +16,14 @@ export class SimulatorService {
         const result = await this.simulatorStore.getSimulator(id)
         return resultStoreToResultHttp(result)
     }
+    async getSimulatorByName(name: string): Promise<ResultHttp<Simulator>> {
+        const validateResult = SimulatorCreateDTOSchema.shape.name.safeParse(name)
+        if (!validateResult.success) {
+            return { ok: false, err: { status: 400, msg: ["name is not valid"] } }
+        }
+        const result = await this.simulatorStore.getSimulatorByName(name)
+        return resultStoreToResultHttp(result)
+    }
     async getSimulatorsByCompanyId(companyId: number): Promise<ResultHttp<Simulator[]>> {
         const validateResult = idSchema.safeParse(companyId)
         if (!validateResult.success) {

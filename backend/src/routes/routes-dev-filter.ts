@@ -43,6 +43,7 @@ export function createRouter(
     // Simulator routes
     routerAuth.get("/companies/:id/simulators", simulatorController.getSimulatorsByCompanyId)
     routerAuth.get("/simulators/:id", simulatorController.getSimulator)
+    routerAuth.get("/simulators/name/:name", simulatorController.getSimulatorByName)
     routerAuth.get("/simulators", simulatorController.getSimulators)
     routerAuth.post("/simulators", jsonMiddleware, simulatorController.createSimulator)
     routerAuth.put("/simulators/:id", jsonMiddleware, simulatorController.updateSimulator)

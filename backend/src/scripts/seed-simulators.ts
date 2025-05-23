@@ -19,12 +19,18 @@ export async function seedSimulators(logger: pino.Logger) {
         const createdSimulator = await simulatorService.createSimulator(simulator)
         if (!createdSimulator.ok) {
             logger.error({ error: createdSimulator.err, exception: createdSimulator.exception }, `error creating simulator with name ${simulator.name}`)
-            continue
+            const existingSimulator = await simulatorService.getSimulatorByName(d.simulator.name)
+            if (existingSimulator.ok && existingSimulator.data?.ready === true) {
+                logger.error(`skiping webgl insertion for ${simulator.name}`)
+                continue
+            }
         }
-        const createdWebgl = await simulatorWebglService.createWebgl({ ...webgl, simulatorId: createdSimulator.data!.id })
-        if (!createdWebgl.ok) {
-            logger.error({ error: createdWebgl.err, exception: createdWebgl.exception }, `error creating webgl for simulator with ${createdSimulator.data!.id}`)
-            continue
+        if (d.webgl) {
+            const createdWebgl = await simulatorWebglService.createWebgl({ ...webgl, simulatorId: createdSimulator.data!.id })
+            if (!createdWebgl.ok) {
+                logger.error({ error: createdWebgl.err, exception: createdWebgl.exception }, `error creating webgl for simulator with ${createdSimulator.data!.id}`)
+                continue
+            }
         }
     }
 }

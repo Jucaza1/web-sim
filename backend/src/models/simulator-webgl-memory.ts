@@ -35,6 +35,7 @@ export class SimulatorWebglMemoryStore implements SimulatorWebglStore {
         return { ok: true, data: Array.from(this.simulatorWebgls.values()) }
     }
     async createSimulatorWebgl(simulatorWebglCreate: SimulatorWebglCreate): Promise<ResultStore<SimulatorWebgl>> {
+        // should also update ready field in simulator
         let simulatorWebglMemory: SimulatorWebgl = { ...simulatorWebglCreate, id: this.autoInc(), createdAt: new Date(), updatedAt: new Date() }
         if (this.simulatorWebgls.has(simulatorWebglMemory.id!)) {
             // SimulatorWebgl already exists

@@ -62,6 +62,18 @@ export class SimulatorWebglPrismaStore implements SimulatorWebglStore {
         catch (e) {
             return { ok: false, err: { code: prismaCatchToStoreError(e), msg: "internal server error" } }
         }
+        if (simulatorWebgl.simulatorId !== undefined) {
+            try {
+                const simUpdateResult = await this.client.simulator.update({ where: { id: simulatorWebgl.simulatorId }, data: { ready: true } })
+                if (!simUpdateResult) {
+                    return { ok: false, err: { code: StoreErrorCode.unknown, msg: "internal server error" } }
+                }
+            }
+            catch (e) {
+                return { ok: false, err: { code: prismaCatchToStoreError(e), msg: "internal server error" } }
+            }
+
+        }
         if (!simulatorResult) {
             return { ok: false, err: { code: StoreErrorCode.unknown, msg: "internal server error" } }
         }

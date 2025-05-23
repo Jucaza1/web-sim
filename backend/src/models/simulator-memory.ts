@@ -23,6 +23,17 @@ export class SimulatorMemoryStore implements SimulatorStore {
         }
         return { ok: true, data: simulator }
     }
+    async getSimulatorByName(name: string): Promise<ResultStore<Simulator>> {
+        const simulators = Array.from(this.simulators.values()).filter(simulator => simulator.name === name)
+        if (simulators.length === 0) {
+            return { ok: false, err: { code: StoreErrorCode.notFound, msg: "simulator not found" } }
+        }
+        const simulator = simulators[0]
+        if (!simulator) {
+            return { ok: false, err: { code: StoreErrorCode.notFound, msg: "simulator not found" } }
+        }
+        return { ok: true, data: simulator }
+    }
     async getSimulatorsByCompanyId(companyId: number): Promise<ResultStore<Simulator[]>> {
         return { ok: true, data: Array.from(this.simulators.values()).filter(simulator => simulator.companyId === companyId) }
     }
@@ -30,7 +41,7 @@ export class SimulatorMemoryStore implements SimulatorStore {
         return { ok: true, data: Array.from(this.simulators.values()) }
     }
     async createSimulator(simulator: SimulatorCreate): Promise<ResultStore<Simulator>> {
-        let simulatorMemory = { ...simulator, id: this.autoInc(), createdAt: new Date(), updatedAt: new Date() }
+        let simulatorMemory = { ...simulator, id: this.autoInc(), ready: false, createdAt: new Date(), updatedAt: new Date() }
         if (this.simulators.has(simulatorMemory.id)) {
             // Simulator already exists
             return { ok: false, err: { code: StoreErrorCode.unique, msg: "simulator already exists" } }

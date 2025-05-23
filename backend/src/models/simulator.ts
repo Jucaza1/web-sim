@@ -7,6 +7,7 @@ import logger from "../logger"
 
 export interface SimulatorStore {
     getSimulator(id: number): Promise<ResultStore<Simulator>>
+    getSimulatorByName(name: string): Promise<ResultStore<Simulator>>
     getSimulatorsByCompanyId(companyId: number): Promise<ResultStore<Simulator[]>>
     getSimulators(): Promise<ResultStore<Simulator[]>>
     createSimulator(simulator: SimulatorCreate): Promise<ResultStore<Simulator>>
