@@ -30,7 +30,7 @@ function App() {
   useEffect(() => {
     // Muestra la pantalla de carga al cambiar de ruta
     setLoading(true);
-    const timeout = setTimeout(() => setLoading(false), 1000); // Simula retraso de 1 segundo
+    const timeout = setTimeout(() => setLoading(false), 500); // Simula retraso de 1 segundo
     return () => {
       clearTimeout(timeout); // Limpia el timeout si el componente se desmonta antes de que se complete
     };

@@ -7,7 +7,7 @@ const API_URL = `${HOST}/api/v1`;
 
 const SimPage: React.FC = () => {
   const [simulators, setSimulators] = useState<Simulator[]>([]);
-  const [isDarkMode, setIsDarkMode] = useState(false);
+  // const [isDarkMode, setIsDarkMode] = useState(false);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
@@ -25,12 +25,12 @@ const SimPage: React.FC = () => {
   //     darkModeMediaQuery.removeEventListener('change', handleChange);
   //   };
   // }, []);
-    useEffect(() => {
-        const currentTheme = localStorage.getItem("theme");
-        const prefersDark = currentTheme === 'dark';
-        setIsDarkMode(prefersDark);
-        document.documentElement.classList.toggle("dark", prefersDark);
-    }, []);
+    // useEffect(() => {
+    //     const currentTheme = localStorage.getItem("theme");
+    //     const prefersDark = currentTheme === 'dark';
+    //     setIsDarkMode(prefersDark);
+    //     document.documentElement.classList.toggle("dark", prefersDark);
+    // }, []);
 
   // Obtener simuladores desde una API
   useEffect(() => {
@@ -67,16 +67,19 @@ const SimPage: React.FC = () => {
   if (loading) {
     return <div className="p-8 text-center">Cargando simuladores...</div>;
   }
+  if (simulators.length === 0) {
+    return <div className="p-8 text-center">No hay simuladores disponibles.</div>;
+  }
 
   return (
-    <div className="p-8 min-h-screen">
+    <div className="p-8">
       <h1 className="text-3xl font-bold mb-8 text-center">Selecciona un Simulador</h1>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+      <div className="max-w-10/12 mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
         {simulators.map((sim) => (
           <div
             key={sim.id}
-            className="rounded-lg border-2 dark:border-white dark:bg-gray-800 bg-white border-gray-800 shadow-md p-6 flex flex-col items-center justify-between"
+            className="relative rounded-lg box-bordered border-2 dark:border-white dark:bg-navy bg-white border-navy shadow-md p-6 flex flex-col items-center justify-between"
           >
             <h2 className="text-xl font-semibold mb-2">{sim.name}</h2>
 
@@ -91,21 +94,33 @@ const SimPage: React.FC = () => {
                   .replace(/\s+/g, '_')
                   .replace('_dark.png', '')
                   .replace('_light.png', '')
-                  .toLowerCase()}_${isDarkMode ? 'dark' : 'light'}.png`}
+                  .toLowerCase()}_dark.png`}
                 alt={sim.name}
-                className="h-60 w-60 object-contain mb-4"
+
+                className="h-60 w-60 object-contain mb-4 logo-light"
+
+              />
+              <img
+                src={`${sim.thumbnail
+                  .normalize('NFD')
+                  .replace(/[\u0300-\u036f]/g, '')
+                  .replace(/\s+/g, '_')
+                  .replace('_dark.png', '')
+                  .replace('_light.png', '')
+                  .toLowerCase()}_light.png`}
+                alt={sim.name}
+
+                className="h-60 w-60 object-contain mb-4 logo-dark"
+
               />
             </div>
-              {!sim.ready && (
-              <div className="flex flex-col items-center">
-                {isDarkMode ? (
-                <img src="/svg/proximamente_light.svg" alt="Próximamente" className="h-10 w-10 object-contain mb-4" />
-                ) : (
-                <img src="/svg/proximamente_dark.svg" alt="Próximamente" className="h-10 w-10 object-contain mb-4" />
-                )}
-                <p className="text-sm text-gray-700 dark:text-navy">Próximamente</p>
-              </div>
-              )}
+            {!sim.ready && (
+            <div className="flex gap-2 items-center absolute bottom-1/12">
+              <img src="/svg/proximamente_light.svg" alt="Próximamente" className="h-4 w-4 logo-light object-contain" />
+              <img src="/svg/proximamente_dark.svg" alt="Próximamente" className="h-4 w-4 logo-dark object-contain" />
+              <p className="text-sm">Próximamente</p>
+            </div>
+            )}
           </div>
         ))}
       </div>

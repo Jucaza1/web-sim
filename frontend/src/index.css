@@ -37,7 +37,7 @@ body {
     color: var(--text-color);
     font-family: 'Manrope', sans-serif;
     transition: background-color 0.3s ease, color 0.3s ease;
-} 
+}
 
 button {
     background-color: var(--button-bg);
@@ -71,4 +71,11 @@ html.dark .footer {
     background-color: var(--color-navy);
     color: var(--color-white);
 }
-
+.box-bordered {
+    background-color: var(--color-navy);
+    border-color: var(--color-white);
+}
+html.dark .box-bordered {
+    border-color: var(--color-navy);
+    background-color: var(--color-white);
+}

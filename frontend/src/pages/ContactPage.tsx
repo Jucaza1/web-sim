@@ -46,7 +46,7 @@ const cardVariants = {
 
 export default function ContactPage() {
   return (
-    <div className="min-h-screen bg-gray-50 py-20 px-8 flex flex-col items-center">
+    <div className="min-h-full bg-gray-50 py-20 px-8 flex flex-col items-center">
       <motion.h1
         initial={{ opacity: 0, y: -40 }}
         whileInView={{ opacity: 1, y: 0 }}
