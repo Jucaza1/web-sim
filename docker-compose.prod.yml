@@ -8,6 +8,7 @@ services:
     environment:
       NODE_ENV: production
       DB_KIND: postgresql
+      DB_SEED: true
       SERVER_HOST: 0.0.0.0
       SERVER_PORT: 3000
       CORS_ORIGIN: http://localhost:5173
