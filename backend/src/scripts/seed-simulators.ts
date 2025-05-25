@@ -16,11 +16,11 @@ export async function seedSimulators(logger: pino.Logger) {
     }
     for (const d of data) {
         const { simulator, webgl } = d
-        const createdSimulator = await simulatorService.createSimulator(simulator)
+        let createdSimulator = await simulatorService.createSimulator(simulator)
         if (!createdSimulator.ok) {
             logger.error({ error: createdSimulator.err, exception: createdSimulator.exception }, `error creating simulator with name ${simulator.name}`)
-            const existingSimulator = await simulatorService.getSimulatorByName(d.simulator.name)
-            if (existingSimulator.ok && existingSimulator.data?.ready === true) {
+            createdSimulator = await simulatorService.getSimulatorByName(d.simulator.name)
+            if (createdSimulator.ok && createdSimulator.data?.ready === true) {
                 logger.error(`skiping webgl insertion for ${simulator.name}`)
                 continue
             }

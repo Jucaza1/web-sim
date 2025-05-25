@@ -41,7 +41,7 @@ const NavBar = () => {
                     </div>
                 ) : (
                     <Link to='/login' className='hover:text-orange-500'>
-                        <div className=" text-white dark:text-navy hover:underline">
+                        <div className=" dark:text-navy hover:underline">
                             Iniciar sesión
                         </div>
                     </Link>

@@ -84,7 +84,7 @@ const SimPage: React.FC = () => {
             <h2 className="text-xl font-semibold mb-2">{sim.name}</h2>
 
             <div
-              onClick={() => navigate(`/simulator?id=${sim.id}`)}
+              onClick={() => { if (sim.ready) {navigate(`/simulator?id=${sim.id}`)}/*else {navigate("/simulatorspage")}*/}}
               className="cursor-pointer active:animate-bounce transition-transform duration-200 hover:scale-105"
             >
               <img
