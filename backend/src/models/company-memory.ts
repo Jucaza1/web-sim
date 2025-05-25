@@ -1,4 +1,4 @@
-import { Company, CompanyCreate, CompanyIdName } from '../types/db'
+import { Company, CompanyCreate, CompanyIdName, CompanyUpdate } from '../types/db'
 import { CompanyStore } from "./company"
 import { ResultStore, StoreErrorCode } from '../types/result'
 
@@ -37,16 +37,20 @@ export class CompanyMemoryStore implements CompanyStore {
             // User already exists
             return { ok: false, err: { code: StoreErrorCode.unique, msg: "company already exists" } }
         }
-        const companyMemory: Company = { ...company, id, createdAt: new Date(), updatedAt: new Date() }
+        const idAndNames = (await this.getCompaniesIdName()).data!
+        if (idAndNames.some((val) => val.name === company.name)) {
+            return { ok: false, err: { code: StoreErrorCode.unique, msg: "company already exists" } }
+        }
+        const companyMemory: Company = { ...company, id: id, createdAt: new Date(), updatedAt: new Date() }
         this.companies.set(companyMemory.id, companyMemory)
-        return { ok: true, data: company as Company }
+        return { ok: true, data: companyMemory as Company }
     }
-    async updateCompany(id: number, company: Partial<Company>): Promise<ResultStore<Company>> {
+    async updateCompany(id: number, company: CompanyUpdate): Promise<ResultStore<Company>> {
         const existingCompany = this.companies.get(id)
         if (!existingCompany) {
             return { ok: false, err: { code: StoreErrorCode.notFound, msg: "company not found" } }
         }
-        const updatedCompany: Company = { ...existingCompany, updatedAt: new Date(), ...company }
+        const updatedCompany: Company = { ...existingCompany, ...company as Partial<Company>, updatedAt: new Date() }
         this.companies.set(id, updatedCompany)
         return { ok: true, data: updatedCompany }
     }

@@ -79,4 +79,25 @@
   height: auto;
   margin-bottom: 0.25rem;
 }
+.backButton {
+  background: none;
+  border: none;
+  color: #013494;
+  font-size: 1rem;
+  cursor: pointer;
+  font-weight: bold;
+}
+.backButton:hover {
+  background-color: white;
+}
+.backContainer {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  background-color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
 

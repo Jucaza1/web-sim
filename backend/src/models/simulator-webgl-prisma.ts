@@ -1,4 +1,4 @@
-import { SimulatorWebgl, SimulatorWebglCreate, SimulatorWebglCreatePrismaConverter } from '../types/db'
+import { SimulatorWebgl, SimulatorWebglCreate, SimulatorWebglCreatePrismaConverter, SimulatorWebglUpdatePrismaConverter } from '../types/db'
 import { PrismaClient } from '@prisma/client'
 import { SimulatorWebglStore } from "./simulator-webgl"
 import { ResultStore, StoreErrorCode } from '../types/result'
@@ -28,20 +28,23 @@ export class SimulatorWebglPrismaStore implements SimulatorWebglStore {
         }
         return { ok: true, data: simulatorWebgl }
     }
-    async getSimulatorWebglBySimulatorId(simulatorId: number): Promise<ResultStore<SimulatorWebgl[]>> {
-        let simulatorWebgls: SimulatorWebgl[] = []
+    async getSimulatorWebglBySimulatorId(simulatorId: number): Promise<ResultStore<SimulatorWebgl>> {
+        let simulatorWebgl: SimulatorWebgl | null
         try {
-            this.client.simulatorWebgl.findMany({ where: { simulatorId } })
+            simulatorWebgl = await this.client.simulatorWebgl.findUnique({ where: { simulatorId } })
         }
         catch (e) {
             return { ok: false, err: { code: prismaCatchToStoreError(e), msg: "internal server error" }, exception: e as Error }
         }
-        return { ok: true, data: simulatorWebgls }
+        if (!simulatorWebgl) {
+            return { ok: false, err: { code: StoreErrorCode.notFound, msg: "simulatorWebgl not found" } }
+        }
+        return { ok: true, data: simulatorWebgl }
     }
     async getSimulatorWebgls(): Promise<ResultStore<SimulatorWebgl[]>> {
         let simulatorWebgls: SimulatorWebgl[] = []
         try {
-            this.client.simulatorWebgl.findMany()
+            simulatorWebgls = await this.client.simulatorWebgl.findMany()
         }
         catch (e) {
             return { ok: false, err: { code: prismaCatchToStoreError(e), msg: "internal server error" }, exception: e as Error }
@@ -59,6 +62,18 @@ export class SimulatorWebglPrismaStore implements SimulatorWebglStore {
         catch (e) {
             return { ok: false, err: { code: prismaCatchToStoreError(e), msg: "internal server error" } }
         }
+        if (simulatorWebgl.simulatorId !== undefined) {
+            try {
+                const simUpdateResult = await this.client.simulator.update({ where: { id: simulatorWebgl.simulatorId }, data: { ready: true } })
+                if (!simUpdateResult) {
+                    return { ok: false, err: { code: StoreErrorCode.unknown, msg: "internal server error" } }
+                }
+            }
+            catch (e) {
+                return { ok: false, err: { code: prismaCatchToStoreError(e), msg: "internal server error" } }
+            }
+
+        }
         if (!simulatorResult) {
             return { ok: false, err: { code: StoreErrorCode.unknown, msg: "internal server error" } }
         }
@@ -66,8 +81,9 @@ export class SimulatorWebglPrismaStore implements SimulatorWebglStore {
     }
     async updateSimulatorWebgl(id: number, simulator: Partial<SimulatorWebgl>): Promise<ResultStore<SimulatorWebgl>> {
         let simulatorResult: SimulatorWebgl | null
+        const simulatorPrisma = SimulatorWebglUpdatePrismaConverter(simulator)
         try {
-            simulatorResult = await this.client.simulatorWebgl.update({ where: { id }, data: simulator })
+            simulatorResult = await this.client.simulatorWebgl.update({ where: { id }, data: simulatorPrisma })
         }
         catch (e) {
             return { ok: false, err: { code: StoreErrorCode.unknown, msg: "internal server error" } }

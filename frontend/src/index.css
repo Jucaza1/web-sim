@@ -9,6 +9,7 @@
     --bg-color: var(--color-navy);
     --text-color: var(--text-white);
     --button-bg: var(--color-white);
+    --button-text: var(--color-navy);
     --button-border: var(--color-white);
 }
 
@@ -16,6 +17,7 @@ html.dark{
     --bg-color: var(--color-white);
     --text-color: var(--color-navy);
     --button-bg: var(--color-navy);
+    --button-text: var(--color-white);
     --button-border: var(--color-navy);
 }
 
@@ -35,11 +37,45 @@ body {
     color: var(--text-color);
     font-family: 'Manrope', sans-serif;
     transition: background-color 0.3s ease, color 0.3s ease;
-} 
+}
 
 button {
     background-color: var(--button-bg);
-    border: 2px solid var(--button-border);
+    color: var(--button-text);
     transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 
+button:hover {
+    background-color: var(--color-orange);
+    transform: scale(1.05);
+    font-weight:700;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.card {
+    color: var(--color-navy);
+    background-color: var(--color-white);
+}
+
+html.dark .card {
+    color: var(--color-white);
+    background-color: var(--color-navy);
+}
+
+.footer {
+    background-color: var(--color-white);
+    color: var(--color-navy);
+}
+
+html.dark .footer {
+    background-color: var(--color-navy);
+    color: var(--color-white);
+}
+.box-bordered {
+    background-color: var(--color-navy);
+    border-color: var(--color-white);
+}
+html.dark .box-bordered {
+    border-color: var(--color-navy);
+    background-color: var(--color-white);
+}

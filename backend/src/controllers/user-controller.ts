@@ -13,6 +13,7 @@ export class UserController {
     constructor(userService: UserService) {
         this.userService = userService
         this.getUser = this.getUser.bind(this)
+        this.getCurrentUser = this.getCurrentUser.bind(this)
         this.getUsers = this.getUsers.bind(this)
         this.createUser = this.createUser.bind(this)
         this.updateUser = this.updateUser.bind(this)
@@ -48,6 +49,21 @@ export class UserController {
         return
     }
 
+    async getCurrentUser(_req: Request, res: Response, next: NextFunction) {
+        let payload = res.locals?.payload as Payload
+        if (payload?.id === undefined) {
+            next(DefaultUnAuthorizedError)
+        }
+        const result = await this.userService.getUser(payload.id ?? -1)
+        if (!result.ok) {
+            next({ httpError: result.err!, exception: result.exception })
+            return
+        }
+        res.status(200).json(result.data)
+        return
+
+    }
+
     async getUsers(_req: Request, res: Response, next: NextFunction) {
         let result: ResultHttp<User[]> = { ok: false, data: undefined }
         switch (res.locals?.payload?.role) {
@@ -80,8 +96,10 @@ export class UserController {
             email: userParams.email,
             password: userParams.password,
             name: userParams.name,
-            companyId: userParams.companyId,
             profession: userParams.profession,
+        }
+        if (userParams.companyId) {
+            userCreate.companyId = userParams.companyId
         }
         const result = await this.userService.createUser(userCreate, "USER")
         if (!result.ok) {
@@ -103,8 +121,10 @@ export class UserController {
             email: userParams.email,
             password: userParams.password,
             name: userParams.name,
-            companyId: userParams.companyId,
             profession: userParams.profession,
+        }
+        if (userParams.companyId) {
+            userCreate.companyId = userParams.companyId
         }
         const result = await this.userService.createUser(userCreate, "ADMIN")
         if (!result.ok) {
@@ -130,8 +150,10 @@ export class UserController {
             email: userParams.email,
             password: userParams.password,
             name: userParams.name,
-            companyId: userParams.companyId,
             profession: userParams.profession,
+        }
+        if (userParams.companyId) {
+            userCreate.companyId = userParams.companyId
         }
         const result = await this.userService.createUser(userCreate, "ADMIN_COMPANY")
         if (!result.ok) {
@@ -160,7 +182,7 @@ export class UserController {
                 const id = req.params.id
                 const intId = intCoerceSchema.safeParse(id)
                 if (!intId.success) {
-                    next({ httpError: { status: 400, msg: [intId.error.message] } })
+                    next({ httpError: { status: 400, msg: [["id", intId.error.message].join(" : ")] } })
                     return
                 }
                 idFinal = intId.data
@@ -174,8 +196,10 @@ export class UserController {
             name: userParams.name,
             email: userParams.email,
             password: userParams.password,
-            companyId: userParams.companyId,
             profession: userParams.profession,
+        }
+        if (userParams.companyId) {
+            userUpdate.companyId = userParams.companyId
         }
         const result = await this.userService.updateUser(idFinal, userUpdate)
         if (!result.ok) {
@@ -204,7 +228,7 @@ export class UserController {
                 const id = req.params.id
                 const intId = intCoerceSchema.safeParse(id)
                 if (!intId.success) {
-                    next({ httpError: { status: 400, msg: [intId.error.message] } })
+                    next({ httpError: { status: 400, msg: [["id", intId.error.message].join(" : ")] } })
                     return
                 }
                 idFinal = intId.data
@@ -234,7 +258,7 @@ export class UserController {
         const companyId = req.params.id
         const intId = intCoerceSchema.safeParse(companyId)
         if (!intId.success) {
-            next({ httpError: { status: 400, msg: [intId.error.message] } })
+            next({ httpError: { status: 400, msg: [["id", intId.error.message].join(" : ")] } })
             return
         }
         const result = await this.userService.getUsersByCompanyId(intId.data)

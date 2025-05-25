@@ -1,6 +1,6 @@
 import { PrismaClient } from '@prisma/client'
 import { SimulatorStore } from "./simulator"
-import { Simulator, SimulatorCreate, SimulatorCreatePrismaConverter } from '../types/db'
+import { Simulator, SimulatorCreate, SimulatorCreatePrismaConverter, SimulatorUpdate, SimulatorUpdatePrismaConverter } from '../types/db'
 import { ResultStore, StoreErrorCode } from '../types/result'
 import { prismaCatchToStoreError } from '../types/exceptions'
 
@@ -9,6 +9,7 @@ export class SimulatorPrismaStore implements SimulatorStore {
     constructor(client: PrismaClient) {
         this.client = client
         this.getSimulator = this.getSimulator.bind(this)
+        this.getSimulatorByName = this.getSimulatorByName.bind(this)
         this.getSimulators = this.getSimulators.bind(this)
         this.getSimulatorsByCompanyId = this.getSimulatorsByCompanyId.bind(this)
         this.createSimulator = this.createSimulator.bind(this)
@@ -19,6 +20,19 @@ export class SimulatorPrismaStore implements SimulatorStore {
         let simulator: Simulator | null
         try {
             simulator = await this.client.simulator.findUnique({ where: { id } })
+        }
+        catch (e) {
+            return { ok: false, err: { code: prismaCatchToStoreError(e), msg: "internal server error" }, exception: e as Error }
+        }
+        if (!simulator) {
+            return { ok: false, err: { code: StoreErrorCode.notFound, msg: "simulator not found" } }
+        }
+        return { ok: true, data: simulator }
+    }
+    async getSimulatorByName(name: string): Promise<ResultStore<Simulator>> {
+        let simulator: Simulator | null
+        try {
+            simulator = await this.client.simulator.findUnique({ where: { name: name } })
         }
         catch (e) {
             return { ok: false, err: { code: prismaCatchToStoreError(e), msg: "internal server error" }, exception: e as Error }
@@ -63,10 +77,11 @@ export class SimulatorPrismaStore implements SimulatorStore {
         }
         return { ok: true, data: simulatorResult }
     }
-    async updateSimulator(id: number, simulator: Partial<Simulator>): Promise<ResultStore<Simulator>> {
+    async updateSimulator(id: number, simulator: SimulatorUpdate): Promise<ResultStore<Simulator>> {
         let simulatorResult: Simulator | null
+        const simulatorPrisma = SimulatorUpdatePrismaConverter(simulator)
         try {
-            simulatorResult = await this.client.simulator.update({ where: { id }, data: simulator })
+            simulatorResult = await this.client.simulator.update({ where: { id }, data: simulatorPrisma })
         }
         catch (e) {
             return { ok: false, err: { code: prismaCatchToStoreError(e), msg: "internal server error" }, exception: e as Error }

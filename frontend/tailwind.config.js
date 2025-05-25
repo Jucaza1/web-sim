@@ -13,8 +13,8 @@ export default {
       fontFamily: {
         manrope: ["Manrope", "sans-serif"],
       },
+      
     },
   },
-  content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   plugins: [],
 };

@@ -22,7 +22,7 @@ export class CompanyController {
         const id = req.params.id
         const intId = intCoerceSchema.safeParse(id)
         if (!intId.success) {
-            next({ httpError: { status: 400, msg: [intId.error.message] } })
+            next({ httpError: { status: 400, msg: [["id", intId.error.message].join(" : ")] } })
             return
         }
         const result = await this.companyService.getCompany(intId.data)
@@ -92,7 +92,7 @@ export class CompanyController {
         const id = req.params.id
         const intId = intCoerceSchema.safeParse(id)
         if (!intId.success) {
-            next({ httpError: { status: 400, msg: [intId.error.message] } })
+            next({ httpError: { status: 400, msg: [["id", intId.error.message].join(" : ")] } })
             return
         }
         const companyParams = req.body as Partial<CompanyUpdateDTO>
@@ -122,7 +122,7 @@ export class CompanyController {
         const id = req.params.id
         const intId = intCoerceSchema.safeParse(id)
         if (!intId.success) {
-            next({ httpError: { status: 400, msg: [intId.error.message] } })
+            next({ httpError: { status: 400, msg: [["id", intId.error.message].join(" : ")] } })
             return
         }
         const result = await this.companyService.deleteCompany(intId.data)

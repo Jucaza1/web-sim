@@ -21,7 +21,7 @@ export class AuthServiceJWT {
     async validateCredentialsForgeJWT(userCred: UserCredentials): Promise<ResultHttp<string>> {
         const validateResult = UserCredentialsSchema.safeParse(userCred)
         if (!validateResult.success) {
-            return { ok: false, err: { status: 400, msg: validateResult.error.errors.map(e => e.message) } }
+            return { ok: false, err: { status: 400, msg: validateResult.error.errors.map(e => [e.path, e.message].join(" : ")) } }
         }
         const userResult = await this.userService.getUserByEmail(userCred.email)
         if (!userResult.ok) {
@@ -31,14 +31,14 @@ export class AuthServiceJWT {
             return { ok: false, err: { status: 401, msg: ["incorrect credentials"] } }
         }
         if (userCred.email !== userResult!.data!.email
-            && !this.hasher.compare(userCred.password, userResult!.data!.password)
+            || !this.hasher.compare(userCred.password, userResult!.data!.password)
         ) {
             return { ok: false, err: { status: 401, msg: ["incorrect credentials"] } }
         }
         return { ok: true, data: this.forgeJWT(userResult!.data!) }
     }
     forgeJWT(user: User): string {
-        const payload: Payload = { id: user.id, role: user.role, company: user.companyId }
+        const payload: Payload = { id: user.id, role: user.role, name: user.name, company: user.companyId }
         return jwt.sign(payload, this.secret, { expiresIn: 3600 })
     }
     async validateJWT(token: string): Promise<ResultHttp<Payload>> {
