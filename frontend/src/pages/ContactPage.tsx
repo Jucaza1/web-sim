@@ -34,8 +34,8 @@ const teamMembers = [
     role: "Logo Designer",
     image: "/avatares/paulo_photo.JPEG",
     github: "https://github.com/PauloFnp",
-    linkedin: "https://www.linkedin.com/in/paulo-frasco-434805207/"
-  }
+    linkedin: "https://www.linkedin.com/in/paulo-frasco-434805207/",
+  },
 ];
 
 const cardVariants = {
@@ -65,58 +65,63 @@ export default function ContactPage() {
       </motion.h1>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 mt-24 gap-10 justify-items-center">
-        {teamMembers.map((member, index) => (
-          <motion.div
-            key={member.name}
-            custom={index}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, amount: 0.3 }}
-            variants={cardVariants}
-            className={`bg-white rounded-2xl shadow-lg p-6 w-full max-w-xs text-center space-y-4 
-              ${
-                index === teamMembers.length - 1
-                  ? "lg:col-span-full lg:justify-self-center"
-                  : ""
-              }`}
-          >
-            <img
-              src={member.image}
-              alt={`Avatar de ${member.name}`}
-              className="w-24 h-24 rounded-full mx-auto object-cover"
-            />
-            <h3 className="text-xl font-semibold text-gray-800">
-              {member.name}
-            </h3>
-            <p className="text-gray-600">{member.role}</p>
-            <div className="flex justify-center gap-4 pt-2">
-              <a
-                href={member.github}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="GitHub"
-              >
-                <img
-                  src="/web_logos/icons8-github.svg"
-                  alt="GitHub"
-                  className="w-6 h-6 hover:opacity-80 transition"
-                />
-              </a>
-              <a
-                href={member.linkedin}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="LinkedIn"
-              >
-                <img
-                  src="/web_logos/icons8-linkedin.svg"
-                  alt="LinkedIn"
-                  className="w-6 h-6 hover:opacity-80 transition"
-                />
-              </a>
-            </div>
-          </motion.div>
-        ))}
+        {teamMembers.map((member, index) => {
+          const isPaulo = member.name === "Paulo Frasco";
+          return (
+            <motion.div
+              key={member.name}
+              custom={index}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, amount: 0.3 }}
+              variants={cardVariants}
+              className={`bg-white rounded-2xl shadow-lg p-6 w-full max-w-xs text-center space-y-4 transition
+                ${index === teamMembers.length - 1 ? "lg:col-span-full lg:justify-self-center" : ""}
+                ${isPaulo ? "scale-80 opacity-80" : ""}`}
+            >
+              <img
+                src={member.image}
+                alt={`Avatar de ${member.name}`}
+                className="w-24 h-24 rounded-full mx-auto object-cover"
+              />
+              <h3 className="text-xl font-semibold text-gray-800">
+                {member.name}
+              </h3>
+              {isPaulo && (
+                <span className="text-xs text-gray-500 italic">
+                  (Colaborador)
+                </span>
+              )}
+              <p className="text-gray-600">{member.role}</p>
+              <div className="flex justify-center gap-4 pt-2">
+                <a
+                  href={member.github}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="GitHub"
+                >
+                  <img
+                    src="/web_logos/icons8-github.svg"
+                    alt="GitHub"
+                    className="w-6 h-6 hover:opacity-80 transition"
+                  />
+                </a>
+                <a
+                  href={member.linkedin}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="LinkedIn"
+                >
+                  <img
+                    src="/web_logos/icons8-linkedin.svg"
+                    alt="LinkedIn"
+                    className="w-6 h-6 hover:opacity-80 transition"
+                  />
+                </a>
+              </div>
+            </motion.div>
+          );
+        })}
       </div>
     </div>
   );
