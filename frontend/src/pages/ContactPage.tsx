@@ -29,6 +29,13 @@ const teamMembers = [
     github: "https://github.com/Perellon15",
     linkedin: "https://www.linkedin.com/in/josé-antonio-perellón-martínez",
   },
+  {
+    name: "Paulo Frasco",
+    role: "Logo Designer",
+    image: "/avatares/paulo_photo.JPEG",
+    github: "https://github.com/PauloFnp",
+    linkedin: "https://www.linkedin.com/in/paulo-frasco-434805207/"
+  }
 ];
 
 const cardVariants = {
@@ -66,7 +73,12 @@ export default function ContactPage() {
             whileInView="visible"
             viewport={{ once: true, amount: 0.3 }}
             variants={cardVariants}
-            className="bg-white rounded-2xl shadow-lg p-6 w-full max-w-xs text-center space-y-4"
+            className={`bg-white rounded-2xl shadow-lg p-6 w-full max-w-xs text-center space-y-4 
+              ${
+                index === teamMembers.length - 1
+                  ? "lg:col-span-full lg:justify-self-center"
+                  : ""
+              }`}
           >
             <img
               src={member.image}
