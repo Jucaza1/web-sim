@@ -26,8 +26,9 @@ import logger from './logger';
 
 const app = express();
 const corsOptions: cors.CorsOptions = {
-    origin: process.env.CORS_ORIGIN ?? 'http://localhost:5173',
-    // origin: '*',
+    origin: process.env.CORS_ORIGIN
+    // ?? 'http://localhost:5173'
+    ,
     optionsSuccessStatus: 200,
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
@@ -74,7 +75,7 @@ export const simulatorWebglService = new SimulatorWebglService(simulatorWebglSto
 const simulatorWebglController = new SimulatorWebglController(simulatorWebglService)
 
 const authService = new AuthServiceJWT(JWT_SECRET, userService, pwdHasher)
-const authController = new AuthController(authService,logger)
+const authController = new AuthController(authService, logger)
 const router = createRouter(
     userController,
     companyController,
@@ -96,19 +97,18 @@ const adminUser: UserCreate = {
     email: process.env.USER_ADMIN_EMAIL ?? "admin@admin.com",
     password: process.env.USER_ADMIN_PASSWORD ?? "adminadmin",
     name: "admin",
-    // companyId: "e30e81bc-4f4f-4339-a40c-feaabca0efb1",
+    // companyId: 1,
     profession: "admin",
-    // isActive: true,
 }
-        logger.info(adminUser,"seeding admin user")
+logger.info(adminUser, "seeding admin user")
 userService.createUser(adminUser, "ADMIN").then((res) => {
     if (res.ok) {
     } else {
-        logger.error({error:res.err, exception:res.exception},"error seeding Admin")
+        logger.error({ error: res.err, exception: res.exception }, "error seeding Admin")
     }
 
 }).catch((e) => {
-        logger.error({exception:e},"error seeding Admin")
+    logger.error({ exception: e }, "error seeding Admin")
 })
 if (DB_SEED) {
     logger.info("seeding simulators")

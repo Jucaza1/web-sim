@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# Script to mount an EBS AWS volume to a specific mount point
+
 if [ -z "$1" ]; then
     echo "Provide device name for the EBS volume"
     echo "lsblk (to find the device name)"

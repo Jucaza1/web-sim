@@ -6,7 +6,7 @@ install-frontend:
 
 # install dependencies backend
 install-backend:
-	cd backend && npm install
+	cd backend && npm install && npx prisma generate
 
 # run dev frontend
 dev-frontend:

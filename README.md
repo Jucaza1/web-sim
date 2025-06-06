@@ -2,6 +2,12 @@
 
 A full-stack web application with a React frontend and an Express backend. This project is structured into two main parts: the frontend and the backend. The backend is powered by Express and connects to a PostgreSQL database. The frontend is built using React with Vite, TypeScript, and TailwindCSS.
 
+## Images
+![Architecture Diagram](img/Selection_018.png)
+![Gallery](img/Selection_019.png)
+
+[other images](img/)
+
 ## Project Structure
 
 The project is divided into two main directories:
@@ -14,6 +20,9 @@ web-sim/
 ├── backend/
 │   ├── src/
 │   ├── build/
+│   ├── static/ (simulators should be placed here in development)
+│   ├── public/ (this folder is served at the root localhost:3000/ )
+│   ├── tests/
 │   ├── node_modules/
 │   ├── package.json
 │   ├── tsconfig.json
@@ -69,6 +78,9 @@ make dev-frontend
 make dev-backend
 ```
 
+> [!WARNING]
+> SEE [DOC.md](DOC.md) for more commands and documentation.
+
 #### 2. Set up the backend
 
 1. Navigate to the `backend` directory:
@@ -81,6 +93,7 @@ cd backend
 
 ```bash
 npm install
+npx prisma generate
 ```
 
 3. Run the development server:
@@ -142,20 +155,24 @@ This will return a simple message confirming that the backend is running.
 ## Technologies Used
 - **General**:
   - Node.js
-  - Docker
-
+  - Docker \
+<br>
 - **Frontend**:
   - React
   - Vite
   - TypeScript
-  - TailwindCSS
-
+  - Zod
+  - TailwindCSS \
+<br>
 - **Backend**:
   - Express.js
   - PostgreSQL
   - TypeScript
   - Jest
   - Zod
+  - Prisma
+  - Swagger (OpenAPI)
+  - JWT (JSON Web Token)
 
 
 ## License
