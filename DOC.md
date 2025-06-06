@@ -1,4 +1,14 @@
 # DOCUMENTATION
+## Simulator database seeding (notes)
+In order to populate the database with the simulators' metadata (urls and info)
+check and write in file ./backend/src/scripts/simulators.ts
+[seed_data](backend/src/scripts/simulators.ts)
+Then place the corresponding simulators in the static folder
+(./backend/static/) in development, or in /persistence/static/ in production
+
+## Database and Types
+Types for TypeScript are generated executing ```npx prisma generate``` from the folder ./backend !
+
 ## Commands:
 ### Development:
 #### Run whole project in development mode:
@@ -31,6 +41,7 @@ or
 ```
 http://your-domain.com/api/v1/docs
 ```
+
 ## Database Schema
 See file `./backend/prisma/schema.prisma` for the database schema.
 [Schema](backend/prisma/schema.prisma)
